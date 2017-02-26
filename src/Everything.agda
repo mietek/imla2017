@@ -1,0 +1,16 @@
+module Everything where
+
+import Common
+
+import Syntax
+import CompleteSemantics
+
+import OnoSemantics
+import BozicDosenSemantics
+import AlechinaEtAlSemantics
+import IemhoffSemantics
+
+import CompleteOnoSemantics
+import CompleteBozicDosenSemantics
+import CompleteAlechinaEtAlSemantics
+import CompleteIemhoffSemantics
