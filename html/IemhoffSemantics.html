@@ -1,0 +1,3340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >IemhoffSemantics</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="IemhoffSemantics.html#1" class="Module"
+      >IemhoffSemantics</a
+      ><a name="24"
+      > </a
+      ><a name="25" class="Keyword"
+      >where</a
+      ><a name="30"
+      >
+
+</a
+      ><a name="32" class="Keyword"
+      >open</a
+      ><a name="36"
+      > </a
+      ><a name="37" class="Keyword"
+      >import</a
+      ><a name="43"
+      > </a
+      ><a name="44" href="Syntax.html#1" class="Module"
+      >Syntax</a
+      ><a name="50"
+      >
+
+
+</a
+      ><a name="53" class="Keyword"
+      >record</a
+      ><a name="59"
+      > </a
+      ><a name="60" href="IemhoffSemantics.html#60" class="Record"
+      >Model</a
+      ><a name="65"
+      > </a
+      ><a name="66" class="Symbol"
+      >:</a
+      ><a name="67"
+      > </a
+      ><a name="68" class="PrimitiveType"
+      >Set&#8321;</a
+      ><a name="72"
+      > </a
+      ><a name="73" class="Keyword"
+      >where</a
+      ><a name="78"
+      >
+  </a
+      ><a name="81" class="Keyword"
+      >infix</a
+      ><a name="86"
+      > </a
+      ><a name="87" class="Number"
+      >3</a
+      ><a name="88"
+      > </a
+      ><a name="89" href="IemhoffSemantics.html#356" class="Field Operator"
+      >_&#8873;&#7493;_</a
+      ><a name="93"
+      >
+  </a
+      ><a name="96" class="Keyword"
+      >field</a
+      ><a name="101"
+      >
+    </a
+      ><a name="106" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="111"
+      >   </a
+      ><a name="114" class="Symbol"
+      >:</a
+      ><a name="115"
+      > </a
+      ><a name="116" class="PrimitiveType"
+      >Set</a
+      ><a name="119"
+      >
+    </a
+      ><a name="124" href="IemhoffSemantics.html#124" class="Field Operator"
+      >_&#8804;_</a
+      ><a name="127"
+      >     </a
+      ><a name="132" class="Symbol"
+      >:</a
+      ><a name="133"
+      > </a
+      ><a name="134" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="139"
+      > </a
+      ><a name="140" class="Symbol"
+      >&#8594;</a
+      ><a name="141"
+      > </a
+      ><a name="142" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="147"
+      > </a
+      ><a name="148" class="Symbol"
+      >&#8594;</a
+      ><a name="149"
+      > </a
+      ><a name="150" class="PrimitiveType"
+      >Set</a
+      ><a name="153"
+      >
+    </a
+      ><a name="158" href="IemhoffSemantics.html#158" class="Field"
+      >refl&#8804;</a
+      ><a name="163"
+      >   </a
+      ><a name="166" class="Symbol"
+      >:</a
+      ><a name="167"
+      > </a
+      ><a name="168" class="Symbol"
+      >&#8704;</a
+      ><a name="169"
+      > </a
+      ><a name="170" class="Symbol"
+      >{</a
+      ><a name="171" href="IemhoffSemantics.html#171" class="Bound"
+      >w</a
+      ><a name="172" class="Symbol"
+      >}</a
+      ><a name="173"
+      > </a
+      ><a name="174" class="Symbol"
+      >&#8594;</a
+      ><a name="175"
+      > </a
+      ><a name="176" href="IemhoffSemantics.html#171" class="Bound"
+      >w</a
+      ><a name="177"
+      > </a
+      ><a name="178" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="179"
+      > </a
+      ><a name="180" href="IemhoffSemantics.html#171" class="Bound"
+      >w</a
+      ><a name="181"
+      >
+    </a
+      ><a name="186" href="IemhoffSemantics.html#186" class="Field"
+      >trans&#8804;</a
+      ><a name="192"
+      >  </a
+      ><a name="194" class="Symbol"
+      >:</a
+      ><a name="195"
+      > </a
+      ><a name="196" class="Symbol"
+      >&#8704;</a
+      ><a name="197"
+      > </a
+      ><a name="198" class="Symbol"
+      >{</a
+      ><a name="199" href="IemhoffSemantics.html#199" class="Bound"
+      >w</a
+      ><a name="200"
+      > </a
+      ><a name="201" href="IemhoffSemantics.html#201" class="Bound"
+      >w&#8242;</a
+      ><a name="203"
+      > </a
+      ><a name="204" href="IemhoffSemantics.html#204" class="Bound"
+      >w&#8243;</a
+      ><a name="206" class="Symbol"
+      >}</a
+      ><a name="207"
+      > </a
+      ><a name="208" class="Symbol"
+      >&#8594;</a
+      ><a name="209"
+      > </a
+      ><a name="210" href="IemhoffSemantics.html#199" class="Bound"
+      >w</a
+      ><a name="211"
+      > </a
+      ><a name="212" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="213"
+      > </a
+      ><a name="214" href="IemhoffSemantics.html#201" class="Bound"
+      >w&#8242;</a
+      ><a name="216"
+      > </a
+      ><a name="217" class="Symbol"
+      >&#8594;</a
+      ><a name="218"
+      > </a
+      ><a name="219" href="IemhoffSemantics.html#201" class="Bound"
+      >w&#8242;</a
+      ><a name="221"
+      > </a
+      ><a name="222" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="223"
+      > </a
+      ><a name="224" href="IemhoffSemantics.html#204" class="Bound"
+      >w&#8243;</a
+      ><a name="226"
+      > </a
+      ><a name="227" class="Symbol"
+      >&#8594;</a
+      ><a name="228"
+      > </a
+      ><a name="229" href="IemhoffSemantics.html#199" class="Bound"
+      >w</a
+      ><a name="230"
+      > </a
+      ><a name="231" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="232"
+      > </a
+      ><a name="233" href="IemhoffSemantics.html#204" class="Bound"
+      >w&#8243;</a
+      ><a name="235"
+      >
+    </a
+      ><a name="240" href="IemhoffSemantics.html#240" class="Field Operator"
+      >_R_</a
+      ><a name="243"
+      >     </a
+      ><a name="248" class="Symbol"
+      >:</a
+      ><a name="249"
+      > </a
+      ><a name="250" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="255"
+      > </a
+      ><a name="256" class="Symbol"
+      >&#8594;</a
+      ><a name="257"
+      > </a
+      ><a name="258" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="263"
+      > </a
+      ><a name="264" class="Symbol"
+      >&#8594;</a
+      ><a name="265"
+      > </a
+      ><a name="266" class="PrimitiveType"
+      >Set</a
+      ><a name="269"
+      >
+    </a
+      ><a name="274" href="IemhoffSemantics.html#274" class="Field"
+      >reflR</a
+      ><a name="279"
+      >   </a
+      ><a name="282" class="Symbol"
+      >:</a
+      ><a name="283"
+      > </a
+      ><a name="284" class="Symbol"
+      >&#8704;</a
+      ><a name="285"
+      > </a
+      ><a name="286" class="Symbol"
+      >{</a
+      ><a name="287" href="IemhoffSemantics.html#287" class="Bound"
+      >w</a
+      ><a name="288" class="Symbol"
+      >}</a
+      ><a name="289"
+      > </a
+      ><a name="290" class="Symbol"
+      >&#8594;</a
+      ><a name="291"
+      > </a
+      ><a name="292" href="IemhoffSemantics.html#287" class="Bound"
+      >w</a
+      ><a name="293"
+      > </a
+      ><a name="294" href="IemhoffSemantics.html#240" class="Field Operator"
+      >R</a
+      ><a name="295"
+      > </a
+      ><a name="296" href="IemhoffSemantics.html#287" class="Bound"
+      >w</a
+      ><a name="297"
+      >
+    </a
+      ><a name="302" href="IemhoffSemantics.html#302" class="Field"
+      >transR</a
+      ><a name="308"
+      >  </a
+      ><a name="310" class="Symbol"
+      >:</a
+      ><a name="311"
+      > </a
+      ><a name="312" class="Symbol"
+      >&#8704;</a
+      ><a name="313"
+      > </a
+      ><a name="314" class="Symbol"
+      >{</a
+      ><a name="315" href="IemhoffSemantics.html#315" class="Bound"
+      >w</a
+      ><a name="316"
+      > </a
+      ><a name="317" href="IemhoffSemantics.html#317" class="Bound"
+      >w&#8242;</a
+      ><a name="319"
+      > </a
+      ><a name="320" href="IemhoffSemantics.html#320" class="Bound"
+      >w&#8243;</a
+      ><a name="322" class="Symbol"
+      >}</a
+      ><a name="323"
+      > </a
+      ><a name="324" class="Symbol"
+      >&#8594;</a
+      ><a name="325"
+      > </a
+      ><a name="326" href="IemhoffSemantics.html#315" class="Bound"
+      >w</a
+      ><a name="327"
+      > </a
+      ><a name="328" href="IemhoffSemantics.html#240" class="Field Operator"
+      >R</a
+      ><a name="329"
+      > </a
+      ><a name="330" href="IemhoffSemantics.html#317" class="Bound"
+      >w&#8242;</a
+      ><a name="332"
+      > </a
+      ><a name="333" class="Symbol"
+      >&#8594;</a
+      ><a name="334"
+      > </a
+      ><a name="335" href="IemhoffSemantics.html#317" class="Bound"
+      >w&#8242;</a
+      ><a name="337"
+      > </a
+      ><a name="338" href="IemhoffSemantics.html#240" class="Field Operator"
+      >R</a
+      ><a name="339"
+      > </a
+      ><a name="340" href="IemhoffSemantics.html#320" class="Bound"
+      >w&#8243;</a
+      ><a name="342"
+      > </a
+      ><a name="343" class="Symbol"
+      >&#8594;</a
+      ><a name="344"
+      > </a
+      ><a name="345" href="IemhoffSemantics.html#315" class="Bound"
+      >w</a
+      ><a name="346"
+      > </a
+      ><a name="347" href="IemhoffSemantics.html#240" class="Field Operator"
+      >R</a
+      ><a name="348"
+      > </a
+      ><a name="349" href="IemhoffSemantics.html#320" class="Bound"
+      >w&#8243;</a
+      ><a name="351"
+      >
+    </a
+      ><a name="356" href="IemhoffSemantics.html#356" class="Field Operator"
+      >_&#8873;&#7493;_</a
+      ><a name="360"
+      >   </a
+      ><a name="363" class="Symbol"
+      >:</a
+      ><a name="364"
+      > </a
+      ><a name="365" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="370"
+      > </a
+      ><a name="371" class="Symbol"
+      >&#8594;</a
+      ><a name="372"
+      > </a
+      ><a name="373" href="Syntax.html#61" class="Function"
+      >Atom</a
+      ><a name="377"
+      > </a
+      ><a name="378" class="Symbol"
+      >&#8594;</a
+      ><a name="379"
+      > </a
+      ><a name="380" class="PrimitiveType"
+      >Set</a
+      ><a name="383"
+      >
+    </a
+      ><a name="388" href="IemhoffSemantics.html#388" class="Field"
+      >mono&#8873;&#7493;</a
+      ><a name="394"
+      > </a
+      ><a name="395" class="Symbol"
+      >:</a
+      ><a name="396"
+      > </a
+      ><a name="397" class="Symbol"
+      >&#8704;</a
+      ><a name="398"
+      > </a
+      ><a name="399" class="Symbol"
+      >{</a
+      ><a name="400" href="IemhoffSemantics.html#400" class="Bound"
+      >w</a
+      ><a name="401"
+      > </a
+      ><a name="402" href="IemhoffSemantics.html#402" class="Bound"
+      >w&#8242;</a
+      ><a name="404"
+      > </a
+      ><a name="405" href="IemhoffSemantics.html#405" class="Bound"
+      >P</a
+      ><a name="406" class="Symbol"
+      >}</a
+      ><a name="407"
+      > </a
+      ><a name="408" class="Symbol"
+      >&#8594;</a
+      ><a name="409"
+      > </a
+      ><a name="410" href="IemhoffSemantics.html#400" class="Bound"
+      >w</a
+      ><a name="411"
+      > </a
+      ><a name="412" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="413"
+      > </a
+      ><a name="414" href="IemhoffSemantics.html#402" class="Bound"
+      >w&#8242;</a
+      ><a name="416"
+      > </a
+      ><a name="417" class="Symbol"
+      >&#8594;</a
+      ><a name="418"
+      > </a
+      ><a name="419" href="IemhoffSemantics.html#400" class="Bound"
+      >w</a
+      ><a name="420"
+      > </a
+      ><a name="421" href="IemhoffSemantics.html#356" class="Field Operator"
+      >&#8873;&#7493;</a
+      ><a name="423"
+      > </a
+      ><a name="424" href="IemhoffSemantics.html#405" class="Bound"
+      >P</a
+      ><a name="425"
+      > </a
+      ><a name="426" class="Symbol"
+      >&#8594;</a
+      ><a name="427"
+      > </a
+      ><a name="428" href="IemhoffSemantics.html#402" class="Bound"
+      >w&#8242;</a
+      ><a name="430"
+      > </a
+      ><a name="431" href="IemhoffSemantics.html#356" class="Field Operator"
+      >&#8873;&#7493;</a
+      ><a name="433"
+      > </a
+      ><a name="434" href="IemhoffSemantics.html#405" class="Bound"
+      >P</a
+      ><a name="435"
+      >
+
+  </a
+      ><a name="439" href="IemhoffSemantics.html#439" class="Function Operator"
+      >_&#8804;&#10814;R_</a
+      ><a name="444"
+      > </a
+      ><a name="445" class="Symbol"
+      >:</a
+      ><a name="446"
+      > </a
+      ><a name="447" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="452"
+      > </a
+      ><a name="453" class="Symbol"
+      >&#8594;</a
+      ><a name="454"
+      > </a
+      ><a name="455" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="460"
+      > </a
+      ><a name="461" class="Symbol"
+      >&#8594;</a
+      ><a name="462"
+      > </a
+      ><a name="463" class="PrimitiveType"
+      >Set</a
+      ><a name="466"
+      >
+  </a
+      ><a name="469" href="IemhoffSemantics.html#439" class="Function Operator"
+      >_&#8804;&#10814;R_</a
+      ><a name="474"
+      > </a
+      ><a name="475" class="Symbol"
+      >=</a
+      ><a name="476"
+      > </a
+      ><a name="477" href="IemhoffSemantics.html#124" class="Field Operator"
+      >_&#8804;_</a
+      ><a name="480"
+      > </a
+      ><a name="481" href="Common.html#993" class="Function Operator"
+      >&#10814;</a
+      ><a name="482"
+      > </a
+      ><a name="483" href="IemhoffSemantics.html#240" class="Field Operator"
+      >_R_</a
+      ><a name="486"
+      >
+
+  </a
+      ><a name="490" href="IemhoffSemantics.html#490" class="Function Operator"
+      >_R&#10814;&#8804;_</a
+      ><a name="495"
+      > </a
+      ><a name="496" class="Symbol"
+      >:</a
+      ><a name="497"
+      > </a
+      ><a name="498" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="503"
+      > </a
+      ><a name="504" class="Symbol"
+      >&#8594;</a
+      ><a name="505"
+      > </a
+      ><a name="506" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="511"
+      > </a
+      ><a name="512" class="Symbol"
+      >&#8594;</a
+      ><a name="513"
+      > </a
+      ><a name="514" class="PrimitiveType"
+      >Set</a
+      ><a name="517"
+      >
+  </a
+      ><a name="520" href="IemhoffSemantics.html#490" class="Function Operator"
+      >_R&#10814;&#8804;_</a
+      ><a name="525"
+      > </a
+      ><a name="526" class="Symbol"
+      >=</a
+      ><a name="527"
+      > </a
+      ><a name="528" href="IemhoffSemantics.html#240" class="Field Operator"
+      >_R_</a
+      ><a name="531"
+      > </a
+      ><a name="532" href="Common.html#993" class="Function Operator"
+      >&#10814;</a
+      ><a name="533"
+      > </a
+      ><a name="534" href="IemhoffSemantics.html#124" class="Field Operator"
+      >_&#8804;_</a
+      ><a name="537"
+      >
+
+  </a
+      ><a name="541" class="Comment"
+      >-- Brilliance condition.</a
+      ><a name="565"
+      >
+  </a
+      ><a name="568" class="Keyword"
+      >field</a
+      ><a name="573"
+      >
+    </a
+      ><a name="578" href="IemhoffSemantics.html#578" class="Field"
+      >R&#10814;&#8804;&#8594;R</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Symbol"
+      >:</a
+      ><a name="585"
+      > </a
+      ><a name="586" class="Symbol"
+      >&#8704;</a
+      ><a name="587"
+      > </a
+      ><a name="588" class="Symbol"
+      >{</a
+      ><a name="589" href="IemhoffSemantics.html#589" class="Bound"
+      >w</a
+      ><a name="590"
+      > </a
+      ><a name="591" href="IemhoffSemantics.html#591" class="Bound"
+      >v&#8242;</a
+      ><a name="593" class="Symbol"
+      >}</a
+      ><a name="594"
+      > </a
+      ><a name="595" class="Symbol"
+      >&#8594;</a
+      ><a name="596"
+      > </a
+      ><a name="597" href="IemhoffSemantics.html#589" class="Bound"
+      >w</a
+      ><a name="598"
+      > </a
+      ><a name="599" href="IemhoffSemantics.html#490" class="Function Operator"
+      >R&#10814;&#8804;</a
+      ><a name="602"
+      > </a
+      ><a name="603" href="IemhoffSemantics.html#591" class="Bound"
+      >v&#8242;</a
+      ><a name="605"
+      > </a
+      ><a name="606" class="Symbol"
+      >&#8594;</a
+      ><a name="607"
+      > </a
+      ><a name="608" href="IemhoffSemantics.html#589" class="Bound"
+      >w</a
+      ><a name="609"
+      > </a
+      ><a name="610" href="IemhoffSemantics.html#240" class="Field Operator"
+      >R</a
+      ><a name="611"
+      > </a
+      ><a name="612" href="IemhoffSemantics.html#591" class="Bound"
+      >v&#8242;</a
+      ><a name="614"
+      >
+
+  </a
+      ><a name="618" href="IemhoffSemantics.html#618" class="Function"
+      >&#8804;&#8594;R</a
+      ><a name="621"
+      > </a
+      ><a name="622" class="Symbol"
+      >:</a
+      ><a name="623"
+      > </a
+      ><a name="624" class="Symbol"
+      >&#8704;</a
+      ><a name="625"
+      > </a
+      ><a name="626" class="Symbol"
+      >{</a
+      ><a name="627" href="IemhoffSemantics.html#627" class="Bound"
+      >w</a
+      ><a name="628"
+      > </a
+      ><a name="629" href="IemhoffSemantics.html#629" class="Bound"
+      >v&#8242;</a
+      ><a name="631" class="Symbol"
+      >}</a
+      ><a name="632"
+      > </a
+      ><a name="633" class="Symbol"
+      >&#8594;</a
+      ><a name="634"
+      > </a
+      ><a name="635" href="IemhoffSemantics.html#627" class="Bound"
+      >w</a
+      ><a name="636"
+      > </a
+      ><a name="637" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="638"
+      > </a
+      ><a name="639" href="IemhoffSemantics.html#629" class="Bound"
+      >v&#8242;</a
+      ><a name="641"
+      > </a
+      ><a name="642" class="Symbol"
+      >&#8594;</a
+      ><a name="643"
+      > </a
+      ><a name="644" href="IemhoffSemantics.html#627" class="Bound"
+      >w</a
+      ><a name="645"
+      > </a
+      ><a name="646" href="IemhoffSemantics.html#240" class="Field Operator"
+      >R</a
+      ><a name="647"
+      > </a
+      ><a name="648" href="IemhoffSemantics.html#629" class="Bound"
+      >v&#8242;</a
+      ><a name="650"
+      >
+  </a
+      ><a name="653" href="IemhoffSemantics.html#618" class="Function"
+      >&#8804;&#8594;R</a
+      ><a name="656"
+      > </a
+      ><a name="657" class="Symbol"
+      >{</a
+      ><a name="658" href="IemhoffSemantics.html#658" class="Bound"
+      >w</a
+      ><a name="659" class="Symbol"
+      >}</a
+      ><a name="660"
+      > </a
+      ><a name="661" href="IemhoffSemantics.html#661" class="Bound"
+      >&#968;</a
+      ><a name="662"
+      > </a
+      ><a name="663" class="Symbol"
+      >=</a
+      ><a name="664"
+      > </a
+      ><a name="665" href="IemhoffSemantics.html#578" class="Field"
+      >R&#10814;&#8804;&#8594;R</a
+      ><a name="670"
+      > </a
+      ><a name="671" class="Symbol"
+      >(</a
+      ><a name="672" href="IemhoffSemantics.html#658" class="Bound"
+      >w</a
+      ><a name="673"
+      > </a
+      ><a name="674" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="675"
+      > </a
+      ><a name="676" class="Symbol"
+      >(</a
+      ><a name="677" href="IemhoffSemantics.html#274" class="Field"
+      >reflR</a
+      ><a name="682"
+      > </a
+      ><a name="683" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="684"
+      > </a
+      ><a name="685" href="IemhoffSemantics.html#661" class="Bound"
+      >&#968;</a
+      ><a name="686" class="Symbol"
+      >))</a
+      ><a name="688"
+      >
+
+  </a
+      ><a name="692" class="Comment"
+      >-- Minor brilliance condition, derived.</a
+      ><a name="731"
+      >
+  </a
+      ><a name="734" href="IemhoffSemantics.html#734" class="Function"
+      >R&#10814;&#8804;&#8594;&#8804;&#10814;R</a
+      ><a name="741"
+      > </a
+      ><a name="742" class="Symbol"
+      >:</a
+      ><a name="743"
+      > </a
+      ><a name="744" class="Symbol"
+      >&#8704;</a
+      ><a name="745"
+      > </a
+      ><a name="746" class="Symbol"
+      >{</a
+      ><a name="747" href="IemhoffSemantics.html#747" class="Bound"
+      >w</a
+      ><a name="748"
+      > </a
+      ><a name="749" href="IemhoffSemantics.html#749" class="Bound"
+      >v&#8242;</a
+      ><a name="751" class="Symbol"
+      >}</a
+      ><a name="752"
+      > </a
+      ><a name="753" class="Symbol"
+      >&#8594;</a
+      ><a name="754"
+      > </a
+      ><a name="755" href="IemhoffSemantics.html#747" class="Bound"
+      >w</a
+      ><a name="756"
+      > </a
+      ><a name="757" href="IemhoffSemantics.html#490" class="Function Operator"
+      >R&#10814;&#8804;</a
+      ><a name="760"
+      > </a
+      ><a name="761" href="IemhoffSemantics.html#749" class="Bound"
+      >v&#8242;</a
+      ><a name="763"
+      > </a
+      ><a name="764" class="Symbol"
+      >&#8594;</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="IemhoffSemantics.html#747" class="Bound"
+      >w</a
+      ><a name="767"
+      > </a
+      ><a name="768" href="IemhoffSemantics.html#439" class="Function Operator"
+      >&#8804;&#10814;R</a
+      ><a name="771"
+      > </a
+      ><a name="772" href="IemhoffSemantics.html#749" class="Bound"
+      >v&#8242;</a
+      ><a name="774"
+      >
+  </a
+      ><a name="777" href="IemhoffSemantics.html#734" class="Function"
+      >R&#10814;&#8804;&#8594;&#8804;&#10814;R</a
+      ><a name="784"
+      > </a
+      ><a name="785" class="Symbol"
+      >{</a
+      ><a name="786" href="IemhoffSemantics.html#786" class="Bound"
+      >w</a
+      ><a name="787" class="Symbol"
+      >}</a
+      ><a name="788"
+      > </a
+      ><a name="789" href="IemhoffSemantics.html#789" class="Bound"
+      >&#961;,&#968;</a
+      ><a name="792"
+      > </a
+      ><a name="793" class="Symbol"
+      >=</a
+      ><a name="794"
+      > </a
+      ><a name="795" href="IemhoffSemantics.html#786" class="Bound"
+      >w</a
+      ><a name="796"
+      > </a
+      ><a name="797" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="798"
+      > </a
+      ><a name="799" class="Symbol"
+      >(</a
+      ><a name="800" href="IemhoffSemantics.html#158" class="Field"
+      >refl&#8804;</a
+      ><a name="805"
+      > </a
+      ><a name="806" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="807"
+      > </a
+      ><a name="808" href="IemhoffSemantics.html#578" class="Field"
+      >R&#10814;&#8804;&#8594;R</a
+      ><a name="813"
+      > </a
+      ><a name="814" href="IemhoffSemantics.html#789" class="Bound"
+      >&#961;,&#968;</a
+      ><a name="817" class="Symbol"
+      >)</a
+      ><a name="818"
+      >
+
+  </a
+      ><a name="822" href="IemhoffSemantics.html#822" class="Function"
+      >refl&#8804;&#10814;R</a
+      ><a name="829"
+      > </a
+      ><a name="830" class="Symbol"
+      >:</a
+      ><a name="831"
+      > </a
+      ><a name="832" class="Symbol"
+      >&#8704;</a
+      ><a name="833"
+      > </a
+      ><a name="834" class="Symbol"
+      >{</a
+      ><a name="835" href="IemhoffSemantics.html#835" class="Bound"
+      >w</a
+      ><a name="836" class="Symbol"
+      >}</a
+      ><a name="837"
+      > </a
+      ><a name="838" class="Symbol"
+      >&#8594;</a
+      ><a name="839"
+      > </a
+      ><a name="840" href="IemhoffSemantics.html#835" class="Bound"
+      >w</a
+      ><a name="841"
+      > </a
+      ><a name="842" href="IemhoffSemantics.html#439" class="Function Operator"
+      >&#8804;&#10814;R</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="IemhoffSemantics.html#835" class="Bound"
+      >w</a
+      ><a name="847"
+      >
+  </a
+      ><a name="850" href="IemhoffSemantics.html#822" class="Function"
+      >refl&#8804;&#10814;R</a
+      ><a name="857"
+      > </a
+      ><a name="858" class="Symbol"
+      >{</a
+      ><a name="859" href="IemhoffSemantics.html#859" class="Bound"
+      >w</a
+      ><a name="860" class="Symbol"
+      >}</a
+      ><a name="861"
+      > </a
+      ><a name="862" class="Symbol"
+      >=</a
+      ><a name="863"
+      > </a
+      ><a name="864" href="IemhoffSemantics.html#859" class="Bound"
+      >w</a
+      ><a name="865"
+      > </a
+      ><a name="866" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="867"
+      > </a
+      ><a name="868" class="Symbol"
+      >(</a
+      ><a name="869" href="IemhoffSemantics.html#158" class="Field"
+      >refl&#8804;</a
+      ><a name="874"
+      > </a
+      ><a name="875" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="876"
+      > </a
+      ><a name="877" href="IemhoffSemantics.html#274" class="Field"
+      >reflR</a
+      ><a name="882" class="Symbol"
+      >)</a
+      ><a name="883"
+      >
+
+  </a
+      ><a name="887" href="IemhoffSemantics.html#887" class="Function"
+      >trans&#8804;&#10814;R</a
+      ><a name="895"
+      > </a
+      ><a name="896" class="Symbol"
+      >:</a
+      ><a name="897"
+      > </a
+      ><a name="898" class="Symbol"
+      >&#8704;</a
+      ><a name="899"
+      > </a
+      ><a name="900" class="Symbol"
+      >{</a
+      ><a name="901" href="IemhoffSemantics.html#901" class="Bound"
+      >w&#8242;</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="IemhoffSemantics.html#904" class="Bound"
+      >w</a
+      ><a name="905"
+      > </a
+      ><a name="906" href="IemhoffSemantics.html#906" class="Bound"
+      >w&#8243;</a
+      ><a name="908" class="Symbol"
+      >}</a
+      ><a name="909"
+      > </a
+      ><a name="910" class="Symbol"
+      >&#8594;</a
+      ><a name="911"
+      > </a
+      ><a name="912" href="IemhoffSemantics.html#904" class="Bound"
+      >w</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="IemhoffSemantics.html#439" class="Function Operator"
+      >&#8804;&#10814;R</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="IemhoffSemantics.html#901" class="Bound"
+      >w&#8242;</a
+      ><a name="920"
+      > </a
+      ><a name="921" class="Symbol"
+      >&#8594;</a
+      ><a name="922"
+      > </a
+      ><a name="923" href="IemhoffSemantics.html#901" class="Bound"
+      >w&#8242;</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="IemhoffSemantics.html#439" class="Function Operator"
+      >&#8804;&#10814;R</a
+      ><a name="929"
+      > </a
+      ><a name="930" href="IemhoffSemantics.html#906" class="Bound"
+      >w&#8243;</a
+      ><a name="932"
+      > </a
+      ><a name="933" class="Symbol"
+      >&#8594;</a
+      ><a name="934"
+      > </a
+      ><a name="935" href="IemhoffSemantics.html#904" class="Bound"
+      >w</a
+      ><a name="936"
+      > </a
+      ><a name="937" href="IemhoffSemantics.html#439" class="Function Operator"
+      >&#8804;&#10814;R</a
+      ><a name="940"
+      > </a
+      ><a name="941" href="IemhoffSemantics.html#906" class="Bound"
+      >w&#8243;</a
+      ><a name="943"
+      >
+  </a
+      ><a name="946" href="IemhoffSemantics.html#887" class="Function"
+      >trans&#8804;&#10814;R</a
+      ><a name="954"
+      > </a
+      ><a name="955" class="Symbol"
+      >{</a
+      ><a name="956" href="IemhoffSemantics.html#956" class="Bound"
+      >w&#8242;</a
+      ><a name="958" class="Symbol"
+      >}</a
+      ><a name="959"
+      > </a
+      ><a name="960" class="Symbol"
+      >(</a
+      ><a name="961" href="IemhoffSemantics.html#961" class="Bound"
+      >v</a
+      ><a name="962"
+      > </a
+      ><a name="963" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="964"
+      > </a
+      ><a name="965" class="Symbol"
+      >(</a
+      ><a name="966" href="IemhoffSemantics.html#966" class="Bound"
+      >&#958;</a
+      ><a name="967"
+      > </a
+      ><a name="968" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="IemhoffSemantics.html#970" class="Bound"
+      >&#950;</a
+      ><a name="971" class="Symbol"
+      >))</a
+      ><a name="973"
+      > </a
+      ><a name="974" class="Symbol"
+      >(</a
+      ><a name="975" href="IemhoffSemantics.html#975" class="Bound"
+      >v&#8242;</a
+      ><a name="977"
+      > </a
+      ><a name="978" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="979"
+      > </a
+      ><a name="980" class="Symbol"
+      >(</a
+      ><a name="981" href="IemhoffSemantics.html#981" class="Bound"
+      >&#958;&#8242;</a
+      ><a name="983"
+      > </a
+      ><a name="984" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="985"
+      > </a
+      ><a name="986" href="IemhoffSemantics.html#986" class="Bound"
+      >&#950;&#8242;</a
+      ><a name="988" class="Symbol"
+      >))</a
+      ><a name="990"
+      > </a
+      ><a name="991" class="Symbol"
+      >=</a
+      ><a name="992"
+      > </a
+      ><a name="993" class="Keyword"
+      >let</a
+      ><a name="996"
+      > </a
+      ><a name="997" href="IemhoffSemantics.html#997" class="Bound"
+      >v&#8243;</a
+      ><a name="999"
+      > </a
+      ><a name="1000" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1001"
+      > </a
+      ><a name="1002" class="Symbol"
+      >(</a
+      ><a name="1003" href="IemhoffSemantics.html#1003" class="Bound"
+      >&#958;&#8243;</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1007"
+      > </a
+      ><a name="1008" href="IemhoffSemantics.html#1008" class="Bound"
+      >&#950;&#8243;</a
+      ><a name="1010" class="Symbol"
+      >)</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" class="Symbol"
+      >=</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" href="IemhoffSemantics.html#734" class="Function"
+      >R&#10814;&#8804;&#8594;&#8804;&#10814;R</a
+      ><a name="1021"
+      > </a
+      ><a name="1022" class="Symbol"
+      >(</a
+      ><a name="1023" href="IemhoffSemantics.html#956" class="Bound"
+      >w&#8242;</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" class="Symbol"
+      >(</a
+      ><a name="1029" href="IemhoffSemantics.html#970" class="Bound"
+      >&#950;</a
+      ><a name="1030"
+      > </a
+      ><a name="1031" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" href="IemhoffSemantics.html#981" class="Bound"
+      >&#958;&#8242;</a
+      ><a name="1035" class="Symbol"
+      >))</a
+      ><a name="1037"
+      >
+                                                 </a
+      ><a name="1087" class="Keyword"
+      >in</a
+      ><a name="1089"
+      >  </a
+      ><a name="1091" href="IemhoffSemantics.html#997" class="Bound"
+      >v&#8243;</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1095"
+      > </a
+      ><a name="1096" class="Symbol"
+      >(</a
+      ><a name="1097" href="IemhoffSemantics.html#186" class="Field"
+      >trans&#8804;</a
+      ><a name="1103"
+      > </a
+      ><a name="1104" href="IemhoffSemantics.html#966" class="Bound"
+      >&#958;</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" href="IemhoffSemantics.html#1003" class="Bound"
+      >&#958;&#8243;</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1110"
+      > </a
+      ><a name="1111" href="IemhoffSemantics.html#302" class="Field"
+      >transR</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="IemhoffSemantics.html#1008" class="Bound"
+      >&#950;&#8243;</a
+      ><a name="1120"
+      > </a
+      ><a name="1121" href="IemhoffSemantics.html#986" class="Bound"
+      >&#950;&#8242;</a
+      ><a name="1123" class="Symbol"
+      >)</a
+      ><a name="1124"
+      >
+
+</a
+      ><a name="1126" class="Keyword"
+      >open</a
+      ><a name="1130"
+      > </a
+      ><a name="1131" href="IemhoffSemantics.html#60" class="Module"
+      >Model</a
+      ><a name="1136"
+      > </a
+      ><a name="1137" class="Symbol"
+      >{{&#8230;}}</a
+      ><a name="1142"
+      > </a
+      ><a name="1143" class="Keyword"
+      >public</a
+      ><a name="1149"
+      >
+
+</a
+      ><a name="1151" class="Keyword"
+      >module</a
+      ><a name="1157"
+      > </a
+      ><a name="1158" href="IemhoffSemantics.html#1158" class="Module"
+      >_</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" class="Symbol"
+      >{{</a
+      ><a name="1162" href="IemhoffSemantics.html#1162" class="Bound"
+      >_</a
+      ><a name="1163"
+      > </a
+      ><a name="1164" class="Symbol"
+      >:</a
+      ><a name="1165"
+      > </a
+      ><a name="1166" href="IemhoffSemantics.html#60" class="Record"
+      >Model</a
+      ><a name="1171" class="Symbol"
+      >}}</a
+      ><a name="1173"
+      > </a
+      ><a name="1174" class="Keyword"
+      >where</a
+      ><a name="1179"
+      >
+  </a
+      ><a name="1182" class="Keyword"
+      >infix</a
+      ><a name="1187"
+      > </a
+      ><a name="1188" class="Number"
+      >3</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >_&#8873;_</a
+      ><a name="1193"
+      >
+  </a
+      ><a name="1196" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >_&#8873;_</a
+      ><a name="1199"
+      > </a
+      ><a name="1200" class="Symbol"
+      >:</a
+      ><a name="1201"
+      > </a
+      ><a name="1202" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" class="Symbol"
+      >&#8594;</a
+      ><a name="1209"
+      > </a
+      ><a name="1210" href="Syntax.html#104" class="Datatype"
+      >Type</a
+      ><a name="1214"
+      > </a
+      ><a name="1215" class="Symbol"
+      >&#8594;</a
+      ><a name="1216"
+      > </a
+      ><a name="1217" class="PrimitiveType"
+      >Set</a
+      ><a name="1220"
+      >
+  </a
+      ><a name="1223" href="IemhoffSemantics.html#1223" class="Bound"
+      >w</a
+      ><a name="1224"
+      > </a
+      ><a name="1225" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1226"
+      > </a
+      ><a name="1227" href="Syntax.html#123" class="InductiveConstructor Operator"
+      >&#945;</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" href="IemhoffSemantics.html#1229" class="Bound"
+      >P</a
+      ><a name="1230"
+      >    </a
+      ><a name="1234" class="Symbol"
+      >=</a
+      ><a name="1235"
+      > </a
+      ><a name="1236" href="IemhoffSemantics.html#1223" class="Bound"
+      >w</a
+      ><a name="1237"
+      > </a
+      ><a name="1238" href="IemhoffSemantics.html#356" class="Field Operator"
+      >&#8873;&#7493;</a
+      ><a name="1240"
+      > </a
+      ><a name="1241" href="IemhoffSemantics.html#1229" class="Bound"
+      >P</a
+      ><a name="1242"
+      >
+  </a
+      ><a name="1245" href="IemhoffSemantics.html#1245" class="Bound"
+      >w</a
+      ><a name="1246"
+      > </a
+      ><a name="1247" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" href="IemhoffSemantics.html#1249" class="Bound"
+      >A</a
+      ><a name="1250"
+      > </a
+      ><a name="1251" href="Syntax.html#144" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="1252"
+      > </a
+      ><a name="1253" href="IemhoffSemantics.html#1253" class="Bound"
+      >B</a
+      ><a name="1254"
+      > </a
+      ><a name="1255" class="Symbol"
+      >=</a
+      ><a name="1256"
+      > </a
+      ><a name="1257" class="Symbol"
+      >&#8704;</a
+      ><a name="1258"
+      > </a
+      ><a name="1259" class="Symbol"
+      >{</a
+      ><a name="1260" href="IemhoffSemantics.html#1260" class="Bound"
+      >w&#8242;</a
+      ><a name="1262" class="Symbol"
+      >}</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" class="Symbol"
+      >&#8594;</a
+      ><a name="1265"
+      > </a
+      ><a name="1266" href="IemhoffSemantics.html#1245" class="Bound"
+      >w</a
+      ><a name="1267"
+      > </a
+      ><a name="1268" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="1269"
+      > </a
+      ><a name="1270" href="IemhoffSemantics.html#1260" class="Bound"
+      >w&#8242;</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" class="Symbol"
+      >&#8594;</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="IemhoffSemantics.html#1260" class="Bound"
+      >w&#8242;</a
+      ><a name="1277"
+      > </a
+      ><a name="1278" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1279"
+      > </a
+      ><a name="1280" href="IemhoffSemantics.html#1249" class="Bound"
+      >A</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" class="Symbol"
+      >&#8594;</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="IemhoffSemantics.html#1260" class="Bound"
+      >w&#8242;</a
+      ><a name="1286"
+      > </a
+      ><a name="1287" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" href="IemhoffSemantics.html#1253" class="Bound"
+      >B</a
+      ><a name="1290"
+      >
+  </a
+      ><a name="1293" href="IemhoffSemantics.html#1293" class="Bound"
+      >w</a
+      ><a name="1294"
+      > </a
+      ><a name="1295" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1296"
+      > </a
+      ><a name="1297" href="Syntax.html#171" class="InductiveConstructor Operator"
+      >&#9633;</a
+      ><a name="1298"
+      > </a
+      ><a name="1299" href="IemhoffSemantics.html#1299" class="Bound"
+      >A</a
+      ><a name="1300"
+      >    </a
+      ><a name="1304" class="Symbol"
+      >=</a
+      ><a name="1305"
+      > </a
+      ><a name="1306" class="Symbol"
+      >&#8704;</a
+      ><a name="1307"
+      > </a
+      ><a name="1308" class="Symbol"
+      >{</a
+      ><a name="1309" href="IemhoffSemantics.html#1309" class="Bound"
+      >v&#8242;</a
+      ><a name="1311" class="Symbol"
+      >}</a
+      ><a name="1312"
+      > </a
+      ><a name="1313" class="Symbol"
+      >&#8594;</a
+      ><a name="1314"
+      > </a
+      ><a name="1315" href="IemhoffSemantics.html#1293" class="Bound"
+      >w</a
+      ><a name="1316"
+      > </a
+      ><a name="1317" href="IemhoffSemantics.html#240" class="Field Operator"
+      >R</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" href="IemhoffSemantics.html#1309" class="Bound"
+      >v&#8242;</a
+      ><a name="1321"
+      > </a
+      ><a name="1322" class="Symbol"
+      >&#8594;</a
+      ><a name="1323"
+      > </a
+      ><a name="1324" href="IemhoffSemantics.html#1309" class="Bound"
+      >v&#8242;</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" href="IemhoffSemantics.html#1299" class="Bound"
+      >A</a
+      ><a name="1330"
+      >
+  </a
+      ><a name="1333" href="IemhoffSemantics.html#1333" class="Bound"
+      >w</a
+      ><a name="1334"
+      > </a
+      ><a name="1335" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1336"
+      > </a
+      ><a name="1337" href="IemhoffSemantics.html#1337" class="Bound"
+      >A</a
+      ><a name="1338"
+      > </a
+      ><a name="1339" href="Syntax.html#192" class="InductiveConstructor Operator"
+      >&#10837;</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" href="IemhoffSemantics.html#1341" class="Bound"
+      >B</a
+      ><a name="1342"
+      >  </a
+      ><a name="1344" class="Symbol"
+      >=</a
+      ><a name="1345"
+      > </a
+      ><a name="1346" href="IemhoffSemantics.html#1333" class="Bound"
+      >w</a
+      ><a name="1347"
+      > </a
+      ><a name="1348" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="IemhoffSemantics.html#1337" class="Bound"
+      >A</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" href="Common.html#517" class="Function Operator"
+      >&#8743;</a
+      ><a name="1353"
+      > </a
+      ><a name="1354" href="IemhoffSemantics.html#1333" class="Bound"
+      >w</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" href="IemhoffSemantics.html#1341" class="Bound"
+      >B</a
+      ><a name="1359"
+      >
+  </a
+      ><a name="1362" href="IemhoffSemantics.html#1362" class="Bound"
+      >w</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" href="Syntax.html#220" class="InductiveConstructor"
+      >&#10986;</a
+      ><a name="1367"
+      >     </a
+      ><a name="1372" class="Symbol"
+      >=</a
+      ><a name="1373"
+      > </a
+      ><a name="1374" href="Agda.Builtin.Unit.html#69" class="Record"
+      >&#8868;</a
+      ><a name="1375"
+      >
+
+  </a
+      ><a name="1379" class="Keyword"
+      >infix</a
+      ><a name="1384"
+      > </a
+      ><a name="1385" class="Number"
+      >3</a
+      ><a name="1386"
+      > </a
+      ><a name="1387" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >_&#8873;&#8902;_</a
+      ><a name="1391"
+      >
+  </a
+      ><a name="1394" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >_&#8873;&#8902;_</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" class="Symbol"
+      >:</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" href="IemhoffSemantics.html#106" class="Field"
+      >World</a
+      ><a name="1406"
+      > </a
+      ><a name="1407" class="Symbol"
+      >&#8594;</a
+      ><a name="1408"
+      > </a
+      ><a name="1409" href="Common.html#1143" class="Datatype"
+      >Stack</a
+      ><a name="1414"
+      > </a
+      ><a name="1415" href="Syntax.html#104" class="Datatype"
+      >Type</a
+      ><a name="1419"
+      > </a
+      ><a name="1420" class="Symbol"
+      >&#8594;</a
+      ><a name="1421"
+      > </a
+      ><a name="1422" class="PrimitiveType"
+      >Set</a
+      ><a name="1425"
+      >
+  </a
+      ><a name="1428" href="IemhoffSemantics.html#1428" class="Bound"
+      >w</a
+      ><a name="1429"
+      > </a
+      ><a name="1430" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1432"
+      > </a
+      ><a name="1433" href="Common.html#1173" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="1434"
+      >     </a
+      ><a name="1439" class="Symbol"
+      >=</a
+      ><a name="1440"
+      > </a
+      ><a name="1441" href="Agda.Builtin.Unit.html#69" class="Record"
+      >&#8868;</a
+      ><a name="1442"
+      >
+  </a
+      ><a name="1445" href="IemhoffSemantics.html#1445" class="Bound"
+      >w</a
+      ><a name="1446"
+      > </a
+      ><a name="1447" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1449"
+      > </a
+      ><a name="1450" href="IemhoffSemantics.html#1450" class="Bound"
+      >&#936;</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" href="Common.html#1189" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" href="IemhoffSemantics.html#1454" class="Bound"
+      >A</a
+      ><a name="1455"
+      > </a
+      ><a name="1456" class="Symbol"
+      >=</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" href="IemhoffSemantics.html#1445" class="Bound"
+      >w</a
+      ><a name="1459"
+      > </a
+      ><a name="1460" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1462"
+      > </a
+      ><a name="1463" href="IemhoffSemantics.html#1450" class="Bound"
+      >&#936;</a
+      ><a name="1464"
+      > </a
+      ><a name="1465" href="Common.html#517" class="Function Operator"
+      >&#8743;</a
+      ><a name="1466"
+      > </a
+      ><a name="1467" href="IemhoffSemantics.html#1445" class="Bound"
+      >w</a
+      ><a name="1468"
+      > </a
+      ><a name="1469" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" href="IemhoffSemantics.html#1454" class="Bound"
+      >A</a
+      ><a name="1472"
+      >
+
+  </a
+      ><a name="1476" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" class="Symbol"
+      >:</a
+      ><a name="1483"
+      > </a
+      ><a name="1484" class="Symbol"
+      >&#8704;</a
+      ><a name="1485"
+      > </a
+      ><a name="1486" class="Symbol"
+      >{</a
+      ><a name="1487" href="IemhoffSemantics.html#1487" class="Bound"
+      >A</a
+      ><a name="1488"
+      > </a
+      ><a name="1489" href="IemhoffSemantics.html#1489" class="Bound"
+      >w</a
+      ><a name="1490"
+      > </a
+      ><a name="1491" href="IemhoffSemantics.html#1491" class="Bound"
+      >w&#8242;</a
+      ><a name="1493" class="Symbol"
+      >}</a
+      ><a name="1494"
+      > </a
+      ><a name="1495" class="Symbol"
+      >&#8594;</a
+      ><a name="1496"
+      > </a
+      ><a name="1497" href="IemhoffSemantics.html#1489" class="Bound"
+      >w</a
+      ><a name="1498"
+      > </a
+      ><a name="1499" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="IemhoffSemantics.html#1491" class="Bound"
+      >w&#8242;</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" class="Symbol"
+      >&#8594;</a
+      ><a name="1505"
+      > </a
+      ><a name="1506" href="IemhoffSemantics.html#1489" class="Bound"
+      >w</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1509"
+      > </a
+      ><a name="1510" href="IemhoffSemantics.html#1487" class="Bound"
+      >A</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" class="Symbol"
+      >&#8594;</a
+      ><a name="1513"
+      > </a
+      ><a name="1514" href="IemhoffSemantics.html#1491" class="Bound"
+      >w&#8242;</a
+      ><a name="1516"
+      > </a
+      ><a name="1517" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1518"
+      > </a
+      ><a name="1519" href="IemhoffSemantics.html#1487" class="Bound"
+      >A</a
+      ><a name="1520"
+      >
+  </a
+      ><a name="1523" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1528"
+      > </a
+      ><a name="1529" class="Symbol"
+      >{</a
+      ><a name="1530" href="Syntax.html#123" class="InductiveConstructor Operator"
+      >&#945;</a
+      ><a name="1531"
+      > </a
+      ><a name="1532" href="IemhoffSemantics.html#1532" class="Bound"
+      >P</a
+      ><a name="1533" class="Symbol"
+      >}</a
+      ><a name="1534"
+      >    </a
+      ><a name="1538" href="IemhoffSemantics.html#1538" class="Bound"
+      >&#968;</a
+      ><a name="1539"
+      > </a
+      ><a name="1540" href="IemhoffSemantics.html#1540" class="Bound"
+      >s</a
+      ><a name="1541"
+      >       </a
+      ><a name="1548" class="Symbol"
+      >=</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" href="IemhoffSemantics.html#388" class="Field"
+      >mono&#8873;&#7493;</a
+      ><a name="1556"
+      > </a
+      ><a name="1557" href="IemhoffSemantics.html#1538" class="Bound"
+      >&#968;</a
+      ><a name="1558"
+      > </a
+      ><a name="1559" href="IemhoffSemantics.html#1540" class="Bound"
+      >s</a
+      ><a name="1560"
+      >
+  </a
+      ><a name="1563" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1568"
+      > </a
+      ><a name="1569" class="Symbol"
+      >{</a
+      ><a name="1570" href="IemhoffSemantics.html#1570" class="Bound"
+      >A</a
+      ><a name="1571"
+      > </a
+      ><a name="1572" href="Syntax.html#144" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="1573"
+      > </a
+      ><a name="1574" href="IemhoffSemantics.html#1574" class="Bound"
+      >B</a
+      ><a name="1575" class="Symbol"
+      >}</a
+      ><a name="1576"
+      > </a
+      ><a name="1577" href="IemhoffSemantics.html#1577" class="Bound"
+      >&#968;</a
+      ><a name="1578"
+      > </a
+      ><a name="1579" href="IemhoffSemantics.html#1579" class="Bound"
+      >f</a
+      ><a name="1580"
+      >       </a
+      ><a name="1587" class="Symbol"
+      >=</a
+      ><a name="1588"
+      > </a
+      ><a name="1589" class="Symbol"
+      >&#955;</a
+      ><a name="1590"
+      > </a
+      ><a name="1591" href="IemhoffSemantics.html#1591" class="Bound"
+      >&#968;&#8242;</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" href="IemhoffSemantics.html#1594" class="Bound"
+      >a</a
+      ><a name="1595"
+      > </a
+      ><a name="1596" class="Symbol"
+      >&#8594;</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" href="IemhoffSemantics.html#1579" class="Bound"
+      >f</a
+      ><a name="1599"
+      > </a
+      ><a name="1600" class="Symbol"
+      >(</a
+      ><a name="1601" href="IemhoffSemantics.html#186" class="Field"
+      >trans&#8804;</a
+      ><a name="1607"
+      > </a
+      ><a name="1608" href="IemhoffSemantics.html#1577" class="Bound"
+      >&#968;</a
+      ><a name="1609"
+      > </a
+      ><a name="1610" href="IemhoffSemantics.html#1591" class="Bound"
+      >&#968;&#8242;</a
+      ><a name="1612" class="Symbol"
+      >)</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="IemhoffSemantics.html#1594" class="Bound"
+      >a</a
+      ><a name="1615"
+      >
+  </a
+      ><a name="1618" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" class="Symbol"
+      >{</a
+      ><a name="1625" href="Syntax.html#171" class="InductiveConstructor Operator"
+      >&#9633;</a
+      ><a name="1626"
+      > </a
+      ><a name="1627" href="IemhoffSemantics.html#1627" class="Bound"
+      >A</a
+      ><a name="1628" class="Symbol"
+      >}</a
+      ><a name="1629"
+      >    </a
+      ><a name="1633" href="IemhoffSemantics.html#1633" class="Bound"
+      >&#968;</a
+      ><a name="1634"
+      > </a
+      ><a name="1635" href="IemhoffSemantics.html#1635" class="Bound"
+      >f</a
+      ><a name="1636"
+      >       </a
+      ><a name="1643" class="Symbol"
+      >=</a
+      ><a name="1644"
+      > </a
+      ><a name="1645" class="Symbol"
+      >&#955;</a
+      ><a name="1646"
+      > </a
+      ><a name="1647" href="IemhoffSemantics.html#1647" class="Bound"
+      >&#961;</a
+      ><a name="1648"
+      > </a
+      ><a name="1649" class="Symbol"
+      >&#8594;</a
+      ><a name="1650"
+      > </a
+      ><a name="1651" href="IemhoffSemantics.html#1635" class="Bound"
+      >f</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" class="Symbol"
+      >(</a
+      ><a name="1654" href="IemhoffSemantics.html#302" class="Field"
+      >transR</a
+      ><a name="1660"
+      > </a
+      ><a name="1661" class="Symbol"
+      >(</a
+      ><a name="1662" href="IemhoffSemantics.html#618" class="Function"
+      >&#8804;&#8594;R</a
+      ><a name="1665"
+      > </a
+      ><a name="1666" href="IemhoffSemantics.html#1633" class="Bound"
+      >&#968;</a
+      ><a name="1667" class="Symbol"
+      >)</a
+      ><a name="1668"
+      > </a
+      ><a name="1669" href="IemhoffSemantics.html#1647" class="Bound"
+      >&#961;</a
+      ><a name="1670" class="Symbol"
+      >)</a
+      ><a name="1671"
+      >
+  </a
+      ><a name="1674" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1679"
+      > </a
+      ><a name="1680" class="Symbol"
+      >{</a
+      ><a name="1681" href="IemhoffSemantics.html#1681" class="Bound"
+      >A</a
+      ><a name="1682"
+      > </a
+      ><a name="1683" href="Syntax.html#192" class="InductiveConstructor Operator"
+      >&#10837;</a
+      ><a name="1684"
+      > </a
+      ><a name="1685" href="IemhoffSemantics.html#1685" class="Bound"
+      >B</a
+      ><a name="1686" class="Symbol"
+      >}</a
+      ><a name="1687"
+      >  </a
+      ><a name="1689" href="IemhoffSemantics.html#1689" class="Bound"
+      >&#968;</a
+      ><a name="1690"
+      > </a
+      ><a name="1691" class="Symbol"
+      >(</a
+      ><a name="1692" href="IemhoffSemantics.html#1692" class="Bound"
+      >a</a
+      ><a name="1693"
+      > </a
+      ><a name="1694" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1695"
+      > </a
+      ><a name="1696" href="IemhoffSemantics.html#1696" class="Bound"
+      >b</a
+      ><a name="1697" class="Symbol"
+      >)</a
+      ><a name="1698"
+      > </a
+      ><a name="1699" class="Symbol"
+      >=</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1706"
+      > </a
+      ><a name="1707" class="Symbol"
+      >{</a
+      ><a name="1708" href="IemhoffSemantics.html#1681" class="Bound"
+      >A</a
+      ><a name="1709" class="Symbol"
+      >}</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" href="IemhoffSemantics.html#1689" class="Bound"
+      >&#968;</a
+      ><a name="1712"
+      > </a
+      ><a name="1713" href="IemhoffSemantics.html#1692" class="Bound"
+      >a</a
+      ><a name="1714"
+      > </a
+      ><a name="1715" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1716"
+      > </a
+      ><a name="1717" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1722"
+      > </a
+      ><a name="1723" class="Symbol"
+      >{</a
+      ><a name="1724" href="IemhoffSemantics.html#1685" class="Bound"
+      >B</a
+      ><a name="1725" class="Symbol"
+      >}</a
+      ><a name="1726"
+      > </a
+      ><a name="1727" href="IemhoffSemantics.html#1689" class="Bound"
+      >&#968;</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" href="IemhoffSemantics.html#1696" class="Bound"
+      >b</a
+      ><a name="1730"
+      >
+  </a
+      ><a name="1733" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" class="Symbol"
+      >{</a
+      ><a name="1740" href="Syntax.html#220" class="InductiveConstructor"
+      >&#10986;</a
+      ><a name="1741" class="Symbol"
+      >}</a
+      ><a name="1742"
+      >     </a
+      ><a name="1747" href="IemhoffSemantics.html#1747" class="Bound"
+      >&#968;</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="1750"
+      >       </a
+      ><a name="1757" class="Symbol"
+      >=</a
+      ><a name="1758"
+      > </a
+      ><a name="1759" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="1760"
+      >
+
+  </a
+      ><a name="1764" href="IemhoffSemantics.html#1764" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1770"
+      > </a
+      ><a name="1771" class="Symbol"
+      >:</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" class="Symbol"
+      >&#8704;</a
+      ><a name="1774"
+      > </a
+      ><a name="1775" class="Symbol"
+      >{</a
+      ><a name="1776" href="IemhoffSemantics.html#1776" class="Bound"
+      >&#926;</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" href="IemhoffSemantics.html#1778" class="Bound"
+      >w</a
+      ><a name="1779"
+      > </a
+      ><a name="1780" href="IemhoffSemantics.html#1780" class="Bound"
+      >w&#8242;</a
+      ><a name="1782" class="Symbol"
+      >}</a
+      ><a name="1783"
+      > </a
+      ><a name="1784" class="Symbol"
+      >&#8594;</a
+      ><a name="1785"
+      > </a
+      ><a name="1786" href="IemhoffSemantics.html#1778" class="Bound"
+      >w</a
+      ><a name="1787"
+      > </a
+      ><a name="1788" href="IemhoffSemantics.html#124" class="Field Operator"
+      >&#8804;</a
+      ><a name="1789"
+      > </a
+      ><a name="1790" href="IemhoffSemantics.html#1780" class="Bound"
+      >w&#8242;</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" class="Symbol"
+      >&#8594;</a
+      ><a name="1794"
+      > </a
+      ><a name="1795" href="IemhoffSemantics.html#1778" class="Bound"
+      >w</a
+      ><a name="1796"
+      > </a
+      ><a name="1797" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1799"
+      > </a
+      ><a name="1800" href="IemhoffSemantics.html#1776" class="Bound"
+      >&#926;</a
+      ><a name="1801"
+      > </a
+      ><a name="1802" class="Symbol"
+      >&#8594;</a
+      ><a name="1803"
+      > </a
+      ><a name="1804" href="IemhoffSemantics.html#1780" class="Bound"
+      >w&#8242;</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" href="IemhoffSemantics.html#1776" class="Bound"
+      >&#926;</a
+      ><a name="1811"
+      >
+  </a
+      ><a name="1814" href="IemhoffSemantics.html#1764" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1820"
+      > </a
+      ><a name="1821" class="Symbol"
+      >{</a
+      ><a name="1822" href="Common.html#1173" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="1823" class="Symbol"
+      >}</a
+      ><a name="1824"
+      >     </a
+      ><a name="1829" href="IemhoffSemantics.html#1829" class="Bound"
+      >&#968;</a
+      ><a name="1830"
+      > </a
+      ><a name="1831" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="1832"
+      >       </a
+      ><a name="1839" class="Symbol"
+      >=</a
+      ><a name="1840"
+      > </a
+      ><a name="1841" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="1842"
+      >
+  </a
+      ><a name="1845" href="IemhoffSemantics.html#1764" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1851"
+      > </a
+      ><a name="1852" class="Symbol"
+      >{</a
+      ><a name="1853" href="IemhoffSemantics.html#1853" class="Bound"
+      >&#926;</a
+      ><a name="1854"
+      > </a
+      ><a name="1855" href="Common.html#1189" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1856"
+      > </a
+      ><a name="1857" href="IemhoffSemantics.html#1857" class="Bound"
+      >A</a
+      ><a name="1858" class="Symbol"
+      >}</a
+      ><a name="1859"
+      > </a
+      ><a name="1860" href="IemhoffSemantics.html#1860" class="Bound"
+      >&#968;</a
+      ><a name="1861"
+      > </a
+      ><a name="1862" class="Symbol"
+      >(</a
+      ><a name="1863" href="IemhoffSemantics.html#1863" class="Bound"
+      >&#958;</a
+      ><a name="1864"
+      > </a
+      ><a name="1865" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1866"
+      > </a
+      ><a name="1867" href="IemhoffSemantics.html#1867" class="Bound"
+      >s</a
+      ><a name="1868" class="Symbol"
+      >)</a
+      ><a name="1869"
+      > </a
+      ><a name="1870" class="Symbol"
+      >=</a
+      ><a name="1871"
+      > </a
+      ><a name="1872" href="IemhoffSemantics.html#1764" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1878"
+      > </a
+      ><a name="1879" class="Symbol"
+      >{</a
+      ><a name="1880" href="IemhoffSemantics.html#1853" class="Bound"
+      >&#926;</a
+      ><a name="1881" class="Symbol"
+      >}</a
+      ><a name="1882"
+      > </a
+      ><a name="1883" href="IemhoffSemantics.html#1860" class="Bound"
+      >&#968;</a
+      ><a name="1884"
+      > </a
+      ><a name="1885" href="IemhoffSemantics.html#1863" class="Bound"
+      >&#958;</a
+      ><a name="1886"
+      > </a
+      ><a name="1887" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1888"
+      > </a
+      ><a name="1889" href="IemhoffSemantics.html#1476" class="Function"
+      >mono&#8873;</a
+      ><a name="1894"
+      > </a
+      ><a name="1895" class="Symbol"
+      >{</a
+      ><a name="1896" href="IemhoffSemantics.html#1857" class="Bound"
+      >A</a
+      ><a name="1897" class="Symbol"
+      >}</a
+      ><a name="1898"
+      > </a
+      ><a name="1899" href="IemhoffSemantics.html#1860" class="Bound"
+      >&#968;</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" href="IemhoffSemantics.html#1867" class="Bound"
+      >s</a
+      ><a name="1902"
+      >
+
+  </a
+      ><a name="1906" href="IemhoffSemantics.html#1906" class="Function"
+      >lookup</a
+      ><a name="1912"
+      > </a
+      ><a name="1913" class="Symbol"
+      >:</a
+      ><a name="1914"
+      > </a
+      ><a name="1915" class="Symbol"
+      >&#8704;</a
+      ><a name="1916"
+      > </a
+      ><a name="1917" class="Symbol"
+      >{</a
+      ><a name="1918" href="IemhoffSemantics.html#1918" class="Bound"
+      >&#926;</a
+      ><a name="1919"
+      > </a
+      ><a name="1920" href="IemhoffSemantics.html#1920" class="Bound"
+      >A</a
+      ><a name="1921"
+      > </a
+      ><a name="1922" href="IemhoffSemantics.html#1922" class="Bound"
+      >w</a
+      ><a name="1923" class="Symbol"
+      >}</a
+      ><a name="1924"
+      > </a
+      ><a name="1925" class="Symbol"
+      >&#8594;</a
+      ><a name="1926"
+      > </a
+      ><a name="1927" href="IemhoffSemantics.html#1920" class="Bound"
+      >A</a
+      ><a name="1928"
+      > </a
+      ><a name="1929" href="Common.html#1309" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="1930"
+      > </a
+      ><a name="1931" href="IemhoffSemantics.html#1918" class="Bound"
+      >&#926;</a
+      ><a name="1932"
+      > </a
+      ><a name="1933" class="Symbol"
+      >&#8594;</a
+      ><a name="1934"
+      > </a
+      ><a name="1935" href="IemhoffSemantics.html#1922" class="Bound"
+      >w</a
+      ><a name="1936"
+      > </a
+      ><a name="1937" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1939"
+      > </a
+      ><a name="1940" href="IemhoffSemantics.html#1918" class="Bound"
+      >&#926;</a
+      ><a name="1941"
+      > </a
+      ><a name="1942" class="Symbol"
+      >&#8594;</a
+      ><a name="1943"
+      > </a
+      ><a name="1944" href="IemhoffSemantics.html#1922" class="Bound"
+      >w</a
+      ><a name="1945"
+      > </a
+      ><a name="1946" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="1947"
+      > </a
+      ><a name="1948" href="IemhoffSemantics.html#1920" class="Bound"
+      >A</a
+      ><a name="1949"
+      >
+  </a
+      ><a name="1952" href="IemhoffSemantics.html#1906" class="Function"
+      >lookup</a
+      ><a name="1958"
+      > </a
+      ><a name="1959" href="Common.html#1347" class="InductiveConstructor"
+      >top</a
+      ><a name="1962"
+      >     </a
+      ><a name="1967" class="Symbol"
+      >(</a
+      ><a name="1968" href="IemhoffSemantics.html#1968" class="Bound"
+      >&#958;</a
+      ><a name="1969"
+      > </a
+      ><a name="1970" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1971"
+      > </a
+      ><a name="1972" href="IemhoffSemantics.html#1972" class="Bound"
+      >s</a
+      ><a name="1973" class="Symbol"
+      >)</a
+      ><a name="1974"
+      > </a
+      ><a name="1975" class="Symbol"
+      >=</a
+      ><a name="1976"
+      > </a
+      ><a name="1977" href="IemhoffSemantics.html#1972" class="Bound"
+      >s</a
+      ><a name="1978"
+      >
+  </a
+      ><a name="1981" href="IemhoffSemantics.html#1906" class="Function"
+      >lookup</a
+      ><a name="1987"
+      > </a
+      ><a name="1988" class="Symbol"
+      >(</a
+      ><a name="1989" href="Common.html#1377" class="InductiveConstructor"
+      >pop</a
+      ><a name="1992"
+      > </a
+      ><a name="1993" href="IemhoffSemantics.html#1993" class="Bound"
+      >i</a
+      ><a name="1994" class="Symbol"
+      >)</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" class="Symbol"
+      >(</a
+      ><a name="1997" href="IemhoffSemantics.html#1997" class="Bound"
+      >&#958;</a
+      ><a name="1998"
+      > </a
+      ><a name="1999" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2000"
+      > </a
+      ><a name="2001" href="IemhoffSemantics.html#2001" class="Bound"
+      >s</a
+      ><a name="2002" class="Symbol"
+      >)</a
+      ><a name="2003"
+      > </a
+      ><a name="2004" class="Symbol"
+      >=</a
+      ><a name="2005"
+      > </a
+      ><a name="2006" href="IemhoffSemantics.html#1906" class="Function"
+      >lookup</a
+      ><a name="2012"
+      > </a
+      ><a name="2013" href="IemhoffSemantics.html#1993" class="Bound"
+      >i</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" href="IemhoffSemantics.html#1997" class="Bound"
+      >&#958;</a
+      ><a name="2016"
+      >
+
+</a
+      ><a name="2018" class="Keyword"
+      >infix</a
+      ><a name="2023"
+      > </a
+      ><a name="2024" class="Number"
+      >3</a
+      ><a name="2025"
+      > </a
+      ><a name="2026" href="IemhoffSemantics.html#2030" class="Function Operator"
+      >_&#8872;_</a
+      ><a name="2029"
+      >
+</a
+      ><a name="2030" href="IemhoffSemantics.html#2030" class="Function Operator"
+      >_&#8872;_</a
+      ><a name="2033"
+      > </a
+      ><a name="2034" class="Symbol"
+      >:</a
+      ><a name="2035"
+      > </a
+      ><a name="2036" href="Syntax.html#232" class="Function"
+      >Context</a
+      ><a name="2043"
+      > </a
+      ><a name="2044" class="Symbol"
+      >&#8594;</a
+      ><a name="2045"
+      > </a
+      ><a name="2046" href="Syntax.html#104" class="Datatype"
+      >Type</a
+      ><a name="2050"
+      > </a
+      ><a name="2051" class="Symbol"
+      >&#8594;</a
+      ><a name="2052"
+      > </a
+      ><a name="2053" class="PrimitiveType"
+      >Set&#8321;</a
+      ><a name="2057"
+      >
+</a
+      ><a name="2058" href="IemhoffSemantics.html#2058" class="Bound"
+      >&#915;</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" href="Common.html#2559" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="2061"
+      > </a
+      ><a name="2062" href="IemhoffSemantics.html#2062" class="Bound"
+      >&#916;</a
+      ><a name="2063"
+      > </a
+      ><a name="2064" href="IemhoffSemantics.html#2030" class="Function Operator"
+      >&#8872;</a
+      ><a name="2065"
+      > </a
+      ><a name="2066" href="IemhoffSemantics.html#2066" class="Bound"
+      >A</a
+      ><a name="2067"
+      > </a
+      ><a name="2068" class="Symbol"
+      >=</a
+      ><a name="2069"
+      > </a
+      ><a name="2070" class="Symbol"
+      >&#8704;</a
+      ><a name="2071"
+      > </a
+      ><a name="2072" class="Symbol"
+      >{{</a
+      ><a name="2074" href="IemhoffSemantics.html#2074" class="Bound"
+      >_</a
+      ><a name="2075"
+      > </a
+      ><a name="2076" class="Symbol"
+      >:</a
+      ><a name="2077"
+      > </a
+      ><a name="2078" href="IemhoffSemantics.html#60" class="Record"
+      >Model</a
+      ><a name="2083" class="Symbol"
+      >}}</a
+      ><a name="2085"
+      > </a
+      ><a name="2086" class="Symbol"
+      >{</a
+      ><a name="2087" href="IemhoffSemantics.html#2087" class="Bound"
+      >w</a
+      ><a name="2088" class="Symbol"
+      >}</a
+      ><a name="2089"
+      > </a
+      ><a name="2090" class="Symbol"
+      >&#8594;</a
+      ><a name="2091"
+      >
+             </a
+      ><a name="2105" href="IemhoffSemantics.html#2087" class="Bound"
+      >w</a
+      ><a name="2106"
+      > </a
+      ><a name="2107" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="2109"
+      > </a
+      ><a name="2110" href="IemhoffSemantics.html#2058" class="Bound"
+      >&#915;</a
+      ><a name="2111"
+      > </a
+      ><a name="2112" class="Symbol"
+      >&#8594;</a
+      ><a name="2113"
+      >
+             </a
+      ><a name="2127" class="Symbol"
+      >(&#8704;</a
+      ><a name="2129"
+      > </a
+      ><a name="2130" class="Symbol"
+      >{</a
+      ><a name="2131" href="IemhoffSemantics.html#2131" class="Bound"
+      >v&#8242;</a
+      ><a name="2133" class="Symbol"
+      >}</a
+      ><a name="2134"
+      > </a
+      ><a name="2135" class="Symbol"
+      >&#8594;</a
+      ><a name="2136"
+      > </a
+      ><a name="2137" href="IemhoffSemantics.html#2087" class="Bound"
+      >w</a
+      ><a name="2138"
+      > </a
+      ><a name="2139" href="IemhoffSemantics.html#240" class="Field Operator"
+      >R</a
+      ><a name="2140"
+      > </a
+      ><a name="2141" href="IemhoffSemantics.html#2131" class="Bound"
+      >v&#8242;</a
+      ><a name="2143"
+      > </a
+      ><a name="2144" class="Symbol"
+      >&#8594;</a
+      ><a name="2145"
+      > </a
+      ><a name="2146" href="IemhoffSemantics.html#2131" class="Bound"
+      >v&#8242;</a
+      ><a name="2148"
+      > </a
+      ><a name="2149" href="IemhoffSemantics.html#1394" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="2151"
+      > </a
+      ><a name="2152" href="IemhoffSemantics.html#2062" class="Bound"
+      >&#916;</a
+      ><a name="2153" class="Symbol"
+      >)</a
+      ><a name="2154"
+      > </a
+      ><a name="2155" class="Symbol"
+      >&#8594;</a
+      ><a name="2156"
+      >
+             </a
+      ><a name="2170" href="IemhoffSemantics.html#2087" class="Bound"
+      >w</a
+      ><a name="2171"
+      > </a
+      ><a name="2172" href="IemhoffSemantics.html#1196" class="Function Operator"
+      >&#8873;</a
+      ><a name="2173"
+      > </a
+      ><a name="2174" href="IemhoffSemantics.html#2066" class="Bound"
+      >A</a
+      ><a name="2175"
+      >
+
+</a
+      ><a name="2177" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2184"
+      > </a
+      ><a name="2185" class="Symbol"
+      >:</a
+      ><a name="2186"
+      > </a
+      ><a name="2187" class="Symbol"
+      >&#8704;</a
+      ><a name="2188"
+      > </a
+      ><a name="2189" class="Symbol"
+      >{</a
+      ><a name="2190" href="IemhoffSemantics.html#2190" class="Bound"
+      >&#915;</a
+      ><a name="2191"
+      > </a
+      ><a name="2192" href="IemhoffSemantics.html#2192" class="Bound"
+      >&#916;</a
+      ><a name="2193"
+      > </a
+      ><a name="2194" href="IemhoffSemantics.html#2194" class="Bound"
+      >A</a
+      ><a name="2195" class="Symbol"
+      >}</a
+      ><a name="2196"
+      > </a
+      ><a name="2197" class="Symbol"
+      >&#8594;</a
+      ><a name="2198"
+      > </a
+      ><a name="2199" href="IemhoffSemantics.html#2190" class="Bound"
+      >&#915;</a
+      ><a name="2200"
+      > </a
+      ><a name="2201" href="Common.html#2559" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="2202"
+      > </a
+      ><a name="2203" href="IemhoffSemantics.html#2192" class="Bound"
+      >&#916;</a
+      ><a name="2204"
+      > </a
+      ><a name="2205" href="Syntax.html#291" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2206"
+      > </a
+      ><a name="2207" href="IemhoffSemantics.html#2194" class="Bound"
+      >A</a
+      ><a name="2208"
+      > </a
+      ><a name="2209" class="Symbol"
+      >&#8594;</a
+      ><a name="2210"
+      > </a
+      ><a name="2211" href="IemhoffSemantics.html#2190" class="Bound"
+      >&#915;</a
+      ><a name="2212"
+      > </a
+      ><a name="2213" href="Common.html#2559" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="2214"
+      > </a
+      ><a name="2215" href="IemhoffSemantics.html#2192" class="Bound"
+      >&#916;</a
+      ><a name="2216"
+      > </a
+      ><a name="2217" href="IemhoffSemantics.html#2030" class="Function Operator"
+      >&#8872;</a
+      ><a name="2218"
+      > </a
+      ><a name="2219" href="IemhoffSemantics.html#2194" class="Bound"
+      >A</a
+      ><a name="2220"
+      >
+</a
+      ><a name="2221" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2228"
+      > </a
+      ><a name="2229" class="Symbol"
+      >(</a
+      ><a name="2230" href="Syntax.html#326" class="InductiveConstructor"
+      >var</a
+      ><a name="2233"
+      > </a
+      ><a name="2234" href="IemhoffSemantics.html#2234" class="Bound"
+      >i</a
+      ><a name="2235" class="Symbol"
+      >)</a
+      ><a name="2236"
+      >     </a
+      ><a name="2241" href="IemhoffSemantics.html#2241" class="Bound"
+      >&#947;</a
+      ><a name="2242"
+      > </a
+      ><a name="2243" href="IemhoffSemantics.html#2243" class="Bound"
+      >&#948;</a
+      ><a name="2244"
+      > </a
+      ><a name="2245" class="Symbol"
+      >=</a
+      ><a name="2246"
+      > </a
+      ><a name="2247" href="IemhoffSemantics.html#1906" class="Function"
+      >lookup</a
+      ><a name="2253"
+      > </a
+      ><a name="2254" href="IemhoffSemantics.html#2234" class="Bound"
+      >i</a
+      ><a name="2255"
+      > </a
+      ><a name="2256" href="IemhoffSemantics.html#2241" class="Bound"
+      >&#947;</a
+      ><a name="2257"
+      >
+</a
+      ><a name="2258" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2265"
+      > </a
+      ><a name="2266" class="Symbol"
+      >(</a
+      ><a name="2267" href="Syntax.html#368" class="InductiveConstructor"
+      >mvar</a
+      ><a name="2271"
+      > </a
+      ><a name="2272" href="IemhoffSemantics.html#2272" class="Bound"
+      >i</a
+      ><a name="2273" class="Symbol"
+      >)</a
+      ><a name="2274"
+      >    </a
+      ><a name="2278" href="IemhoffSemantics.html#2278" class="Bound"
+      >&#947;</a
+      ><a name="2279"
+      > </a
+      ><a name="2280" href="IemhoffSemantics.html#2280" class="Bound"
+      >&#948;</a
+      ><a name="2281"
+      > </a
+      ><a name="2282" class="Symbol"
+      >=</a
+      ><a name="2283"
+      > </a
+      ><a name="2284" href="IemhoffSemantics.html#1906" class="Function"
+      >lookup</a
+      ><a name="2290"
+      > </a
+      ><a name="2291" href="IemhoffSemantics.html#2272" class="Bound"
+      >i</a
+      ><a name="2292"
+      > </a
+      ><a name="2293" class="Symbol"
+      >(</a
+      ><a name="2294" href="IemhoffSemantics.html#2280" class="Bound"
+      >&#948;</a
+      ><a name="2295"
+      > </a
+      ><a name="2296" href="IemhoffSemantics.html#274" class="Field"
+      >reflR</a
+      ><a name="2301" class="Symbol"
+      >)</a
+      ><a name="2302"
+      >
+</a
+      ><a name="2303" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2310"
+      > </a
+      ><a name="2311" class="Symbol"
+      >(</a
+      ><a name="2312" href="Syntax.html#410" class="InductiveConstructor"
+      >lam</a
+      ><a name="2315"
+      > </a
+      ><a name="2316" href="IemhoffSemantics.html#2316" class="Bound"
+      >d</a
+      ><a name="2317" class="Symbol"
+      >)</a
+      ><a name="2318"
+      >     </a
+      ><a name="2323" href="IemhoffSemantics.html#2323" class="Bound"
+      >&#947;</a
+      ><a name="2324"
+      > </a
+      ><a name="2325" href="IemhoffSemantics.html#2325" class="Bound"
+      >&#948;</a
+      ><a name="2326"
+      > </a
+      ><a name="2327" class="Symbol"
+      >=</a
+      ><a name="2328"
+      > </a
+      ><a name="2329" class="Symbol"
+      >&#955;</a
+      ><a name="2330"
+      > </a
+      ><a name="2331" href="IemhoffSemantics.html#2331" class="Bound"
+      >&#968;</a
+      ><a name="2332"
+      > </a
+      ><a name="2333" href="IemhoffSemantics.html#2333" class="Bound"
+      >a</a
+      ><a name="2334"
+      > </a
+      ><a name="2335" class="Symbol"
+      >&#8594;</a
+      ><a name="2336"
+      > </a
+      ><a name="2337" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2344"
+      > </a
+      ><a name="2345" href="IemhoffSemantics.html#2316" class="Bound"
+      >d</a
+      ><a name="2346"
+      > </a
+      ><a name="2347" class="Symbol"
+      >(</a
+      ><a name="2348" href="IemhoffSemantics.html#1764" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="2354"
+      > </a
+      ><a name="2355" href="IemhoffSemantics.html#2331" class="Bound"
+      >&#968;</a
+      ><a name="2356"
+      > </a
+      ><a name="2357" href="IemhoffSemantics.html#2323" class="Bound"
+      >&#947;</a
+      ><a name="2358"
+      > </a
+      ><a name="2359" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2360"
+      > </a
+      ><a name="2361" href="IemhoffSemantics.html#2333" class="Bound"
+      >a</a
+      ><a name="2362" class="Symbol"
+      >)</a
+      ><a name="2363"
+      >
+                                             </a
+      ><a name="2409" class="Symbol"
+      >(&#955;</a
+      ><a name="2411"
+      > </a
+      ><a name="2412" href="IemhoffSemantics.html#2412" class="Bound"
+      >&#961;</a
+      ><a name="2413"
+      > </a
+      ><a name="2414" class="Symbol"
+      >&#8594;</a
+      ><a name="2415"
+      > </a
+      ><a name="2416" href="IemhoffSemantics.html#2325" class="Bound"
+      >&#948;</a
+      ><a name="2417"
+      > </a
+      ><a name="2418" class="Symbol"
+      >(</a
+      ><a name="2419" href="IemhoffSemantics.html#302" class="Field"
+      >transR</a
+      ><a name="2425"
+      > </a
+      ><a name="2426" class="Symbol"
+      >(</a
+      ><a name="2427" href="IemhoffSemantics.html#618" class="Function"
+      >&#8804;&#8594;R</a
+      ><a name="2430"
+      > </a
+      ><a name="2431" href="IemhoffSemantics.html#2331" class="Bound"
+      >&#968;</a
+      ><a name="2432" class="Symbol"
+      >)</a
+      ><a name="2433"
+      > </a
+      ><a name="2434" href="IemhoffSemantics.html#2412" class="Bound"
+      >&#961;</a
+      ><a name="2435" class="Symbol"
+      >))</a
+      ><a name="2437"
+      >
+</a
+      ><a name="2438" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2445"
+      > </a
+      ><a name="2446" class="Symbol"
+      >(</a
+      ><a name="2447" href="Syntax.html#464" class="InductiveConstructor"
+      >app</a
+      ><a name="2450"
+      > </a
+      ><a name="2451" href="IemhoffSemantics.html#2451" class="Bound"
+      >d</a
+      ><a name="2452"
+      > </a
+      ><a name="2453" href="IemhoffSemantics.html#2453" class="Bound"
+      >e</a
+      ><a name="2454" class="Symbol"
+      >)</a
+      ><a name="2455"
+      >   </a
+      ><a name="2458" href="IemhoffSemantics.html#2458" class="Bound"
+      >&#947;</a
+      ><a name="2459"
+      > </a
+      ><a name="2460" href="IemhoffSemantics.html#2460" class="Bound"
+      >&#948;</a
+      ><a name="2461"
+      > </a
+      ><a name="2462" class="Symbol"
+      >=</a
+      ><a name="2463"
+      > </a
+      ><a name="2464" class="Symbol"
+      >(</a
+      ><a name="2465" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2472"
+      > </a
+      ><a name="2473" href="IemhoffSemantics.html#2451" class="Bound"
+      >d</a
+      ><a name="2474"
+      > </a
+      ><a name="2475" href="IemhoffSemantics.html#2458" class="Bound"
+      >&#947;</a
+      ><a name="2476"
+      > </a
+      ><a name="2477" href="IemhoffSemantics.html#2460" class="Bound"
+      >&#948;</a
+      ><a name="2478" class="Symbol"
+      >)</a
+      ><a name="2479"
+      > </a
+      ><a name="2480" href="IemhoffSemantics.html#158" class="Field"
+      >refl&#8804;</a
+      ><a name="2485"
+      > </a
+      ><a name="2486" class="Symbol"
+      >(</a
+      ><a name="2487" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2494"
+      > </a
+      ><a name="2495" href="IemhoffSemantics.html#2453" class="Bound"
+      >e</a
+      ><a name="2496"
+      > </a
+      ><a name="2497" href="IemhoffSemantics.html#2458" class="Bound"
+      >&#947;</a
+      ><a name="2498"
+      > </a
+      ><a name="2499" href="IemhoffSemantics.html#2460" class="Bound"
+      >&#948;</a
+      ><a name="2500" class="Symbol"
+      >)</a
+      ><a name="2501"
+      >
+</a
+      ><a name="2502" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2509"
+      > </a
+      ><a name="2510" class="Symbol"
+      >(</a
+      ><a name="2511" href="Syntax.html#526" class="InductiveConstructor"
+      >box</a
+      ><a name="2514"
+      > </a
+      ><a name="2515" href="IemhoffSemantics.html#2515" class="Bound"
+      >d</a
+      ><a name="2516" class="Symbol"
+      >)</a
+      ><a name="2517"
+      >     </a
+      ><a name="2522" href="IemhoffSemantics.html#2522" class="Bound"
+      >&#947;</a
+      ><a name="2523"
+      > </a
+      ><a name="2524" href="IemhoffSemantics.html#2524" class="Bound"
+      >&#948;</a
+      ><a name="2525"
+      > </a
+      ><a name="2526" class="Symbol"
+      >=</a
+      ><a name="2527"
+      > </a
+      ><a name="2528" class="Symbol"
+      >&#955;</a
+      ><a name="2529"
+      > </a
+      ><a name="2530" href="IemhoffSemantics.html#2530" class="Bound"
+      >&#961;</a
+      ><a name="2531"
+      > </a
+      ><a name="2532" class="Symbol"
+      >&#8594;</a
+      ><a name="2533"
+      > </a
+      ><a name="2534" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2541"
+      > </a
+      ><a name="2542" href="IemhoffSemantics.html#2515" class="Bound"
+      >d</a
+      ><a name="2543"
+      > </a
+      ><a name="2544" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="2545"
+      >
+                                           </a
+      ><a name="2589" class="Symbol"
+      >(&#955;</a
+      ><a name="2591"
+      > </a
+      ><a name="2592" href="IemhoffSemantics.html#2592" class="Bound"
+      >&#961;&#8242;</a
+      ><a name="2594"
+      > </a
+      ><a name="2595" class="Symbol"
+      >&#8594;</a
+      ><a name="2596"
+      > </a
+      ><a name="2597" href="IemhoffSemantics.html#2524" class="Bound"
+      >&#948;</a
+      ><a name="2598"
+      > </a
+      ><a name="2599" class="Symbol"
+      >(</a
+      ><a name="2600" href="IemhoffSemantics.html#302" class="Field"
+      >transR</a
+      ><a name="2606"
+      > </a
+      ><a name="2607" href="IemhoffSemantics.html#2530" class="Bound"
+      >&#961;</a
+      ><a name="2608"
+      > </a
+      ><a name="2609" href="IemhoffSemantics.html#2592" class="Bound"
+      >&#961;&#8242;</a
+      ><a name="2611" class="Symbol"
+      >))</a
+      ><a name="2613"
+      >
+</a
+      ><a name="2614" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2621"
+      > </a
+      ><a name="2622" class="Symbol"
+      >(</a
+      ><a name="2623" href="Syntax.html#574" class="InductiveConstructor"
+      >unbox</a
+      ><a name="2628"
+      > </a
+      ><a name="2629" href="IemhoffSemantics.html#2629" class="Bound"
+      >d</a
+      ><a name="2630"
+      > </a
+      ><a name="2631" href="IemhoffSemantics.html#2631" class="Bound"
+      >e</a
+      ><a name="2632" class="Symbol"
+      >)</a
+      ><a name="2633"
+      > </a
+      ><a name="2634" href="IemhoffSemantics.html#2634" class="Bound"
+      >&#947;</a
+      ><a name="2635"
+      > </a
+      ><a name="2636" href="IemhoffSemantics.html#2636" class="Bound"
+      >&#948;</a
+      ><a name="2637"
+      > </a
+      ><a name="2638" class="Symbol"
+      >=</a
+      ><a name="2639"
+      > </a
+      ><a name="2640" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2647"
+      > </a
+      ><a name="2648" href="IemhoffSemantics.html#2631" class="Bound"
+      >e</a
+      ><a name="2649"
+      > </a
+      ><a name="2650" href="IemhoffSemantics.html#2634" class="Bound"
+      >&#947;</a
+      ><a name="2651"
+      > </a
+      ><a name="2652" class="Symbol"
+      >(&#955;</a
+      ><a name="2654"
+      > </a
+      ><a name="2655" href="IemhoffSemantics.html#2655" class="Bound"
+      >&#961;</a
+      ><a name="2656"
+      > </a
+      ><a name="2657" class="Symbol"
+      >&#8594;</a
+      ><a name="2658"
+      > </a
+      ><a name="2659" href="IemhoffSemantics.html#2636" class="Bound"
+      >&#948;</a
+      ><a name="2660"
+      > </a
+      ><a name="2661" href="IemhoffSemantics.html#2655" class="Bound"
+      >&#961;</a
+      ><a name="2662"
+      > </a
+      ><a name="2663" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2664"
+      > </a
+      ><a name="2665" class="Symbol"
+      >(</a
+      ><a name="2666" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2673"
+      > </a
+      ><a name="2674" href="IemhoffSemantics.html#2629" class="Bound"
+      >d</a
+      ><a name="2675"
+      > </a
+      ><a name="2676" href="IemhoffSemantics.html#2634" class="Bound"
+      >&#947;</a
+      ><a name="2677"
+      > </a
+      ><a name="2678" href="IemhoffSemantics.html#2636" class="Bound"
+      >&#948;</a
+      ><a name="2679" class="Symbol"
+      >)</a
+      ><a name="2680"
+      > </a
+      ><a name="2681" href="IemhoffSemantics.html#2655" class="Bound"
+      >&#961;</a
+      ><a name="2682" class="Symbol"
+      >)</a
+      ><a name="2683"
+      >
+</a
+      ><a name="2684" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2691"
+      > </a
+      ><a name="2692" class="Symbol"
+      >(</a
+      ><a name="2693" href="Syntax.html#638" class="InductiveConstructor"
+      >pair</a
+      ><a name="2697"
+      > </a
+      ><a name="2698" href="IemhoffSemantics.html#2698" class="Bound"
+      >d</a
+      ><a name="2699"
+      > </a
+      ><a name="2700" href="IemhoffSemantics.html#2700" class="Bound"
+      >e</a
+      ><a name="2701" class="Symbol"
+      >)</a
+      ><a name="2702"
+      >  </a
+      ><a name="2704" href="IemhoffSemantics.html#2704" class="Bound"
+      >&#947;</a
+      ><a name="2705"
+      > </a
+      ><a name="2706" href="IemhoffSemantics.html#2706" class="Bound"
+      >&#948;</a
+      ><a name="2707"
+      > </a
+      ><a name="2708" class="Symbol"
+      >=</a
+      ><a name="2709"
+      > </a
+      ><a name="2710" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2717"
+      > </a
+      ><a name="2718" href="IemhoffSemantics.html#2698" class="Bound"
+      >d</a
+      ><a name="2719"
+      > </a
+      ><a name="2720" href="IemhoffSemantics.html#2704" class="Bound"
+      >&#947;</a
+      ><a name="2721"
+      > </a
+      ><a name="2722" href="IemhoffSemantics.html#2706" class="Bound"
+      >&#948;</a
+      ><a name="2723"
+      > </a
+      ><a name="2724" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2725"
+      > </a
+      ><a name="2726" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2733"
+      > </a
+      ><a name="2734" href="IemhoffSemantics.html#2700" class="Bound"
+      >e</a
+      ><a name="2735"
+      > </a
+      ><a name="2736" href="IemhoffSemantics.html#2704" class="Bound"
+      >&#947;</a
+      ><a name="2737"
+      > </a
+      ><a name="2738" href="IemhoffSemantics.html#2706" class="Bound"
+      >&#948;</a
+      ><a name="2739"
+      >
+</a
+      ><a name="2740" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2747"
+      > </a
+      ><a name="2748" class="Symbol"
+      >(</a
+      ><a name="2749" href="Syntax.html#700" class="InductiveConstructor"
+      >fst</a
+      ><a name="2752"
+      > </a
+      ><a name="2753" href="IemhoffSemantics.html#2753" class="Bound"
+      >d</a
+      ><a name="2754" class="Symbol"
+      >)</a
+      ><a name="2755"
+      >     </a
+      ><a name="2760" href="IemhoffSemantics.html#2760" class="Bound"
+      >&#947;</a
+      ><a name="2761"
+      > </a
+      ><a name="2762" href="IemhoffSemantics.html#2762" class="Bound"
+      >&#948;</a
+      ><a name="2763"
+      > </a
+      ><a name="2764" class="Symbol"
+      >=</a
+      ><a name="2765"
+      > </a
+      ><a name="2766" href="Common.html#449" class="Field"
+      >&#960;&#8321;</a
+      ><a name="2768"
+      > </a
+      ><a name="2769" class="Symbol"
+      >(</a
+      ><a name="2770" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2777"
+      > </a
+      ><a name="2778" href="IemhoffSemantics.html#2753" class="Bound"
+      >d</a
+      ><a name="2779"
+      > </a
+      ><a name="2780" href="IemhoffSemantics.html#2760" class="Bound"
+      >&#947;</a
+      ><a name="2781"
+      > </a
+      ><a name="2782" href="IemhoffSemantics.html#2762" class="Bound"
+      >&#948;</a
+      ><a name="2783" class="Symbol"
+      >)</a
+      ><a name="2784"
+      >
+</a
+      ><a name="2785" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2792"
+      > </a
+      ><a name="2793" class="Symbol"
+      >(</a
+      ><a name="2794" href="Syntax.html#750" class="InductiveConstructor"
+      >snd</a
+      ><a name="2797"
+      > </a
+      ><a name="2798" href="IemhoffSemantics.html#2798" class="Bound"
+      >d</a
+      ><a name="2799" class="Symbol"
+      >)</a
+      ><a name="2800"
+      >     </a
+      ><a name="2805" href="IemhoffSemantics.html#2805" class="Bound"
+      >&#947;</a
+      ><a name="2806"
+      > </a
+      ><a name="2807" href="IemhoffSemantics.html#2807" class="Bound"
+      >&#948;</a
+      ><a name="2808"
+      > </a
+      ><a name="2809" class="Symbol"
+      >=</a
+      ><a name="2810"
+      > </a
+      ><a name="2811" href="Common.html#460" class="Field"
+      >&#960;&#8322;</a
+      ><a name="2813"
+      > </a
+      ><a name="2814" class="Symbol"
+      >(</a
+      ><a name="2815" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2822"
+      > </a
+      ><a name="2823" href="IemhoffSemantics.html#2798" class="Bound"
+      >d</a
+      ><a name="2824"
+      > </a
+      ><a name="2825" href="IemhoffSemantics.html#2805" class="Bound"
+      >&#947;</a
+      ><a name="2826"
+      > </a
+      ><a name="2827" href="IemhoffSemantics.html#2807" class="Bound"
+      >&#948;</a
+      ><a name="2828" class="Symbol"
+      >)</a
+      ><a name="2829"
+      >
+</a
+      ><a name="2830" href="IemhoffSemantics.html#2177" class="Function"
+      >reflect</a
+      ><a name="2837"
+      > </a
+      ><a name="2838" href="Syntax.html#800" class="InductiveConstructor"
+      >unit</a
+      ><a name="2842"
+      >        </a
+      ><a name="2850" href="IemhoffSemantics.html#2850" class="Bound"
+      >&#947;</a
+      ><a name="2851"
+      > </a
+      ><a name="2852" href="IemhoffSemantics.html#2852" class="Bound"
+      >&#948;</a
+      ><a name="2853"
+      > </a
+      ><a name="2854" class="Symbol"
+      >=</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="2857"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>
