@@ -1,0 +1,3222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Semantics</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Semantics.html#1" class="Module"
+      >Semantics</a
+      ><a name="17"
+      > </a
+      ><a name="18" class="Keyword"
+      >where</a
+      ><a name="23"
+      >
+
+</a
+      ><a name="25" class="Keyword"
+      >open</a
+      ><a name="29"
+      > </a
+      ><a name="30" class="Keyword"
+      >import</a
+      ><a name="36"
+      > </a
+      ><a name="37" href="Syntax.html#1" class="Module"
+      >Syntax</a
+      ><a name="43"
+      >
+
+
+</a
+      ><a name="46" class="Keyword"
+      >record</a
+      ><a name="52"
+      > </a
+      ><a name="53" href="Semantics.html#53" class="Record"
+      >Model</a
+      ><a name="58"
+      > </a
+      ><a name="59" class="Symbol"
+      >:</a
+      ><a name="60"
+      > </a
+      ><a name="61" class="PrimitiveType"
+      >Set&#8321;</a
+      ><a name="65"
+      > </a
+      ><a name="66" class="Keyword"
+      >where</a
+      ><a name="71"
+      >
+  </a
+      ><a name="74" class="Keyword"
+      >infix</a
+      ><a name="79"
+      > </a
+      ><a name="80" class="Number"
+      >3</a
+      ><a name="81"
+      > </a
+      ><a name="82" href="Semantics.html#349" class="Field Operator"
+      >_&#8873;&#7493;_</a
+      ><a name="86"
+      >
+  </a
+      ><a name="89" class="Keyword"
+      >field</a
+      ><a name="94"
+      >
+    </a
+      ><a name="99" href="Semantics.html#99" class="Field"
+      >World</a
+      ><a name="104"
+      >   </a
+      ><a name="107" class="Symbol"
+      >:</a
+      ><a name="108"
+      > </a
+      ><a name="109" class="PrimitiveType"
+      >Set</a
+      ><a name="112"
+      >
+    </a
+      ><a name="117" href="Semantics.html#117" class="Field Operator"
+      >_&#8804;_</a
+      ><a name="120"
+      >     </a
+      ><a name="125" class="Symbol"
+      >:</a
+      ><a name="126"
+      > </a
+      ><a name="127" href="Semantics.html#99" class="Field"
+      >World</a
+      ><a name="132"
+      > </a
+      ><a name="133" class="Symbol"
+      >&#8594;</a
+      ><a name="134"
+      > </a
+      ><a name="135" href="Semantics.html#99" class="Field"
+      >World</a
+      ><a name="140"
+      > </a
+      ><a name="141" class="Symbol"
+      >&#8594;</a
+      ><a name="142"
+      > </a
+      ><a name="143" class="PrimitiveType"
+      >Set</a
+      ><a name="146"
+      >
+    </a
+      ><a name="151" href="Semantics.html#151" class="Field"
+      >refl&#8804;</a
+      ><a name="156"
+      >   </a
+      ><a name="159" class="Symbol"
+      >:</a
+      ><a name="160"
+      > </a
+      ><a name="161" class="Symbol"
+      >&#8704;</a
+      ><a name="162"
+      > </a
+      ><a name="163" class="Symbol"
+      >{</a
+      ><a name="164" href="Semantics.html#164" class="Bound"
+      >w</a
+      ><a name="165" class="Symbol"
+      >}</a
+      ><a name="166"
+      > </a
+      ><a name="167" class="Symbol"
+      >&#8594;</a
+      ><a name="168"
+      > </a
+      ><a name="169" href="Semantics.html#164" class="Bound"
+      >w</a
+      ><a name="170"
+      > </a
+      ><a name="171" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="172"
+      > </a
+      ><a name="173" href="Semantics.html#164" class="Bound"
+      >w</a
+      ><a name="174"
+      >
+    </a
+      ><a name="179" href="Semantics.html#179" class="Field"
+      >trans&#8804;</a
+      ><a name="185"
+      >  </a
+      ><a name="187" class="Symbol"
+      >:</a
+      ><a name="188"
+      > </a
+      ><a name="189" class="Symbol"
+      >&#8704;</a
+      ><a name="190"
+      > </a
+      ><a name="191" class="Symbol"
+      >{</a
+      ><a name="192" href="Semantics.html#192" class="Bound"
+      >w</a
+      ><a name="193"
+      > </a
+      ><a name="194" href="Semantics.html#194" class="Bound"
+      >w&#8242;</a
+      ><a name="196"
+      > </a
+      ><a name="197" href="Semantics.html#197" class="Bound"
+      >w&#8243;</a
+      ><a name="199" class="Symbol"
+      >}</a
+      ><a name="200"
+      > </a
+      ><a name="201" class="Symbol"
+      >&#8594;</a
+      ><a name="202"
+      > </a
+      ><a name="203" href="Semantics.html#192" class="Bound"
+      >w</a
+      ><a name="204"
+      > </a
+      ><a name="205" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="206"
+      > </a
+      ><a name="207" href="Semantics.html#194" class="Bound"
+      >w&#8242;</a
+      ><a name="209"
+      > </a
+      ><a name="210" class="Symbol"
+      >&#8594;</a
+      ><a name="211"
+      > </a
+      ><a name="212" href="Semantics.html#194" class="Bound"
+      >w&#8242;</a
+      ><a name="214"
+      > </a
+      ><a name="215" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="216"
+      > </a
+      ><a name="217" href="Semantics.html#197" class="Bound"
+      >w&#8243;</a
+      ><a name="219"
+      > </a
+      ><a name="220" class="Symbol"
+      >&#8594;</a
+      ><a name="221"
+      > </a
+      ><a name="222" href="Semantics.html#192" class="Bound"
+      >w</a
+      ><a name="223"
+      > </a
+      ><a name="224" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="225"
+      > </a
+      ><a name="226" href="Semantics.html#197" class="Bound"
+      >w&#8243;</a
+      ><a name="228"
+      >
+    </a
+      ><a name="233" href="Semantics.html#233" class="Field Operator"
+      >_R_</a
+      ><a name="236"
+      >     </a
+      ><a name="241" class="Symbol"
+      >:</a
+      ><a name="242"
+      > </a
+      ><a name="243" href="Semantics.html#99" class="Field"
+      >World</a
+      ><a name="248"
+      > </a
+      ><a name="249" class="Symbol"
+      >&#8594;</a
+      ><a name="250"
+      > </a
+      ><a name="251" href="Semantics.html#99" class="Field"
+      >World</a
+      ><a name="256"
+      > </a
+      ><a name="257" class="Symbol"
+      >&#8594;</a
+      ><a name="258"
+      > </a
+      ><a name="259" class="PrimitiveType"
+      >Set</a
+      ><a name="262"
+      >
+    </a
+      ><a name="267" href="Semantics.html#267" class="Field"
+      >reflR</a
+      ><a name="272"
+      >   </a
+      ><a name="275" class="Symbol"
+      >:</a
+      ><a name="276"
+      > </a
+      ><a name="277" class="Symbol"
+      >&#8704;</a
+      ><a name="278"
+      > </a
+      ><a name="279" class="Symbol"
+      >{</a
+      ><a name="280" href="Semantics.html#280" class="Bound"
+      >w</a
+      ><a name="281" class="Symbol"
+      >}</a
+      ><a name="282"
+      > </a
+      ><a name="283" class="Symbol"
+      >&#8594;</a
+      ><a name="284"
+      > </a
+      ><a name="285" href="Semantics.html#280" class="Bound"
+      >w</a
+      ><a name="286"
+      > </a
+      ><a name="287" href="Semantics.html#233" class="Field Operator"
+      >R</a
+      ><a name="288"
+      > </a
+      ><a name="289" href="Semantics.html#280" class="Bound"
+      >w</a
+      ><a name="290"
+      >
+    </a
+      ><a name="295" href="Semantics.html#295" class="Field"
+      >transR</a
+      ><a name="301"
+      >  </a
+      ><a name="303" class="Symbol"
+      >:</a
+      ><a name="304"
+      > </a
+      ><a name="305" class="Symbol"
+      >&#8704;</a
+      ><a name="306"
+      > </a
+      ><a name="307" class="Symbol"
+      >{</a
+      ><a name="308" href="Semantics.html#308" class="Bound"
+      >w</a
+      ><a name="309"
+      > </a
+      ><a name="310" href="Semantics.html#310" class="Bound"
+      >w&#8242;</a
+      ><a name="312"
+      > </a
+      ><a name="313" href="Semantics.html#313" class="Bound"
+      >w&#8243;</a
+      ><a name="315" class="Symbol"
+      >}</a
+      ><a name="316"
+      > </a
+      ><a name="317" class="Symbol"
+      >&#8594;</a
+      ><a name="318"
+      > </a
+      ><a name="319" href="Semantics.html#308" class="Bound"
+      >w</a
+      ><a name="320"
+      > </a
+      ><a name="321" href="Semantics.html#233" class="Field Operator"
+      >R</a
+      ><a name="322"
+      > </a
+      ><a name="323" href="Semantics.html#310" class="Bound"
+      >w&#8242;</a
+      ><a name="325"
+      > </a
+      ><a name="326" class="Symbol"
+      >&#8594;</a
+      ><a name="327"
+      > </a
+      ><a name="328" href="Semantics.html#310" class="Bound"
+      >w&#8242;</a
+      ><a name="330"
+      > </a
+      ><a name="331" href="Semantics.html#233" class="Field Operator"
+      >R</a
+      ><a name="332"
+      > </a
+      ><a name="333" href="Semantics.html#313" class="Bound"
+      >w&#8243;</a
+      ><a name="335"
+      > </a
+      ><a name="336" class="Symbol"
+      >&#8594;</a
+      ><a name="337"
+      > </a
+      ><a name="338" href="Semantics.html#308" class="Bound"
+      >w</a
+      ><a name="339"
+      > </a
+      ><a name="340" href="Semantics.html#233" class="Field Operator"
+      >R</a
+      ><a name="341"
+      > </a
+      ><a name="342" href="Semantics.html#313" class="Bound"
+      >w&#8243;</a
+      ><a name="344"
+      >
+    </a
+      ><a name="349" href="Semantics.html#349" class="Field Operator"
+      >_&#8873;&#7493;_</a
+      ><a name="353"
+      >   </a
+      ><a name="356" class="Symbol"
+      >:</a
+      ><a name="357"
+      > </a
+      ><a name="358" href="Semantics.html#99" class="Field"
+      >World</a
+      ><a name="363"
+      > </a
+      ><a name="364" class="Symbol"
+      >&#8594;</a
+      ><a name="365"
+      > </a
+      ><a name="366" href="Syntax.html#61" class="Function"
+      >Atom</a
+      ><a name="370"
+      > </a
+      ><a name="371" class="Symbol"
+      >&#8594;</a
+      ><a name="372"
+      > </a
+      ><a name="373" class="PrimitiveType"
+      >Set</a
+      ><a name="376"
+      >
+    </a
+      ><a name="381" href="Semantics.html#381" class="Field"
+      >mono&#8873;&#7493;</a
+      ><a name="387"
+      > </a
+      ><a name="388" class="Symbol"
+      >:</a
+      ><a name="389"
+      > </a
+      ><a name="390" class="Symbol"
+      >&#8704;</a
+      ><a name="391"
+      > </a
+      ><a name="392" class="Symbol"
+      >{</a
+      ><a name="393" href="Semantics.html#393" class="Bound"
+      >w</a
+      ><a name="394"
+      > </a
+      ><a name="395" href="Semantics.html#395" class="Bound"
+      >w&#8242;</a
+      ><a name="397"
+      > </a
+      ><a name="398" href="Semantics.html#398" class="Bound"
+      >P</a
+      ><a name="399" class="Symbol"
+      >}</a
+      ><a name="400"
+      > </a
+      ><a name="401" class="Symbol"
+      >&#8594;</a
+      ><a name="402"
+      > </a
+      ><a name="403" href="Semantics.html#393" class="Bound"
+      >w</a
+      ><a name="404"
+      > </a
+      ><a name="405" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="406"
+      > </a
+      ><a name="407" href="Semantics.html#395" class="Bound"
+      >w&#8242;</a
+      ><a name="409"
+      > </a
+      ><a name="410" class="Symbol"
+      >&#8594;</a
+      ><a name="411"
+      > </a
+      ><a name="412" href="Semantics.html#393" class="Bound"
+      >w</a
+      ><a name="413"
+      > </a
+      ><a name="414" href="Semantics.html#349" class="Field Operator"
+      >&#8873;&#7493;</a
+      ><a name="416"
+      > </a
+      ><a name="417" href="Semantics.html#398" class="Bound"
+      >P</a
+      ><a name="418"
+      > </a
+      ><a name="419" class="Symbol"
+      >&#8594;</a
+      ><a name="420"
+      > </a
+      ><a name="421" href="Semantics.html#395" class="Bound"
+      >w&#8242;</a
+      ><a name="423"
+      > </a
+      ><a name="424" href="Semantics.html#349" class="Field Operator"
+      >&#8873;&#7493;</a
+      ><a name="426"
+      > </a
+      ><a name="427" href="Semantics.html#398" class="Bound"
+      >P</a
+      ><a name="428"
+      >
+
+  </a
+      ><a name="432" class="Comment"
+      >-- Shared consequence of brilliance and persistence.</a
+      ><a name="484"
+      >
+  </a
+      ><a name="487" class="Keyword"
+      >field</a
+      ><a name="492"
+      >
+    </a
+      ><a name="497" href="Semantics.html#497" class="Field"
+      >&#8804;&#8594;R</a
+      ><a name="500"
+      > </a
+      ><a name="501" class="Symbol"
+      >:</a
+      ><a name="502"
+      > </a
+      ><a name="503" class="Symbol"
+      >&#8704;</a
+      ><a name="504"
+      > </a
+      ><a name="505" class="Symbol"
+      >{</a
+      ><a name="506" href="Semantics.html#506" class="Bound"
+      >v&#8242;</a
+      ><a name="508"
+      > </a
+      ><a name="509" href="Semantics.html#509" class="Bound"
+      >w</a
+      ><a name="510" class="Symbol"
+      >}</a
+      ><a name="511"
+      > </a
+      ><a name="512" class="Symbol"
+      >&#8594;</a
+      ><a name="513"
+      > </a
+      ><a name="514" href="Semantics.html#509" class="Bound"
+      >w</a
+      ><a name="515"
+      > </a
+      ><a name="516" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="517"
+      > </a
+      ><a name="518" href="Semantics.html#506" class="Bound"
+      >v&#8242;</a
+      ><a name="520"
+      > </a
+      ><a name="521" class="Symbol"
+      >&#8594;</a
+      ><a name="522"
+      > </a
+      ><a name="523" href="Semantics.html#509" class="Bound"
+      >w</a
+      ><a name="524"
+      > </a
+      ><a name="525" href="Semantics.html#233" class="Field Operator"
+      >R</a
+      ><a name="526"
+      > </a
+      ><a name="527" href="Semantics.html#506" class="Bound"
+      >v&#8242;</a
+      ><a name="529"
+      >
+
+</a
+      ><a name="531" class="Keyword"
+      >open</a
+      ><a name="535"
+      > </a
+      ><a name="536" href="Semantics.html#53" class="Module"
+      >Model</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >{{&#8230;}}</a
+      ><a name="547"
+      > </a
+      ><a name="548" class="Keyword"
+      >public</a
+      ><a name="554"
+      >
+
+</a
+      ><a name="556" class="Keyword"
+      >module</a
+      ><a name="562"
+      > </a
+      ><a name="563" href="Semantics.html#563" class="Module"
+      >_</a
+      ><a name="564"
+      > </a
+      ><a name="565" class="Symbol"
+      >{{</a
+      ><a name="567" href="Semantics.html#567" class="Bound"
+      >_</a
+      ><a name="568"
+      > </a
+      ><a name="569" class="Symbol"
+      >:</a
+      ><a name="570"
+      > </a
+      ><a name="571" href="Semantics.html#53" class="Record"
+      >Model</a
+      ><a name="576" class="Symbol"
+      >}}</a
+      ><a name="578"
+      > </a
+      ><a name="579" class="Keyword"
+      >where</a
+      ><a name="584"
+      >
+  </a
+      ><a name="587" class="Keyword"
+      >infix</a
+      ><a name="592"
+      > </a
+      ><a name="593" class="Number"
+      >3</a
+      ><a name="594"
+      > </a
+      ><a name="595" href="Semantics.html#601" class="Function Operator"
+      >_&#8873;_</a
+      ><a name="598"
+      >
+  </a
+      ><a name="601" href="Semantics.html#601" class="Function Operator"
+      >_&#8873;_</a
+      ><a name="604"
+      > </a
+      ><a name="605" class="Symbol"
+      >:</a
+      ><a name="606"
+      > </a
+      ><a name="607" href="Semantics.html#99" class="Field"
+      >World</a
+      ><a name="612"
+      > </a
+      ><a name="613" class="Symbol"
+      >&#8594;</a
+      ><a name="614"
+      > </a
+      ><a name="615" href="Syntax.html#104" class="Datatype"
+      >Type</a
+      ><a name="619"
+      > </a
+      ><a name="620" class="Symbol"
+      >&#8594;</a
+      ><a name="621"
+      > </a
+      ><a name="622" class="PrimitiveType"
+      >Set</a
+      ><a name="625"
+      >
+  </a
+      ><a name="628" href="Semantics.html#628" class="Bound"
+      >w</a
+      ><a name="629"
+      > </a
+      ><a name="630" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="Syntax.html#123" class="InductiveConstructor Operator"
+      >&#945;</a
+      ><a name="633"
+      > </a
+      ><a name="634" href="Semantics.html#634" class="Bound"
+      >P</a
+      ><a name="635"
+      >    </a
+      ><a name="639" class="Symbol"
+      >=</a
+      ><a name="640"
+      > </a
+      ><a name="641" href="Semantics.html#628" class="Bound"
+      >w</a
+      ><a name="642"
+      > </a
+      ><a name="643" href="Semantics.html#349" class="Field Operator"
+      >&#8873;&#7493;</a
+      ><a name="645"
+      > </a
+      ><a name="646" href="Semantics.html#634" class="Bound"
+      >P</a
+      ><a name="647"
+      >
+  </a
+      ><a name="650" href="Semantics.html#650" class="Bound"
+      >w</a
+      ><a name="651"
+      > </a
+      ><a name="652" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="653"
+      > </a
+      ><a name="654" href="Semantics.html#654" class="Bound"
+      >A</a
+      ><a name="655"
+      > </a
+      ><a name="656" href="Syntax.html#144" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="657"
+      > </a
+      ><a name="658" href="Semantics.html#658" class="Bound"
+      >B</a
+      ><a name="659"
+      > </a
+      ><a name="660" class="Symbol"
+      >=</a
+      ><a name="661"
+      > </a
+      ><a name="662" class="Symbol"
+      >&#8704;</a
+      ><a name="663"
+      > </a
+      ><a name="664" class="Symbol"
+      >{</a
+      ><a name="665" href="Semantics.html#665" class="Bound"
+      >w&#8242;</a
+      ><a name="667" class="Symbol"
+      >}</a
+      ><a name="668"
+      > </a
+      ><a name="669" class="Symbol"
+      >&#8594;</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="Semantics.html#650" class="Bound"
+      >w</a
+      ><a name="672"
+      > </a
+      ><a name="673" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="674"
+      > </a
+      ><a name="675" href="Semantics.html#665" class="Bound"
+      >w&#8242;</a
+      ><a name="677"
+      > </a
+      ><a name="678" class="Symbol"
+      >&#8594;</a
+      ><a name="679"
+      > </a
+      ><a name="680" href="Semantics.html#665" class="Bound"
+      >w&#8242;</a
+      ><a name="682"
+      > </a
+      ><a name="683" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="684"
+      > </a
+      ><a name="685" href="Semantics.html#654" class="Bound"
+      >A</a
+      ><a name="686"
+      > </a
+      ><a name="687" class="Symbol"
+      >&#8594;</a
+      ><a name="688"
+      > </a
+      ><a name="689" href="Semantics.html#665" class="Bound"
+      >w&#8242;</a
+      ><a name="691"
+      > </a
+      ><a name="692" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="693"
+      > </a
+      ><a name="694" href="Semantics.html#658" class="Bound"
+      >B</a
+      ><a name="695"
+      >
+  </a
+      ><a name="698" href="Semantics.html#698" class="Bound"
+      >w</a
+      ><a name="699"
+      > </a
+      ><a name="700" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="701"
+      > </a
+      ><a name="702" href="Syntax.html#171" class="InductiveConstructor Operator"
+      >&#9633;</a
+      ><a name="703"
+      > </a
+      ><a name="704" href="Semantics.html#704" class="Bound"
+      >A</a
+      ><a name="705"
+      >    </a
+      ><a name="709" class="Symbol"
+      >=</a
+      ><a name="710"
+      > </a
+      ><a name="711" class="Symbol"
+      >&#8704;</a
+      ><a name="712"
+      > </a
+      ><a name="713" class="Symbol"
+      >{</a
+      ><a name="714" href="Semantics.html#714" class="Bound"
+      >v&#8242;</a
+      ><a name="716" class="Symbol"
+      >}</a
+      ><a name="717"
+      > </a
+      ><a name="718" class="Symbol"
+      >&#8594;</a
+      ><a name="719"
+      > </a
+      ><a name="720" href="Semantics.html#698" class="Bound"
+      >w</a
+      ><a name="721"
+      > </a
+      ><a name="722" href="Semantics.html#233" class="Field Operator"
+      >R</a
+      ><a name="723"
+      > </a
+      ><a name="724" href="Semantics.html#714" class="Bound"
+      >v&#8242;</a
+      ><a name="726"
+      > </a
+      ><a name="727" class="Symbol"
+      >&#8594;</a
+      ><a name="728"
+      > </a
+      ><a name="729" href="Semantics.html#714" class="Bound"
+      >v&#8242;</a
+      ><a name="731"
+      > </a
+      ><a name="732" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Semantics.html#704" class="Bound"
+      >A</a
+      ><a name="735"
+      >
+  </a
+      ><a name="738" href="Semantics.html#738" class="Bound"
+      >w</a
+      ><a name="739"
+      > </a
+      ><a name="740" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="Semantics.html#742" class="Bound"
+      >A</a
+      ><a name="743"
+      > </a
+      ><a name="744" href="Syntax.html#192" class="InductiveConstructor Operator"
+      >&#10837;</a
+      ><a name="745"
+      > </a
+      ><a name="746" href="Semantics.html#746" class="Bound"
+      >B</a
+      ><a name="747"
+      >  </a
+      ><a name="749" class="Symbol"
+      >=</a
+      ><a name="750"
+      > </a
+      ><a name="751" href="Semantics.html#738" class="Bound"
+      >w</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="754"
+      > </a
+      ><a name="755" href="Semantics.html#742" class="Bound"
+      >A</a
+      ><a name="756"
+      > </a
+      ><a name="757" href="Common.html#517" class="Function Operator"
+      >&#8743;</a
+      ><a name="758"
+      > </a
+      ><a name="759" href="Semantics.html#738" class="Bound"
+      >w</a
+      ><a name="760"
+      > </a
+      ><a name="761" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="762"
+      > </a
+      ><a name="763" href="Semantics.html#746" class="Bound"
+      >B</a
+      ><a name="764"
+      >
+  </a
+      ><a name="767" href="Semantics.html#767" class="Bound"
+      >w</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="770"
+      > </a
+      ><a name="771" href="Syntax.html#220" class="InductiveConstructor"
+      >&#10986;</a
+      ><a name="772"
+      >     </a
+      ><a name="777" class="Symbol"
+      >=</a
+      ><a name="778"
+      > </a
+      ><a name="779" href="Agda.Builtin.Unit.html#69" class="Record"
+      >&#8868;</a
+      ><a name="780"
+      >
+  </a
+      ><a name="783" href="Semantics.html#783" class="Bound"
+      >w</a
+      ><a name="784"
+      > </a
+      ><a name="785" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="786"
+      > </a
+      ><a name="787" href="Syntax.html#233" class="InductiveConstructor"
+      >&#10987;</a
+      ><a name="788"
+      >     </a
+      ><a name="793" class="Symbol"
+      >=</a
+      ><a name="794"
+      > </a
+      ><a name="795" href="Common.html#225" class="Datatype"
+      >&#8869;</a
+      ><a name="796"
+      >
+  </a
+      ><a name="799" href="Semantics.html#799" class="Bound"
+      >w</a
+      ><a name="800"
+      > </a
+      ><a name="801" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="802"
+      > </a
+      ><a name="803" href="Semantics.html#803" class="Bound"
+      >A</a
+      ><a name="804"
+      > </a
+      ><a name="805" href="Syntax.html#246" class="InductiveConstructor Operator"
+      >&#10838;</a
+      ><a name="806"
+      > </a
+      ><a name="807" href="Semantics.html#807" class="Bound"
+      >B</a
+      ><a name="808"
+      >  </a
+      ><a name="810" class="Symbol"
+      >=</a
+      ><a name="811"
+      > </a
+      ><a name="812" href="Semantics.html#799" class="Bound"
+      >w</a
+      ><a name="813"
+      > </a
+      ><a name="814" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="Semantics.html#803" class="Bound"
+      >A</a
+      ><a name="817"
+      > </a
+      ><a name="818" href="Common.html#598" class="Datatype Operator"
+      >&#8744;</a
+      ><a name="819"
+      > </a
+      ><a name="820" href="Semantics.html#799" class="Bound"
+      >w</a
+      ><a name="821"
+      > </a
+      ><a name="822" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="823"
+      > </a
+      ><a name="824" href="Semantics.html#807" class="Bound"
+      >B</a
+      ><a name="825"
+      >
+
+  </a
+      ><a name="829" class="Keyword"
+      >infix</a
+      ><a name="834"
+      > </a
+      ><a name="835" class="Number"
+      >3</a
+      ><a name="836"
+      > </a
+      ><a name="837" href="Semantics.html#844" class="Function Operator"
+      >_&#8873;&#8902;_</a
+      ><a name="841"
+      >
+  </a
+      ><a name="844" href="Semantics.html#844" class="Function Operator"
+      >_&#8873;&#8902;_</a
+      ><a name="848"
+      > </a
+      ><a name="849" class="Symbol"
+      >:</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Semantics.html#99" class="Field"
+      >World</a
+      ><a name="856"
+      > </a
+      ><a name="857" class="Symbol"
+      >&#8594;</a
+      ><a name="858"
+      > </a
+      ><a name="859" href="Common.html#1143" class="Datatype"
+      >Stack</a
+      ><a name="864"
+      > </a
+      ><a name="865" href="Syntax.html#104" class="Datatype"
+      >Type</a
+      ><a name="869"
+      > </a
+      ><a name="870" class="Symbol"
+      >&#8594;</a
+      ><a name="871"
+      > </a
+      ><a name="872" class="PrimitiveType"
+      >Set</a
+      ><a name="875"
+      >
+  </a
+      ><a name="878" href="Semantics.html#878" class="Bound"
+      >w</a
+      ><a name="879"
+      > </a
+      ><a name="880" href="Semantics.html#844" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="882"
+      > </a
+      ><a name="883" href="Common.html#1173" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="884"
+      >     </a
+      ><a name="889" class="Symbol"
+      >=</a
+      ><a name="890"
+      > </a
+      ><a name="891" href="Agda.Builtin.Unit.html#69" class="Record"
+      >&#8868;</a
+      ><a name="892"
+      >
+  </a
+      ><a name="895" href="Semantics.html#895" class="Bound"
+      >w</a
+      ><a name="896"
+      > </a
+      ><a name="897" href="Semantics.html#844" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="Semantics.html#900" class="Bound"
+      >&#936;</a
+      ><a name="901"
+      > </a
+      ><a name="902" href="Common.html#1189" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Semantics.html#904" class="Bound"
+      >A</a
+      ><a name="905"
+      > </a
+      ><a name="906" class="Symbol"
+      >=</a
+      ><a name="907"
+      > </a
+      ><a name="908" href="Semantics.html#895" class="Bound"
+      >w</a
+      ><a name="909"
+      > </a
+      ><a name="910" href="Semantics.html#844" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="Semantics.html#900" class="Bound"
+      >&#936;</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Common.html#517" class="Function Operator"
+      >&#8743;</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Semantics.html#895" class="Bound"
+      >w</a
+      ><a name="918"
+      > </a
+      ><a name="919" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Semantics.html#904" class="Bound"
+      >A</a
+      ><a name="922"
+      >
+
+  </a
+      ><a name="926" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="931"
+      > </a
+      ><a name="932" class="Symbol"
+      >:</a
+      ><a name="933"
+      > </a
+      ><a name="934" class="Symbol"
+      >&#8704;</a
+      ><a name="935"
+      > </a
+      ><a name="936" class="Symbol"
+      >{</a
+      ><a name="937" href="Semantics.html#937" class="Bound"
+      >A</a
+      ><a name="938"
+      > </a
+      ><a name="939" href="Semantics.html#939" class="Bound"
+      >w</a
+      ><a name="940"
+      > </a
+      ><a name="941" href="Semantics.html#941" class="Bound"
+      >w&#8242;</a
+      ><a name="943" class="Symbol"
+      >}</a
+      ><a name="944"
+      > </a
+      ><a name="945" class="Symbol"
+      >&#8594;</a
+      ><a name="946"
+      > </a
+      ><a name="947" href="Semantics.html#939" class="Bound"
+      >w</a
+      ><a name="948"
+      > </a
+      ><a name="949" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Semantics.html#941" class="Bound"
+      >w&#8242;</a
+      ><a name="953"
+      > </a
+      ><a name="954" class="Symbol"
+      >&#8594;</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="Semantics.html#939" class="Bound"
+      >w</a
+      ><a name="957"
+      > </a
+      ><a name="958" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="Semantics.html#937" class="Bound"
+      >A</a
+      ><a name="961"
+      > </a
+      ><a name="962" class="Symbol"
+      >&#8594;</a
+      ><a name="963"
+      > </a
+      ><a name="964" href="Semantics.html#941" class="Bound"
+      >w&#8242;</a
+      ><a name="966"
+      > </a
+      ><a name="967" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="968"
+      > </a
+      ><a name="969" href="Semantics.html#937" class="Bound"
+      >A</a
+      ><a name="970"
+      >
+  </a
+      ><a name="973" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="978"
+      > </a
+      ><a name="979" class="Symbol"
+      >{</a
+      ><a name="980" href="Syntax.html#123" class="InductiveConstructor Operator"
+      >&#945;</a
+      ><a name="981"
+      > </a
+      ><a name="982" href="Semantics.html#982" class="Bound"
+      >P</a
+      ><a name="983" class="Symbol"
+      >}</a
+      ><a name="984"
+      >    </a
+      ><a name="988" href="Semantics.html#988" class="Bound"
+      >&#968;</a
+      ><a name="989"
+      > </a
+      ><a name="990" href="Semantics.html#990" class="Bound"
+      >s</a
+      ><a name="991"
+      >       </a
+      ><a name="998" class="Symbol"
+      >=</a
+      ><a name="999"
+      > </a
+      ><a name="1000" href="Semantics.html#381" class="Field"
+      >mono&#8873;&#7493;</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" href="Semantics.html#988" class="Bound"
+      >&#968;</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" href="Semantics.html#990" class="Bound"
+      >s</a
+      ><a name="1010"
+      >
+  </a
+      ><a name="1013" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" class="Symbol"
+      >{</a
+      ><a name="1020" href="Semantics.html#1020" class="Bound"
+      >A</a
+      ><a name="1021"
+      > </a
+      ><a name="1022" href="Syntax.html#144" class="InductiveConstructor Operator"
+      >&#8658;</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" href="Semantics.html#1024" class="Bound"
+      >B</a
+      ><a name="1025" class="Symbol"
+      >}</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" href="Semantics.html#1027" class="Bound"
+      >&#968;</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" href="Semantics.html#1029" class="Bound"
+      >f</a
+      ><a name="1030"
+      >       </a
+      ><a name="1037" class="Symbol"
+      >=</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" class="Symbol"
+      >&#955;</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" href="Semantics.html#1041" class="Bound"
+      >&#968;&#8242;</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="Semantics.html#1044" class="Bound"
+      >a</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" class="Symbol"
+      >&#8594;</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" href="Semantics.html#1029" class="Bound"
+      >f</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" class="Symbol"
+      >(</a
+      ><a name="1051" href="Semantics.html#179" class="Field"
+      >trans&#8804;</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" href="Semantics.html#1027" class="Bound"
+      >&#968;</a
+      ><a name="1059"
+      > </a
+      ><a name="1060" href="Semantics.html#1041" class="Bound"
+      >&#968;&#8242;</a
+      ><a name="1062" class="Symbol"
+      >)</a
+      ><a name="1063"
+      > </a
+      ><a name="1064" href="Semantics.html#1044" class="Bound"
+      >a</a
+      ><a name="1065"
+      >
+  </a
+      ><a name="1068" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" class="Symbol"
+      >{</a
+      ><a name="1075" href="Syntax.html#171" class="InductiveConstructor Operator"
+      >&#9633;</a
+      ><a name="1076"
+      > </a
+      ><a name="1077" href="Semantics.html#1077" class="Bound"
+      >A</a
+      ><a name="1078" class="Symbol"
+      >}</a
+      ><a name="1079"
+      >    </a
+      ><a name="1083" href="Semantics.html#1083" class="Bound"
+      >&#968;</a
+      ><a name="1084"
+      > </a
+      ><a name="1085" href="Semantics.html#1085" class="Bound"
+      >f</a
+      ><a name="1086"
+      >       </a
+      ><a name="1093" class="Symbol"
+      >=</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" class="Symbol"
+      >&#955;</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" href="Semantics.html#1097" class="Bound"
+      >&#961;</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" class="Symbol"
+      >&#8594;</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" href="Semantics.html#1085" class="Bound"
+      >f</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" class="Symbol"
+      >(</a
+      ><a name="1104" href="Semantics.html#295" class="Field"
+      >transR</a
+      ><a name="1110"
+      > </a
+      ><a name="1111" class="Symbol"
+      >(</a
+      ><a name="1112" href="Semantics.html#497" class="Field"
+      >&#8804;&#8594;R</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="Semantics.html#1083" class="Bound"
+      >&#968;</a
+      ><a name="1117" class="Symbol"
+      >)</a
+      ><a name="1118"
+      > </a
+      ><a name="1119" href="Semantics.html#1097" class="Bound"
+      >&#961;</a
+      ><a name="1120" class="Symbol"
+      >)</a
+      ><a name="1121"
+      >
+  </a
+      ><a name="1124" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" class="Symbol"
+      >{</a
+      ><a name="1131" href="Semantics.html#1131" class="Bound"
+      >A</a
+      ><a name="1132"
+      > </a
+      ><a name="1133" href="Syntax.html#192" class="InductiveConstructor Operator"
+      >&#10837;</a
+      ><a name="1134"
+      > </a
+      ><a name="1135" href="Semantics.html#1135" class="Bound"
+      >B</a
+      ><a name="1136" class="Symbol"
+      >}</a
+      ><a name="1137"
+      >  </a
+      ><a name="1139" href="Semantics.html#1139" class="Bound"
+      >&#968;</a
+      ><a name="1140"
+      > </a
+      ><a name="1141" class="Symbol"
+      >(</a
+      ><a name="1142" href="Semantics.html#1142" class="Bound"
+      >a</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" href="Semantics.html#1146" class="Bound"
+      >b</a
+      ><a name="1147" class="Symbol"
+      >)</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" class="Symbol"
+      >=</a
+      ><a name="1150"
+      > </a
+      ><a name="1151" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" class="Symbol"
+      >{</a
+      ><a name="1158" href="Semantics.html#1131" class="Bound"
+      >A</a
+      ><a name="1159" class="Symbol"
+      >}</a
+      ><a name="1160"
+      > </a
+      ><a name="1161" href="Semantics.html#1139" class="Bound"
+      >&#968;</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" href="Semantics.html#1142" class="Bound"
+      >a</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1166"
+      > </a
+      ><a name="1167" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1172"
+      > </a
+      ><a name="1173" class="Symbol"
+      >{</a
+      ><a name="1174" href="Semantics.html#1135" class="Bound"
+      >B</a
+      ><a name="1175" class="Symbol"
+      >}</a
+      ><a name="1176"
+      > </a
+      ><a name="1177" href="Semantics.html#1139" class="Bound"
+      >&#968;</a
+      ><a name="1178"
+      > </a
+      ><a name="1179" href="Semantics.html#1146" class="Bound"
+      >b</a
+      ><a name="1180"
+      >
+  </a
+      ><a name="1183" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" class="Symbol"
+      >{</a
+      ><a name="1190" href="Syntax.html#220" class="InductiveConstructor"
+      >&#10986;</a
+      ><a name="1191" class="Symbol"
+      >}</a
+      ><a name="1192"
+      >     </a
+      ><a name="1197" href="Semantics.html#1197" class="Bound"
+      >&#968;</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="1200"
+      >       </a
+      ><a name="1207" class="Symbol"
+      >=</a
+      ><a name="1208"
+      > </a
+      ><a name="1209" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="1210"
+      >
+  </a
+      ><a name="1213" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1218"
+      > </a
+      ><a name="1219" class="Symbol"
+      >{</a
+      ><a name="1220" href="Syntax.html#233" class="InductiveConstructor"
+      >&#10987;</a
+      ><a name="1221" class="Symbol"
+      >}</a
+      ><a name="1222"
+      >     </a
+      ><a name="1227" href="Semantics.html#1227" class="Bound"
+      >&#968;</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" class="Symbol"
+      >()</a
+      ><a name="1231"
+      >
+  </a
+      ><a name="1234" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1239"
+      > </a
+      ><a name="1240" class="Symbol"
+      >{</a
+      ><a name="1241" href="Semantics.html#1241" class="Bound"
+      >A</a
+      ><a name="1242"
+      > </a
+      ><a name="1243" href="Syntax.html#246" class="InductiveConstructor Operator"
+      >&#10838;</a
+      ><a name="1244"
+      > </a
+      ><a name="1245" href="Semantics.html#1245" class="Bound"
+      >B</a
+      ><a name="1246" class="Symbol"
+      >}</a
+      ><a name="1247"
+      >  </a
+      ><a name="1249" href="Semantics.html#1249" class="Bound"
+      >&#968;</a
+      ><a name="1250"
+      > </a
+      ><a name="1251" class="Symbol"
+      >(</a
+      ><a name="1252" href="Common.html#628" class="InductiveConstructor"
+      >&#953;&#8321;</a
+      ><a name="1254"
+      > </a
+      ><a name="1255" href="Semantics.html#1255" class="Bound"
+      >a</a
+      ><a name="1256" class="Symbol"
+      >)</a
+      ><a name="1257"
+      >  </a
+      ><a name="1259" class="Symbol"
+      >=</a
+      ><a name="1260"
+      > </a
+      ><a name="1261" href="Common.html#628" class="InductiveConstructor"
+      >&#953;&#8321;</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" class="Symbol"
+      >(</a
+      ><a name="1265" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1270"
+      > </a
+      ><a name="1271" class="Symbol"
+      >{</a
+      ><a name="1272" href="Semantics.html#1241" class="Bound"
+      >A</a
+      ><a name="1273" class="Symbol"
+      >}</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="Semantics.html#1249" class="Bound"
+      >&#968;</a
+      ><a name="1276"
+      > </a
+      ><a name="1277" href="Semantics.html#1255" class="Bound"
+      >a</a
+      ><a name="1278" class="Symbol"
+      >)</a
+      ><a name="1279"
+      >
+  </a
+      ><a name="1282" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" class="Symbol"
+      >{</a
+      ><a name="1289" href="Semantics.html#1289" class="Bound"
+      >A</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" href="Syntax.html#246" class="InductiveConstructor Operator"
+      >&#10838;</a
+      ><a name="1292"
+      > </a
+      ><a name="1293" href="Semantics.html#1293" class="Bound"
+      >B</a
+      ><a name="1294" class="Symbol"
+      >}</a
+      ><a name="1295"
+      >  </a
+      ><a name="1297" href="Semantics.html#1297" class="Bound"
+      >&#968;</a
+      ><a name="1298"
+      > </a
+      ><a name="1299" class="Symbol"
+      >(</a
+      ><a name="1300" href="Common.html#645" class="InductiveConstructor"
+      >&#953;&#8322;</a
+      ><a name="1302"
+      > </a
+      ><a name="1303" href="Semantics.html#1303" class="Bound"
+      >b</a
+      ><a name="1304" class="Symbol"
+      >)</a
+      ><a name="1305"
+      >  </a
+      ><a name="1307" class="Symbol"
+      >=</a
+      ><a name="1308"
+      > </a
+      ><a name="1309" href="Common.html#645" class="InductiveConstructor"
+      >&#953;&#8322;</a
+      ><a name="1311"
+      > </a
+      ><a name="1312" class="Symbol"
+      >(</a
+      ><a name="1313" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" class="Symbol"
+      >{</a
+      ><a name="1320" href="Semantics.html#1293" class="Bound"
+      >B</a
+      ><a name="1321" class="Symbol"
+      >}</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" href="Semantics.html#1297" class="Bound"
+      >&#968;</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" href="Semantics.html#1303" class="Bound"
+      >b</a
+      ><a name="1326" class="Symbol"
+      >)</a
+      ><a name="1327"
+      >
+
+  </a
+      ><a name="1331" href="Semantics.html#1331" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" class="Symbol"
+      >:</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" class="Symbol"
+      >&#8704;</a
+      ><a name="1341"
+      > </a
+      ><a name="1342" class="Symbol"
+      >{</a
+      ><a name="1343" href="Semantics.html#1343" class="Bound"
+      >&#926;</a
+      ><a name="1344"
+      > </a
+      ><a name="1345" href="Semantics.html#1345" class="Bound"
+      >w</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" href="Semantics.html#1347" class="Bound"
+      >w&#8242;</a
+      ><a name="1349" class="Symbol"
+      >}</a
+      ><a name="1350"
+      > </a
+      ><a name="1351" class="Symbol"
+      >&#8594;</a
+      ><a name="1352"
+      > </a
+      ><a name="1353" href="Semantics.html#1345" class="Bound"
+      >w</a
+      ><a name="1354"
+      > </a
+      ><a name="1355" href="Semantics.html#117" class="Field Operator"
+      >&#8804;</a
+      ><a name="1356"
+      > </a
+      ><a name="1357" href="Semantics.html#1347" class="Bound"
+      >w&#8242;</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" class="Symbol"
+      >&#8594;</a
+      ><a name="1361"
+      > </a
+      ><a name="1362" href="Semantics.html#1345" class="Bound"
+      >w</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" href="Semantics.html#844" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1366"
+      > </a
+      ><a name="1367" href="Semantics.html#1343" class="Bound"
+      >&#926;</a
+      ><a name="1368"
+      > </a
+      ><a name="1369" class="Symbol"
+      >&#8594;</a
+      ><a name="1370"
+      > </a
+      ><a name="1371" href="Semantics.html#1347" class="Bound"
+      >w&#8242;</a
+      ><a name="1373"
+      > </a
+      ><a name="1374" href="Semantics.html#844" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1376"
+      > </a
+      ><a name="1377" href="Semantics.html#1343" class="Bound"
+      >&#926;</a
+      ><a name="1378"
+      >
+  </a
+      ><a name="1381" href="Semantics.html#1331" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1387"
+      > </a
+      ><a name="1388" class="Symbol"
+      >{</a
+      ><a name="1389" href="Common.html#1173" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="1390" class="Symbol"
+      >}</a
+      ><a name="1391"
+      >     </a
+      ><a name="1396" href="Semantics.html#1396" class="Bound"
+      >&#968;</a
+      ><a name="1397"
+      > </a
+      ><a name="1398" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="1399"
+      >       </a
+      ><a name="1406" class="Symbol"
+      >=</a
+      ><a name="1407"
+      > </a
+      ><a name="1408" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="1409"
+      >
+  </a
+      ><a name="1412" href="Semantics.html#1331" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1418"
+      > </a
+      ><a name="1419" class="Symbol"
+      >{</a
+      ><a name="1420" href="Semantics.html#1420" class="Bound"
+      >&#926;</a
+      ><a name="1421"
+      > </a
+      ><a name="1422" href="Common.html#1189" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1423"
+      > </a
+      ><a name="1424" href="Semantics.html#1424" class="Bound"
+      >A</a
+      ><a name="1425" class="Symbol"
+      >}</a
+      ><a name="1426"
+      > </a
+      ><a name="1427" href="Semantics.html#1427" class="Bound"
+      >&#968;</a
+      ><a name="1428"
+      > </a
+      ><a name="1429" class="Symbol"
+      >(</a
+      ><a name="1430" href="Semantics.html#1430" class="Bound"
+      >&#958;</a
+      ><a name="1431"
+      > </a
+      ><a name="1432" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1433"
+      > </a
+      ><a name="1434" href="Semantics.html#1434" class="Bound"
+      >s</a
+      ><a name="1435" class="Symbol"
+      >)</a
+      ><a name="1436"
+      > </a
+      ><a name="1437" class="Symbol"
+      >=</a
+      ><a name="1438"
+      > </a
+      ><a name="1439" href="Semantics.html#1331" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" class="Symbol"
+      >{</a
+      ><a name="1447" href="Semantics.html#1420" class="Bound"
+      >&#926;</a
+      ><a name="1448" class="Symbol"
+      >}</a
+      ><a name="1449"
+      > </a
+      ><a name="1450" href="Semantics.html#1427" class="Bound"
+      >&#968;</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" href="Semantics.html#1430" class="Bound"
+      >&#958;</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1455"
+      > </a
+      ><a name="1456" href="Semantics.html#926" class="Function"
+      >mono&#8873;</a
+      ><a name="1461"
+      > </a
+      ><a name="1462" class="Symbol"
+      >{</a
+      ><a name="1463" href="Semantics.html#1424" class="Bound"
+      >A</a
+      ><a name="1464" class="Symbol"
+      >}</a
+      ><a name="1465"
+      > </a
+      ><a name="1466" href="Semantics.html#1427" class="Bound"
+      >&#968;</a
+      ><a name="1467"
+      > </a
+      ><a name="1468" href="Semantics.html#1434" class="Bound"
+      >s</a
+      ><a name="1469"
+      >
+
+  </a
+      ><a name="1473" href="Semantics.html#1473" class="Function"
+      >lookup</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" class="Symbol"
+      >:</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" class="Symbol"
+      >&#8704;</a
+      ><a name="1483"
+      > </a
+      ><a name="1484" class="Symbol"
+      >{</a
+      ><a name="1485" href="Semantics.html#1485" class="Bound"
+      >&#926;</a
+      ><a name="1486"
+      > </a
+      ><a name="1487" href="Semantics.html#1487" class="Bound"
+      >A</a
+      ><a name="1488"
+      > </a
+      ><a name="1489" href="Semantics.html#1489" class="Bound"
+      >w</a
+      ><a name="1490" class="Symbol"
+      >}</a
+      ><a name="1491"
+      > </a
+      ><a name="1492" class="Symbol"
+      >&#8594;</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" href="Semantics.html#1487" class="Bound"
+      >A</a
+      ><a name="1495"
+      > </a
+      ><a name="1496" href="Common.html#1309" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="1497"
+      > </a
+      ><a name="1498" href="Semantics.html#1485" class="Bound"
+      >&#926;</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" class="Symbol"
+      >&#8594;</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Semantics.html#1489" class="Bound"
+      >w</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" href="Semantics.html#844" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1506"
+      > </a
+      ><a name="1507" href="Semantics.html#1485" class="Bound"
+      >&#926;</a
+      ><a name="1508"
+      > </a
+      ><a name="1509" class="Symbol"
+      >&#8594;</a
+      ><a name="1510"
+      > </a
+      ><a name="1511" href="Semantics.html#1489" class="Bound"
+      >w</a
+      ><a name="1512"
+      > </a
+      ><a name="1513" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="1514"
+      > </a
+      ><a name="1515" href="Semantics.html#1487" class="Bound"
+      >A</a
+      ><a name="1516"
+      >
+  </a
+      ><a name="1519" href="Semantics.html#1473" class="Function"
+      >lookup</a
+      ><a name="1525"
+      > </a
+      ><a name="1526" href="Common.html#1347" class="InductiveConstructor"
+      >top</a
+      ><a name="1529"
+      >     </a
+      ><a name="1534" class="Symbol"
+      >(</a
+      ><a name="1535" href="Semantics.html#1535" class="Bound"
+      >&#958;</a
+      ><a name="1536"
+      > </a
+      ><a name="1537" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1538"
+      > </a
+      ><a name="1539" href="Semantics.html#1539" class="Bound"
+      >s</a
+      ><a name="1540" class="Symbol"
+      >)</a
+      ><a name="1541"
+      > </a
+      ><a name="1542" class="Symbol"
+      >=</a
+      ><a name="1543"
+      > </a
+      ><a name="1544" href="Semantics.html#1539" class="Bound"
+      >s</a
+      ><a name="1545"
+      >
+  </a
+      ><a name="1548" href="Semantics.html#1473" class="Function"
+      >lookup</a
+      ><a name="1554"
+      > </a
+      ><a name="1555" class="Symbol"
+      >(</a
+      ><a name="1556" href="Common.html#1377" class="InductiveConstructor"
+      >pop</a
+      ><a name="1559"
+      > </a
+      ><a name="1560" href="Semantics.html#1560" class="Bound"
+      >i</a
+      ><a name="1561" class="Symbol"
+      >)</a
+      ><a name="1562"
+      > </a
+      ><a name="1563" class="Symbol"
+      >(</a
+      ><a name="1564" href="Semantics.html#1564" class="Bound"
+      >&#958;</a
+      ><a name="1565"
+      > </a
+      ><a name="1566" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1567"
+      > </a
+      ><a name="1568" href="Semantics.html#1568" class="Bound"
+      >s</a
+      ><a name="1569" class="Symbol"
+      >)</a
+      ><a name="1570"
+      > </a
+      ><a name="1571" class="Symbol"
+      >=</a
+      ><a name="1572"
+      > </a
+      ><a name="1573" href="Semantics.html#1473" class="Function"
+      >lookup</a
+      ><a name="1579"
+      > </a
+      ><a name="1580" href="Semantics.html#1560" class="Bound"
+      >i</a
+      ><a name="1581"
+      > </a
+      ><a name="1582" href="Semantics.html#1564" class="Bound"
+      >&#958;</a
+      ><a name="1583"
+      >
+
+</a
+      ><a name="1585" class="Keyword"
+      >infix</a
+      ><a name="1590"
+      > </a
+      ><a name="1591" class="Number"
+      >3</a
+      ><a name="1592"
+      > </a
+      ><a name="1593" href="Semantics.html#1597" class="Function Operator"
+      >_&#8872;_</a
+      ><a name="1596"
+      >
+</a
+      ><a name="1597" href="Semantics.html#1597" class="Function Operator"
+      >_&#8872;_</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" class="Symbol"
+      >:</a
+      ><a name="1602"
+      > </a
+      ><a name="1603" href="Syntax.html#273" class="Function"
+      >Context</a
+      ><a name="1610"
+      > </a
+      ><a name="1611" class="Symbol"
+      >&#8594;</a
+      ><a name="1612"
+      > </a
+      ><a name="1613" href="Syntax.html#104" class="Datatype"
+      >Type</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" class="Symbol"
+      >&#8594;</a
+      ><a name="1619"
+      > </a
+      ><a name="1620" class="PrimitiveType"
+      >Set&#8321;</a
+      ><a name="1624"
+      >
+</a
+      ><a name="1625" href="Semantics.html#1625" class="Bound"
+      >&#915;</a
+      ><a name="1626"
+      > </a
+      ><a name="1627" href="Common.html#2559" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" href="Semantics.html#1629" class="Bound"
+      >&#916;</a
+      ><a name="1630"
+      > </a
+      ><a name="1631" href="Semantics.html#1597" class="Function Operator"
+      >&#8872;</a
+      ><a name="1632"
+      > </a
+      ><a name="1633" href="Semantics.html#1633" class="Bound"
+      >A</a
+      ><a name="1634"
+      > </a
+      ><a name="1635" class="Symbol"
+      >=</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" class="Symbol"
+      >&#8704;</a
+      ><a name="1638"
+      > </a
+      ><a name="1639" class="Symbol"
+      >{{</a
+      ><a name="1641" href="Semantics.html#1641" class="Bound"
+      >_</a
+      ><a name="1642"
+      > </a
+      ><a name="1643" class="Symbol"
+      >:</a
+      ><a name="1644"
+      > </a
+      ><a name="1645" href="Semantics.html#53" class="Record"
+      >Model</a
+      ><a name="1650" class="Symbol"
+      >}}</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" class="Symbol"
+      >{</a
+      ><a name="1654" href="Semantics.html#1654" class="Bound"
+      >w</a
+      ><a name="1655" class="Symbol"
+      >}</a
+      ><a name="1656"
+      > </a
+      ><a name="1657" class="Symbol"
+      >&#8594;</a
+      ><a name="1658"
+      >
+             </a
+      ><a name="1672" href="Semantics.html#1654" class="Bound"
+      >w</a
+      ><a name="1673"
+      > </a
+      ><a name="1674" href="Semantics.html#844" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1676"
+      > </a
+      ><a name="1677" href="Semantics.html#1625" class="Bound"
+      >&#915;</a
+      ><a name="1678"
+      > </a
+      ><a name="1679" class="Symbol"
+      >&#8594;</a
+      ><a name="1680"
+      >
+             </a
+      ><a name="1694" class="Symbol"
+      >(&#8704;</a
+      ><a name="1696"
+      > </a
+      ><a name="1697" class="Symbol"
+      >{</a
+      ><a name="1698" href="Semantics.html#1698" class="Bound"
+      >v&#8242;</a
+      ><a name="1700" class="Symbol"
+      >}</a
+      ><a name="1701"
+      > </a
+      ><a name="1702" class="Symbol"
+      >&#8594;</a
+      ><a name="1703"
+      > </a
+      ><a name="1704" href="Semantics.html#1654" class="Bound"
+      >w</a
+      ><a name="1705"
+      > </a
+      ><a name="1706" href="Semantics.html#233" class="Field Operator"
+      >R</a
+      ><a name="1707"
+      > </a
+      ><a name="1708" href="Semantics.html#1698" class="Bound"
+      >v&#8242;</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" class="Symbol"
+      >&#8594;</a
+      ><a name="1712"
+      > </a
+      ><a name="1713" href="Semantics.html#1698" class="Bound"
+      >v&#8242;</a
+      ><a name="1715"
+      > </a
+      ><a name="1716" href="Semantics.html#844" class="Function Operator"
+      >&#8873;&#8902;</a
+      ><a name="1718"
+      > </a
+      ><a name="1719" href="Semantics.html#1629" class="Bound"
+      >&#916;</a
+      ><a name="1720" class="Symbol"
+      >)</a
+      ><a name="1721"
+      > </a
+      ><a name="1722" class="Symbol"
+      >&#8594;</a
+      ><a name="1723"
+      >
+             </a
+      ><a name="1737" href="Semantics.html#1654" class="Bound"
+      >w</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" href="Semantics.html#601" class="Function Operator"
+      >&#8873;</a
+      ><a name="1740"
+      > </a
+      ><a name="1741" href="Semantics.html#1633" class="Bound"
+      >A</a
+      ><a name="1742"
+      >
+
+</a
+      ><a name="1744" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="1751"
+      > </a
+      ><a name="1752" class="Symbol"
+      >:</a
+      ><a name="1753"
+      > </a
+      ><a name="1754" class="Symbol"
+      >&#8704;</a
+      ><a name="1755"
+      > </a
+      ><a name="1756" class="Symbol"
+      >{</a
+      ><a name="1757" href="Semantics.html#1757" class="Bound"
+      >&#915;</a
+      ><a name="1758"
+      > </a
+      ><a name="1759" href="Semantics.html#1759" class="Bound"
+      >&#916;</a
+      ><a name="1760"
+      > </a
+      ><a name="1761" href="Semantics.html#1761" class="Bound"
+      >A</a
+      ><a name="1762" class="Symbol"
+      >}</a
+      ><a name="1763"
+      > </a
+      ><a name="1764" class="Symbol"
+      >&#8594;</a
+      ><a name="1765"
+      > </a
+      ><a name="1766" href="Semantics.html#1757" class="Bound"
+      >&#915;</a
+      ><a name="1767"
+      > </a
+      ><a name="1768" href="Common.html#2559" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1769"
+      > </a
+      ><a name="1770" href="Semantics.html#1759" class="Bound"
+      >&#916;</a
+      ><a name="1771"
+      > </a
+      ><a name="1772" href="Syntax.html#332" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1773"
+      > </a
+      ><a name="1774" href="Semantics.html#1761" class="Bound"
+      >A</a
+      ><a name="1775"
+      > </a
+      ><a name="1776" class="Symbol"
+      >&#8594;</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" href="Semantics.html#1757" class="Bound"
+      >&#915;</a
+      ><a name="1779"
+      > </a
+      ><a name="1780" href="Common.html#2559" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1781"
+      > </a
+      ><a name="1782" href="Semantics.html#1759" class="Bound"
+      >&#916;</a
+      ><a name="1783"
+      > </a
+      ><a name="1784" href="Semantics.html#1597" class="Function Operator"
+      >&#8872;</a
+      ><a name="1785"
+      > </a
+      ><a name="1786" href="Semantics.html#1761" class="Bound"
+      >A</a
+      ><a name="1787"
+      >
+</a
+      ><a name="1788" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="1795"
+      > </a
+      ><a name="1796" class="Symbol"
+      >(</a
+      ><a name="1797" href="Syntax.html#367" class="InductiveConstructor"
+      >var</a
+      ><a name="1800"
+      > </a
+      ><a name="1801" href="Semantics.html#1801" class="Bound"
+      >i</a
+      ><a name="1802" class="Symbol"
+      >)</a
+      ><a name="1803"
+      >      </a
+      ><a name="1809" href="Semantics.html#1809" class="Bound"
+      >&#947;</a
+      ><a name="1810"
+      > </a
+      ><a name="1811" href="Semantics.html#1811" class="Bound"
+      >&#948;</a
+      ><a name="1812"
+      > </a
+      ><a name="1813" class="Symbol"
+      >=</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" href="Semantics.html#1473" class="Function"
+      >lookup</a
+      ><a name="1821"
+      > </a
+      ><a name="1822" href="Semantics.html#1801" class="Bound"
+      >i</a
+      ><a name="1823"
+      > </a
+      ><a name="1824" href="Semantics.html#1809" class="Bound"
+      >&#947;</a
+      ><a name="1825"
+      >
+</a
+      ><a name="1826" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="1833"
+      > </a
+      ><a name="1834" class="Symbol"
+      >(</a
+      ><a name="1835" href="Syntax.html#411" class="InductiveConstructor"
+      >mvar</a
+      ><a name="1839"
+      > </a
+      ><a name="1840" href="Semantics.html#1840" class="Bound"
+      >i</a
+      ><a name="1841" class="Symbol"
+      >)</a
+      ><a name="1842"
+      >     </a
+      ><a name="1847" href="Semantics.html#1847" class="Bound"
+      >&#947;</a
+      ><a name="1848"
+      > </a
+      ><a name="1849" href="Semantics.html#1849" class="Bound"
+      >&#948;</a
+      ><a name="1850"
+      > </a
+      ><a name="1851" class="Symbol"
+      >=</a
+      ><a name="1852"
+      > </a
+      ><a name="1853" href="Semantics.html#1473" class="Function"
+      >lookup</a
+      ><a name="1859"
+      > </a
+      ><a name="1860" href="Semantics.html#1840" class="Bound"
+      >i</a
+      ><a name="1861"
+      > </a
+      ><a name="1862" class="Symbol"
+      >(</a
+      ><a name="1863" href="Semantics.html#1849" class="Bound"
+      >&#948;</a
+      ><a name="1864"
+      > </a
+      ><a name="1865" href="Semantics.html#267" class="Field"
+      >reflR</a
+      ><a name="1870" class="Symbol"
+      >)</a
+      ><a name="1871"
+      >
+</a
+      ><a name="1872" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="1879"
+      > </a
+      ><a name="1880" class="Symbol"
+      >(</a
+      ><a name="1881" href="Syntax.html#455" class="InductiveConstructor"
+      >lam</a
+      ><a name="1884"
+      > </a
+      ><a name="1885" href="Semantics.html#1885" class="Bound"
+      >d</a
+      ><a name="1886" class="Symbol"
+      >)</a
+      ><a name="1887"
+      >      </a
+      ><a name="1893" href="Semantics.html#1893" class="Bound"
+      >&#947;</a
+      ><a name="1894"
+      > </a
+      ><a name="1895" href="Semantics.html#1895" class="Bound"
+      >&#948;</a
+      ><a name="1896"
+      > </a
+      ><a name="1897" class="Symbol"
+      >=</a
+      ><a name="1898"
+      > </a
+      ><a name="1899" class="Symbol"
+      >&#955;</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" href="Semantics.html#1901" class="Bound"
+      >&#968;</a
+      ><a name="1902"
+      > </a
+      ><a name="1903" href="Semantics.html#1903" class="Bound"
+      >a</a
+      ><a name="1904"
+      > </a
+      ><a name="1905" class="Symbol"
+      >&#8594;</a
+      ><a name="1906"
+      > </a
+      ><a name="1907" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="1914"
+      > </a
+      ><a name="1915" href="Semantics.html#1885" class="Bound"
+      >d</a
+      ><a name="1916"
+      > </a
+      ><a name="1917" class="Symbol"
+      >(</a
+      ><a name="1918" href="Semantics.html#1331" class="Function"
+      >mono&#8873;&#8902;</a
+      ><a name="1924"
+      > </a
+      ><a name="1925" href="Semantics.html#1901" class="Bound"
+      >&#968;</a
+      ><a name="1926"
+      > </a
+      ><a name="1927" href="Semantics.html#1893" class="Bound"
+      >&#947;</a
+      ><a name="1928"
+      > </a
+      ><a name="1929" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1930"
+      > </a
+      ><a name="1931" href="Semantics.html#1903" class="Bound"
+      >a</a
+      ><a name="1932" class="Symbol"
+      >)</a
+      ><a name="1933"
+      >
+                                              </a
+      ><a name="1980" class="Symbol"
+      >(&#955;</a
+      ><a name="1982"
+      > </a
+      ><a name="1983" href="Semantics.html#1983" class="Bound"
+      >&#961;</a
+      ><a name="1984"
+      > </a
+      ><a name="1985" class="Symbol"
+      >&#8594;</a
+      ><a name="1986"
+      > </a
+      ><a name="1987" href="Semantics.html#1895" class="Bound"
+      >&#948;</a
+      ><a name="1988"
+      > </a
+      ><a name="1989" class="Symbol"
+      >(</a
+      ><a name="1990" href="Semantics.html#295" class="Field"
+      >transR</a
+      ><a name="1996"
+      > </a
+      ><a name="1997" class="Symbol"
+      >(</a
+      ><a name="1998" href="Semantics.html#497" class="Field"
+      >&#8804;&#8594;R</a
+      ><a name="2001"
+      > </a
+      ><a name="2002" href="Semantics.html#1901" class="Bound"
+      >&#968;</a
+      ><a name="2003" class="Symbol"
+      >)</a
+      ><a name="2004"
+      > </a
+      ><a name="2005" href="Semantics.html#1983" class="Bound"
+      >&#961;</a
+      ><a name="2006" class="Symbol"
+      >))</a
+      ><a name="2008"
+      >
+</a
+      ><a name="2009" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2016"
+      > </a
+      ><a name="2017" class="Symbol"
+      >(</a
+      ><a name="2018" href="Syntax.html#511" class="InductiveConstructor"
+      >app</a
+      ><a name="2021"
+      > </a
+      ><a name="2022" href="Semantics.html#2022" class="Bound"
+      >d</a
+      ><a name="2023"
+      > </a
+      ><a name="2024" href="Semantics.html#2024" class="Bound"
+      >e</a
+      ><a name="2025" class="Symbol"
+      >)</a
+      ><a name="2026"
+      >    </a
+      ><a name="2030" href="Semantics.html#2030" class="Bound"
+      >&#947;</a
+      ><a name="2031"
+      > </a
+      ><a name="2032" href="Semantics.html#2032" class="Bound"
+      >&#948;</a
+      ><a name="2033"
+      > </a
+      ><a name="2034" class="Symbol"
+      >=</a
+      ><a name="2035"
+      > </a
+      ><a name="2036" class="Symbol"
+      >(</a
+      ><a name="2037" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2044"
+      > </a
+      ><a name="2045" href="Semantics.html#2022" class="Bound"
+      >d</a
+      ><a name="2046"
+      > </a
+      ><a name="2047" href="Semantics.html#2030" class="Bound"
+      >&#947;</a
+      ><a name="2048"
+      > </a
+      ><a name="2049" href="Semantics.html#2032" class="Bound"
+      >&#948;</a
+      ><a name="2050" class="Symbol"
+      >)</a
+      ><a name="2051"
+      > </a
+      ><a name="2052" href="Semantics.html#151" class="Field"
+      >refl&#8804;</a
+      ><a name="2057"
+      > </a
+      ><a name="2058" class="Symbol"
+      >(</a
+      ><a name="2059" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2066"
+      > </a
+      ><a name="2067" href="Semantics.html#2024" class="Bound"
+      >e</a
+      ><a name="2068"
+      > </a
+      ><a name="2069" href="Semantics.html#2030" class="Bound"
+      >&#947;</a
+      ><a name="2070"
+      > </a
+      ><a name="2071" href="Semantics.html#2032" class="Bound"
+      >&#948;</a
+      ><a name="2072" class="Symbol"
+      >)</a
+      ><a name="2073"
+      >
+</a
+      ><a name="2074" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2081"
+      > </a
+      ><a name="2082" class="Symbol"
+      >(</a
+      ><a name="2083" href="Syntax.html#575" class="InductiveConstructor"
+      >box</a
+      ><a name="2086"
+      > </a
+      ><a name="2087" href="Semantics.html#2087" class="Bound"
+      >d</a
+      ><a name="2088" class="Symbol"
+      >)</a
+      ><a name="2089"
+      >      </a
+      ><a name="2095" href="Semantics.html#2095" class="Bound"
+      >&#947;</a
+      ><a name="2096"
+      > </a
+      ><a name="2097" href="Semantics.html#2097" class="Bound"
+      >&#948;</a
+      ><a name="2098"
+      > </a
+      ><a name="2099" class="Symbol"
+      >=</a
+      ><a name="2100"
+      > </a
+      ><a name="2101" class="Symbol"
+      >&#955;</a
+      ><a name="2102"
+      > </a
+      ><a name="2103" href="Semantics.html#2103" class="Bound"
+      >&#961;</a
+      ><a name="2104"
+      > </a
+      ><a name="2105" class="Symbol"
+      >&#8594;</a
+      ><a name="2106"
+      > </a
+      ><a name="2107" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2114"
+      > </a
+      ><a name="2115" href="Semantics.html#2087" class="Bound"
+      >d</a
+      ><a name="2116"
+      > </a
+      ><a name="2117" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="2118"
+      >
+                                            </a
+      ><a name="2163" class="Symbol"
+      >(&#955;</a
+      ><a name="2165"
+      > </a
+      ><a name="2166" href="Semantics.html#2166" class="Bound"
+      >&#961;&#8242;</a
+      ><a name="2168"
+      > </a
+      ><a name="2169" class="Symbol"
+      >&#8594;</a
+      ><a name="2170"
+      > </a
+      ><a name="2171" href="Semantics.html#2097" class="Bound"
+      >&#948;</a
+      ><a name="2172"
+      > </a
+      ><a name="2173" class="Symbol"
+      >(</a
+      ><a name="2174" href="Semantics.html#295" class="Field"
+      >transR</a
+      ><a name="2180"
+      > </a
+      ><a name="2181" href="Semantics.html#2103" class="Bound"
+      >&#961;</a
+      ><a name="2182"
+      > </a
+      ><a name="2183" href="Semantics.html#2166" class="Bound"
+      >&#961;&#8242;</a
+      ><a name="2185" class="Symbol"
+      >))</a
+      ><a name="2187"
+      >
+</a
+      ><a name="2188" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2195"
+      > </a
+      ><a name="2196" class="Symbol"
+      >(</a
+      ><a name="2197" href="Syntax.html#625" class="InductiveConstructor"
+      >unbox</a
+      ><a name="2202"
+      > </a
+      ><a name="2203" href="Semantics.html#2203" class="Bound"
+      >d</a
+      ><a name="2204"
+      > </a
+      ><a name="2205" href="Semantics.html#2205" class="Bound"
+      >e</a
+      ><a name="2206" class="Symbol"
+      >)</a
+      ><a name="2207"
+      >  </a
+      ><a name="2209" href="Semantics.html#2209" class="Bound"
+      >&#947;</a
+      ><a name="2210"
+      > </a
+      ><a name="2211" href="Semantics.html#2211" class="Bound"
+      >&#948;</a
+      ><a name="2212"
+      > </a
+      ><a name="2213" class="Symbol"
+      >=</a
+      ><a name="2214"
+      > </a
+      ><a name="2215" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2222"
+      > </a
+      ><a name="2223" href="Semantics.html#2205" class="Bound"
+      >e</a
+      ><a name="2224"
+      > </a
+      ><a name="2225" href="Semantics.html#2209" class="Bound"
+      >&#947;</a
+      ><a name="2226"
+      > </a
+      ><a name="2227" class="Symbol"
+      >(&#955;</a
+      ><a name="2229"
+      > </a
+      ><a name="2230" href="Semantics.html#2230" class="Bound"
+      >&#961;</a
+      ><a name="2231"
+      > </a
+      ><a name="2232" class="Symbol"
+      >&#8594;</a
+      ><a name="2233"
+      > </a
+      ><a name="2234" href="Semantics.html#2211" class="Bound"
+      >&#948;</a
+      ><a name="2235"
+      > </a
+      ><a name="2236" href="Semantics.html#2230" class="Bound"
+      >&#961;</a
+      ><a name="2237"
+      > </a
+      ><a name="2238" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2239"
+      > </a
+      ><a name="2240" class="Symbol"
+      >(</a
+      ><a name="2241" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2248"
+      > </a
+      ><a name="2249" href="Semantics.html#2203" class="Bound"
+      >d</a
+      ><a name="2250"
+      > </a
+      ><a name="2251" href="Semantics.html#2209" class="Bound"
+      >&#947;</a
+      ><a name="2252"
+      > </a
+      ><a name="2253" href="Semantics.html#2211" class="Bound"
+      >&#948;</a
+      ><a name="2254" class="Symbol"
+      >)</a
+      ><a name="2255"
+      > </a
+      ><a name="2256" href="Semantics.html#2230" class="Bound"
+      >&#961;</a
+      ><a name="2257" class="Symbol"
+      >)</a
+      ><a name="2258"
+      >
+</a
+      ><a name="2259" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2266"
+      > </a
+      ><a name="2267" class="Symbol"
+      >(</a
+      ><a name="2268" href="Syntax.html#691" class="InductiveConstructor"
+      >pair</a
+      ><a name="2272"
+      > </a
+      ><a name="2273" href="Semantics.html#2273" class="Bound"
+      >d</a
+      ><a name="2274"
+      > </a
+      ><a name="2275" href="Semantics.html#2275" class="Bound"
+      >e</a
+      ><a name="2276" class="Symbol"
+      >)</a
+      ><a name="2277"
+      >   </a
+      ><a name="2280" href="Semantics.html#2280" class="Bound"
+      >&#947;</a
+      ><a name="2281"
+      > </a
+      ><a name="2282" href="Semantics.html#2282" class="Bound"
+      >&#948;</a
+      ><a name="2283"
+      > </a
+      ><a name="2284" class="Symbol"
+      >=</a
+      ><a name="2285"
+      > </a
+      ><a name="2286" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2293"
+      > </a
+      ><a name="2294" href="Semantics.html#2273" class="Bound"
+      >d</a
+      ><a name="2295"
+      > </a
+      ><a name="2296" href="Semantics.html#2280" class="Bound"
+      >&#947;</a
+      ><a name="2297"
+      > </a
+      ><a name="2298" href="Semantics.html#2282" class="Bound"
+      >&#948;</a
+      ><a name="2299"
+      > </a
+      ><a name="2300" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2301"
+      > </a
+      ><a name="2302" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2309"
+      > </a
+      ><a name="2310" href="Semantics.html#2275" class="Bound"
+      >e</a
+      ><a name="2311"
+      > </a
+      ><a name="2312" href="Semantics.html#2280" class="Bound"
+      >&#947;</a
+      ><a name="2313"
+      > </a
+      ><a name="2314" href="Semantics.html#2282" class="Bound"
+      >&#948;</a
+      ><a name="2315"
+      >
+</a
+      ><a name="2316" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2323"
+      > </a
+      ><a name="2324" class="Symbol"
+      >(</a
+      ><a name="2325" href="Syntax.html#755" class="InductiveConstructor"
+      >fst</a
+      ><a name="2328"
+      > </a
+      ><a name="2329" href="Semantics.html#2329" class="Bound"
+      >d</a
+      ><a name="2330" class="Symbol"
+      >)</a
+      ><a name="2331"
+      >      </a
+      ><a name="2337" href="Semantics.html#2337" class="Bound"
+      >&#947;</a
+      ><a name="2338"
+      > </a
+      ><a name="2339" href="Semantics.html#2339" class="Bound"
+      >&#948;</a
+      ><a name="2340"
+      > </a
+      ><a name="2341" class="Symbol"
+      >=</a
+      ><a name="2342"
+      > </a
+      ><a name="2343" href="Common.html#449" class="Field"
+      >&#960;&#8321;</a
+      ><a name="2345"
+      > </a
+      ><a name="2346" class="Symbol"
+      >(</a
+      ><a name="2347" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2354"
+      > </a
+      ><a name="2355" href="Semantics.html#2329" class="Bound"
+      >d</a
+      ><a name="2356"
+      > </a
+      ><a name="2357" href="Semantics.html#2337" class="Bound"
+      >&#947;</a
+      ><a name="2358"
+      > </a
+      ><a name="2359" href="Semantics.html#2339" class="Bound"
+      >&#948;</a
+      ><a name="2360" class="Symbol"
+      >)</a
+      ><a name="2361"
+      >
+</a
+      ><a name="2362" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2369"
+      > </a
+      ><a name="2370" class="Symbol"
+      >(</a
+      ><a name="2371" href="Syntax.html#807" class="InductiveConstructor"
+      >snd</a
+      ><a name="2374"
+      > </a
+      ><a name="2375" href="Semantics.html#2375" class="Bound"
+      >d</a
+      ><a name="2376" class="Symbol"
+      >)</a
+      ><a name="2377"
+      >      </a
+      ><a name="2383" href="Semantics.html#2383" class="Bound"
+      >&#947;</a
+      ><a name="2384"
+      > </a
+      ><a name="2385" href="Semantics.html#2385" class="Bound"
+      >&#948;</a
+      ><a name="2386"
+      > </a
+      ><a name="2387" class="Symbol"
+      >=</a
+      ><a name="2388"
+      > </a
+      ><a name="2389" href="Common.html#460" class="Field"
+      >&#960;&#8322;</a
+      ><a name="2391"
+      > </a
+      ><a name="2392" class="Symbol"
+      >(</a
+      ><a name="2393" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2400"
+      > </a
+      ><a name="2401" href="Semantics.html#2375" class="Bound"
+      >d</a
+      ><a name="2402"
+      > </a
+      ><a name="2403" href="Semantics.html#2383" class="Bound"
+      >&#947;</a
+      ><a name="2404"
+      > </a
+      ><a name="2405" href="Semantics.html#2385" class="Bound"
+      >&#948;</a
+      ><a name="2406" class="Symbol"
+      >)</a
+      ><a name="2407"
+      >
+</a
+      ><a name="2408" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2415"
+      > </a
+      ><a name="2416" href="Syntax.html#859" class="InductiveConstructor"
+      >unit</a
+      ><a name="2420"
+      >         </a
+      ><a name="2429" href="Semantics.html#2429" class="Bound"
+      >&#947;</a
+      ><a name="2430"
+      > </a
+      ><a name="2431" href="Semantics.html#2431" class="Bound"
+      >&#948;</a
+      ><a name="2432"
+      > </a
+      ><a name="2433" class="Symbol"
+      >=</a
+      ><a name="2434"
+      > </a
+      ><a name="2435" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >&#8729;</a
+      ><a name="2436"
+      >
+</a
+      ><a name="2437" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2444"
+      > </a
+      ><a name="2445" class="Symbol"
+      >(</a
+      ><a name="2446" href="Syntax.html#895" class="InductiveConstructor"
+      >boom</a
+      ><a name="2450"
+      > </a
+      ><a name="2451" href="Semantics.html#2451" class="Bound"
+      >d</a
+      ><a name="2452" class="Symbol"
+      >)</a
+      ><a name="2453"
+      >     </a
+      ><a name="2458" href="Semantics.html#2458" class="Bound"
+      >&#947;</a
+      ><a name="2459"
+      > </a
+      ><a name="2460" href="Semantics.html#2460" class="Bound"
+      >&#948;</a
+      ><a name="2461"
+      > </a
+      ><a name="2462" class="Symbol"
+      >=</a
+      ><a name="2463"
+      > </a
+      ><a name="2464" href="Common.html#240" class="Function"
+      >elim&#8869;</a
+      ><a name="2469"
+      > </a
+      ><a name="2470" class="Symbol"
+      >(</a
+      ><a name="2471" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2478"
+      > </a
+      ><a name="2479" href="Semantics.html#2451" class="Bound"
+      >d</a
+      ><a name="2480"
+      > </a
+      ><a name="2481" href="Semantics.html#2458" class="Bound"
+      >&#947;</a
+      ><a name="2482"
+      > </a
+      ><a name="2483" href="Semantics.html#2460" class="Bound"
+      >&#948;</a
+      ><a name="2484" class="Symbol"
+      >)</a
+      ><a name="2485"
+      >
+</a
+      ><a name="2486" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2493"
+      > </a
+      ><a name="2494" class="Symbol"
+      >(</a
+      ><a name="2495" href="Syntax.html#943" class="InductiveConstructor"
+      >left</a
+      ><a name="2499"
+      > </a
+      ><a name="2500" href="Semantics.html#2500" class="Bound"
+      >d</a
+      ><a name="2501" class="Symbol"
+      >)</a
+      ><a name="2502"
+      >     </a
+      ><a name="2507" href="Semantics.html#2507" class="Bound"
+      >&#947;</a
+      ><a name="2508"
+      > </a
+      ><a name="2509" href="Semantics.html#2509" class="Bound"
+      >&#948;</a
+      ><a name="2510"
+      > </a
+      ><a name="2511" class="Symbol"
+      >=</a
+      ><a name="2512"
+      > </a
+      ><a name="2513" href="Common.html#628" class="InductiveConstructor"
+      >&#953;&#8321;</a
+      ><a name="2515"
+      > </a
+      ><a name="2516" class="Symbol"
+      >(</a
+      ><a name="2517" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2524"
+      > </a
+      ><a name="2525" href="Semantics.html#2500" class="Bound"
+      >d</a
+      ><a name="2526"
+      > </a
+      ><a name="2527" href="Semantics.html#2507" class="Bound"
+      >&#947;</a
+      ><a name="2528"
+      > </a
+      ><a name="2529" href="Semantics.html#2509" class="Bound"
+      >&#948;</a
+      ><a name="2530" class="Symbol"
+      >)</a
+      ><a name="2531"
+      >
+</a
+      ><a name="2532" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2539"
+      > </a
+      ><a name="2540" class="Symbol"
+      >(</a
+      ><a name="2541" href="Syntax.html#995" class="InductiveConstructor"
+      >right</a
+      ><a name="2546"
+      > </a
+      ><a name="2547" href="Semantics.html#2547" class="Bound"
+      >d</a
+      ><a name="2548" class="Symbol"
+      >)</a
+      ><a name="2549"
+      >    </a
+      ><a name="2553" href="Semantics.html#2553" class="Bound"
+      >&#947;</a
+      ><a name="2554"
+      > </a
+      ><a name="2555" href="Semantics.html#2555" class="Bound"
+      >&#948;</a
+      ><a name="2556"
+      > </a
+      ><a name="2557" class="Symbol"
+      >=</a
+      ><a name="2558"
+      > </a
+      ><a name="2559" href="Common.html#645" class="InductiveConstructor"
+      >&#953;&#8322;</a
+      ><a name="2561"
+      > </a
+      ><a name="2562" class="Symbol"
+      >(</a
+      ><a name="2563" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2570"
+      > </a
+      ><a name="2571" href="Semantics.html#2547" class="Bound"
+      >d</a
+      ><a name="2572"
+      > </a
+      ><a name="2573" href="Semantics.html#2553" class="Bound"
+      >&#947;</a
+      ><a name="2574"
+      > </a
+      ><a name="2575" href="Semantics.html#2555" class="Bound"
+      >&#948;</a
+      ><a name="2576" class="Symbol"
+      >)</a
+      ><a name="2577"
+      >
+</a
+      ><a name="2578" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2585"
+      > </a
+      ><a name="2586" class="Symbol"
+      >(</a
+      ><a name="2587" href="Syntax.html#1047" class="InductiveConstructor"
+      >case</a
+      ><a name="2591"
+      > </a
+      ><a name="2592" href="Semantics.html#2592" class="Bound"
+      >d</a
+      ><a name="2593"
+      > </a
+      ><a name="2594" href="Semantics.html#2594" class="Bound"
+      >e</a
+      ><a name="2595"
+      > </a
+      ><a name="2596" href="Semantics.html#2596" class="Bound"
+      >f</a
+      ><a name="2597" class="Symbol"
+      >)</a
+      ><a name="2598"
+      > </a
+      ><a name="2599" href="Semantics.html#2599" class="Bound"
+      >&#947;</a
+      ><a name="2600"
+      > </a
+      ><a name="2601" href="Semantics.html#2601" class="Bound"
+      >&#948;</a
+      ><a name="2602"
+      > </a
+      ><a name="2603" class="Symbol"
+      >=</a
+      ><a name="2604"
+      > </a
+      ><a name="2605" href="Common.html#661" class="Function"
+      >elim&#8744;</a
+      ><a name="2610"
+      > </a
+      ><a name="2611" class="Symbol"
+      >(</a
+      ><a name="2612" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2619"
+      > </a
+      ><a name="2620" href="Semantics.html#2592" class="Bound"
+      >d</a
+      ><a name="2621"
+      > </a
+      ><a name="2622" href="Semantics.html#2599" class="Bound"
+      >&#947;</a
+      ><a name="2623"
+      > </a
+      ><a name="2624" href="Semantics.html#2601" class="Bound"
+      >&#948;</a
+      ><a name="2625" class="Symbol"
+      >)</a
+      ><a name="2626"
+      > </a
+      ><a name="2627" class="Symbol"
+      >(&#955;</a
+      ><a name="2629"
+      > </a
+      ><a name="2630" href="Semantics.html#2630" class="Bound"
+      >a</a
+      ><a name="2631"
+      > </a
+      ><a name="2632" class="Symbol"
+      >&#8594;</a
+      ><a name="2633"
+      > </a
+      ><a name="2634" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2641"
+      > </a
+      ><a name="2642" href="Semantics.html#2594" class="Bound"
+      >e</a
+      ><a name="2643"
+      > </a
+      ><a name="2644" class="Symbol"
+      >(</a
+      ><a name="2645" href="Semantics.html#2599" class="Bound"
+      >&#947;</a
+      ><a name="2646"
+      > </a
+      ><a name="2647" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2648"
+      > </a
+      ><a name="2649" href="Semantics.html#2630" class="Bound"
+      >a</a
+      ><a name="2650" class="Symbol"
+      >)</a
+      ><a name="2651"
+      > </a
+      ><a name="2652" href="Semantics.html#2601" class="Bound"
+      >&#948;</a
+      ><a name="2653" class="Symbol"
+      >)</a
+      ><a name="2654"
+      >
+                                                 </a
+      ><a name="2704" class="Symbol"
+      >(&#955;</a
+      ><a name="2706"
+      > </a
+      ><a name="2707" href="Semantics.html#2707" class="Bound"
+      >b</a
+      ><a name="2708"
+      > </a
+      ><a name="2709" class="Symbol"
+      >&#8594;</a
+      ><a name="2710"
+      > </a
+      ><a name="2711" href="Semantics.html#1744" class="Function"
+      >reflect</a
+      ><a name="2718"
+      > </a
+      ><a name="2719" href="Semantics.html#2596" class="Bound"
+      >f</a
+      ><a name="2720"
+      > </a
+      ><a name="2721" class="Symbol"
+      >(</a
+      ><a name="2722" href="Semantics.html#2599" class="Bound"
+      >&#947;</a
+      ><a name="2723"
+      > </a
+      ><a name="2724" href="Common.html#433" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2725"
+      > </a
+      ><a name="2726" href="Semantics.html#2707" class="Bound"
+      >b</a
+      ><a name="2727" class="Symbol"
+      >)</a
+      ><a name="2728"
+      > </a
+      ><a name="2729" href="Semantics.html#2601" class="Bound"
+      >&#948;</a
+      ><a name="2730" class="Symbol"
+      >)</a
+      ><a name="2731"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>
