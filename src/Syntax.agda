@@ -3,9 +3,14 @@ module Syntax where
 open import Common public
 
 
+-- Abstract symbols, or atoms.
+
 abstract
   Atom : Set
   Atom = Nat
+
+
+-- Types of constructive modal logic S4.
 
 infixl 9 _⩕_
 infixl 8 _⩖_
@@ -22,8 +27,14 @@ data Type : Set where
 ⫬_ : Type → Type
 ⫬ A = A ⇒ ⫫
 
+
+-- Contexts, or stack pairs of types.
+
 Context : Set
 Context = Stack² Type Type
+
+
+-- Derivations, or syntactic entailment.
 
 infix 3 _⊢_
 data _⊢_ : Context → Type → Set where
@@ -42,28 +53,16 @@ data _⊢_ : Context → Type → Set where
   right : ∀ {A B Γ Δ}   → Γ ⁏ Δ ⊢ B → Γ ⁏ Δ ⊢ A ⩖ B
   case  : ∀ {A B C Γ Δ} → Γ ⁏ Δ ⊢ A ⩖ B → Γ , A ⁏ Δ ⊢ C → Γ , B ⁏ Δ ⊢ C → Γ ⁏ Δ ⊢ C
 
-v₀ : ∀ {Γ Δ A} → Γ , A ⁏ Δ ⊢ A
-v₀ = var i₀
 
-v₁ : ∀ {Γ Δ A B} → Γ , A , B ⁏ Δ ⊢ A
-v₁ = var i₁
-
-v₂ : ∀ {Γ Δ A B C} → Γ , A , B , C ⁏ Δ ⊢ A
-v₂ = var i₂
-
-mv₀ : ∀ {Γ Δ A} → Γ ⁏ Δ , A ⊢ A
-mv₀ = mvar i₀
-
-mv₁ : ∀ {Γ Δ A B} → Γ ⁏ Δ , A , B ⊢ A
-mv₁ = mvar i₁
-
-mv₂ : ∀ {Γ Δ A B C} → Γ ⁏ Δ , A , B , C ⊢ A
-mv₂ = mvar i₂
+-- Stacks of derivations, or simultaneous syntactic entailment.
 
 infix 3 _⊢⋆_
 _⊢⋆_ : Context → Stack Type → Set
 Γ ⁏ Δ ⊢⋆ ∅     = ⊤
 Γ ⁏ Δ ⊢⋆ Ξ , A = Γ ⁏ Δ ⊢⋆ Ξ ∧ Γ ⁏ Δ ⊢ A
+
+
+-- Monotonicity of syntactic entailment with respect to context inclusion.
 
 mono⊢ : ∀ {Γ Γ′ Δ Δ′ A} → Γ ⁏ Δ ⊆² Γ′ ⁏ Δ′ → Γ ⁏ Δ ⊢ A → Γ′ ⁏ Δ′ ⊢ A
 mono⊢ (η , ρ) (var i)      = var (mono∈ η i)
@@ -86,13 +85,19 @@ mono⊢⋆ : ∀ {Ξ Γ Γ′ Δ Δ′} → Γ ⁏ Δ ⊆² Γ′ ⁏ Δ′ → 
 mono⊢⋆ {∅}     ψ ∙       = ∙
 mono⊢⋆ {Ξ , A} ψ (ξ , d) = mono⊢⋆ ψ ξ , mono⊢ ψ d
 
+
+-- Reflexivity of simultaneous syntactic entailment.
+
 refl⊢⋆ : ∀ {Γ Δ} → Γ ⁏ Δ ⊢⋆ Γ
 refl⊢⋆ {∅}     = ∙
-refl⊢⋆ {Γ , A} = mono⊢⋆ (weak⊆ , refl⊆) refl⊢⋆ , v₀
+refl⊢⋆ {Γ , A} = mono⊢⋆ (weak⊆ , refl⊆) refl⊢⋆ , var top
 
 mrefl⊢⋆ : ∀ {Δ Γ} → Γ ⁏ Δ ⊢⋆ Δ
 mrefl⊢⋆ {∅}     = ∙
-mrefl⊢⋆ {Δ , A} = mono⊢⋆ (refl⊆ , weak⊆) mrefl⊢⋆ , mv₀
+mrefl⊢⋆ {Δ , A} = mono⊢⋆ (refl⊆ , weak⊆) mrefl⊢⋆ , mvar top
+
+
+-- Grafting of derivation trees, or simultaneous substitution, or cut.
 
 graft∈ : ∀ {Γ Γ′ Δ C} → Γ′ ⁏ Δ ⊢⋆ Γ → C ∈ Γ → Γ′ ⁏ Δ ⊢ C
 graft∈ (σ , s) top     = s
@@ -105,11 +110,11 @@ mgraft∈ (τ , t) (pop i) = mgraft∈ τ i
 graft⊢ : ∀ {Γ Γ′ Δ Δ′ C} → Γ′ ⁏ Δ′ ⊢⋆ Γ → ∅ ⁏ Δ′ ⊢⋆ Δ → Γ ⁏ Δ ⊢ C → Γ′ ⁏ Δ′ ⊢ C
 graft⊢ σ τ (var i)      = graft∈ σ i
 graft⊢ σ τ (mvar i)     = mgraft∈ τ i
-graft⊢ σ τ (lam d)      = lam (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , v₀) τ d)
+graft⊢ σ τ (lam d)      = lam (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , var top) τ d)
 graft⊢ σ τ (app d e)    = app (graft⊢ σ τ d) (graft⊢ σ τ e)
 graft⊢ σ τ (box d)      = box (graft⊢ ∙ τ d)
 graft⊢ σ τ (unbox d e)  = unbox (graft⊢ σ τ d) (graft⊢ (mono⊢⋆ (refl⊆ , weak⊆) σ)
-                                                          (mono⊢⋆ (refl⊆ , weak⊆) τ , mv₀) e)
+                                                          (mono⊢⋆ (refl⊆ , weak⊆) τ , mvar top) e)
 graft⊢ σ τ (pair d e)   = pair (graft⊢ σ τ d) (graft⊢ σ τ e)
 graft⊢ σ τ (fst d)      = fst (graft⊢ σ τ d)
 graft⊢ σ τ (snd d)      = snd (graft⊢ σ τ d)
@@ -117,8 +122,11 @@ graft⊢ σ τ unit         = unit
 graft⊢ σ τ (boom d)     = boom (graft⊢ σ τ d)
 graft⊢ σ τ (left d)     = left (graft⊢ σ τ d)
 graft⊢ σ τ (right d)    = right (graft⊢ σ τ d)
-graft⊢ σ τ (case d e f) = case (graft⊢ σ τ d) (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , v₀) τ e)
-                                                (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , v₀) τ f)
+graft⊢ σ τ (case d e f) = case (graft⊢ σ τ d) (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , var top) τ e)
+                                                (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , var top) τ f)
+
+
+-- Derivations, or syntactic entailment, in normal and neutral form.
 
 mutual
   infix 3 _⊢ⁿᶠ_
@@ -142,16 +150,16 @@ mutual
     boomⁿᵉ  : ∀ {C Γ Δ}     → Γ ⁏ Δ ⊢ⁿᵉ ⫫ → Γ ⁏ Δ ⊢ⁿᵉ C
     caseⁿᵉ  : ∀ {A B C Γ Δ} → Γ ⁏ Δ ⊢ⁿᵉ A ⩖ B → Γ , A ⁏ Δ ⊢ⁿᶠ C → Γ , B ⁏ Δ ⊢ⁿᶠ C → Γ ⁏ Δ ⊢ⁿᵉ C
 
-v₀ⁿᵉ : ∀ {Γ Δ A} → Γ , A ⁏ Δ ⊢ⁿᵉ A
-v₀ⁿᵉ = varⁿᵉ i₀
 
-mv₀ⁿᵉ : ∀ {Γ Δ A} → Γ ⁏ Δ , A ⊢ⁿᵉ A
-mv₀ⁿᵉ = mvarⁿᵉ i₀
+-- Stacks of derivations, or reflexivity of syntactic entailment, in neutral form.
 
 infix 3 _⊢⋆ⁿᵉ_
 _⊢⋆ⁿᵉ_ : Context → Stack Type → Set
 Γ ⁏ Δ ⊢⋆ⁿᵉ ∅     = ⊤
 Γ ⁏ Δ ⊢⋆ⁿᵉ Ξ , A = Γ ⁏ Δ ⊢⋆ⁿᵉ Ξ ∧ Γ ⁏ Δ ⊢ⁿᵉ A
+
+
+-- Monotonicity of syntactic entailment with respect to context inclusion, in normal and neutral form.
 
 mutual
   mono⊢ⁿᶠ : ∀ {Γ Γ′ Δ Δ′ A} → Γ ⁏ Δ ⊆² Γ′ ⁏ Δ′ → Γ ⁏ Δ ⊢ⁿᶠ A → Γ′ ⁏ Δ′ ⊢ⁿᶠ A
@@ -178,10 +186,13 @@ mono⊢⋆ⁿᵉ : ∀ {Ξ Γ Γ′ Δ Δ′} → Γ ⁏ Δ ⊆² Γ′ ⁏ Δ�
 mono⊢⋆ⁿᵉ {∅}     ψ ∙       = ∙
 mono⊢⋆ⁿᵉ {Ξ , A} ψ (ξ , d) = mono⊢⋆ⁿᵉ ψ ξ , mono⊢ⁿᵉ ψ d
 
+
+-- Reflexivity of simultaneous syntactic entailment, in neutral form.
+
 refl⊢⋆ⁿᵉ : ∀ {Γ Δ} → Γ ⁏ Δ ⊢⋆ⁿᵉ Γ
 refl⊢⋆ⁿᵉ {∅}     = ∙
-refl⊢⋆ⁿᵉ {Γ , A} = mono⊢⋆ⁿᵉ (weak⊆ , refl⊆) refl⊢⋆ⁿᵉ , v₀ⁿᵉ
+refl⊢⋆ⁿᵉ {Γ , A} = mono⊢⋆ⁿᵉ (weak⊆ , refl⊆) refl⊢⋆ⁿᵉ , varⁿᵉ top
 
 mrefl⊢⋆ⁿᵉ : ∀ {Δ Γ} → Γ ⁏ Δ ⊢⋆ⁿᵉ Δ
 mrefl⊢⋆ⁿᵉ {∅}     = ∙
-mrefl⊢⋆ⁿᵉ {Δ , A} = mono⊢⋆ⁿᵉ (refl⊆ , weak⊆) mrefl⊢⋆ⁿᵉ , mv₀ⁿᵉ
+mrefl⊢⋆ⁿᵉ {Δ , A} = mono⊢⋆ⁿᵉ (refl⊆ , weak⊆) mrefl⊢⋆ⁿᵉ , mvarⁿᵉ top

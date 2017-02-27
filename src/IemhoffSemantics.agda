@@ -3,6 +3,8 @@ module IemhoffSemantics where
 open import Syntax
 
 
+-- Brilliant Kripke models.
+
 record Model : Set₁ where
   infix 3 _⊩ᵅ_
   field
@@ -16,31 +18,21 @@ record Model : Set₁ where
     _⊩ᵅ_   : World → Atom → Set
     mono⊩ᵅ : ∀ {w w′ P} → w ≤ w′ → w ⊩ᵅ P → w′ ⊩ᵅ P
 
-  _≤⨾R_ : World → World → Set
-  _≤⨾R_ = _≤_ ⨾ _R_
-
   _R⨾≤_ : World → World → Set
   _R⨾≤_ = _R_ ⨾ _≤_
 
-  -- Brilliance condition.
+  -- Brilliance.
   field
     R⨾≤→R : ∀ {w v′} → w R⨾≤ v′ → w R v′
 
+  -- Steadiness, as a consequence of brilliance.
   ≤→R : ∀ {w v′} → w ≤ v′ → w R v′
   ≤→R {w} ψ = R⨾≤→R (w , (reflR , ψ))
 
-  -- Minor brilliance condition, derived.
-  R⨾≤→≤⨾R : ∀ {w v′} → w R⨾≤ v′ → w ≤⨾R v′
-  R⨾≤→≤⨾R {w} ρ,ψ = w , (refl≤ , R⨾≤→R ρ,ψ)
-
-  refl≤⨾R : ∀ {w} → w ≤⨾R w
-  refl≤⨾R {w} = w , (refl≤ , reflR)
-
-  trans≤⨾R : ∀ {w′ w w″} → w ≤⨾R w′ → w′ ≤⨾R w″ → w ≤⨾R w″
-  trans≤⨾R {w′} (v , (ξ , ζ)) (v′ , (ξ′ , ζ′)) = let v″ , (ξ″ , ζ″) = R⨾≤→≤⨾R (w′ , (ζ , ξ′))
-                                                 in  v″ , (trans≤ ξ ξ″ , transR ζ″ ζ′)
-
 open Model {{…}} public
+
+
+-- Forcing in a particular world of a particular model.
 
 module _ {{_ : Model}} where
   infix 3 _⊩_
@@ -56,8 +48,12 @@ module _ {{_ : Model}} where
   infix 3 _⊩⋆_
   _⊩⋆_ : World → Stack Type → Set
   w ⊩⋆ ∅     = ⊤
-  w ⊩⋆ Ψ , A = w ⊩⋆ Ψ ∧ w ⊩ A
+  w ⊩⋆ Ξ , A = w ⊩⋆ Ξ ∧ w ⊩ A
 
+
+-- Monotonicity of forcing with respect to constructive accessibility.
+
+module _ {{_ : Model}} where
   mono⊩ : ∀ {A w w′} → w ≤ w′ → w ⊩ A → w′ ⊩ A
   mono⊩ {α P}    ψ s       = mono⊩ᵅ ψ s
   mono⊩ {A ⇒ B} ψ f       = λ ψ′ a → f (trans≤ ψ ψ′) a
@@ -72,9 +68,16 @@ module _ {{_ : Model}} where
   mono⊩⋆ {∅}     ψ ∙       = ∙
   mono⊩⋆ {Ξ , A} ψ (ξ , s) = mono⊩⋆ {Ξ} ψ ξ , mono⊩ {A} ψ s
 
+
+-- Additional equipment.
+
+module _ {{_ : Model}} where
   lookup : ∀ {Ξ A w} → A ∈ Ξ → w ⊩⋆ Ξ → w ⊩ A
   lookup top     (ξ , s) = s
   lookup (pop i) (ξ , s) = lookup i ξ
+
+
+-- Forcing in all worlds of all models, or semantic entailment.
 
 infix 3 _⊨_
 _⊨_ : Context → Type → Set₁
@@ -82,6 +85,9 @@ _⊨_ : Context → Type → Set₁
              w ⊩⋆ Γ →
              (∀ {v′} → w R v′ → v′ ⊩⋆ Δ) →
              w ⊩ A
+
+
+-- Soundness of syntax with respect to the semantics.
 
 reflect : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊨ A
 reflect (var i)      γ δ = lookup i γ

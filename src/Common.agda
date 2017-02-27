@@ -1,13 +1,14 @@
 module Common where
 
 
--- Combinators.
+-- Identity and composition.
 
-id : ∀ {X : Set} → X → X
+id : ∀ {ℓ} {X : Set ℓ} → X → X
 id x = x
 
-const : ∀ {X Y : Set} → X → Y → X
-const x y = x
+_∘_ : ∀ {ℓ ℓ′ ℓ″} {X : Set ℓ} {Y : Set ℓ′} {Z : Set ℓ″} →
+      (Y → Z) → (X → Y) → X → Z
+f ∘ g = λ x → f (g x)
 
 
 -- Verum.
@@ -48,7 +49,7 @@ open Σ public
 
 infixr 2 _∧_
 _∧_ : Set → Set → Set
-X ∧ Y = Σ X (λ x → Y)
+X ∧ Y = Σ X (λ _ → Y)
 
 
 -- Disjunction.
@@ -76,7 +77,7 @@ elimNat (suc n) z f = f n (elimNat n z f)
 -- Composition of relations.
 
 _⨾_ : ∀ {X : Set} → (X → X → Set) → (X → X → Set) → (X → X → Set)
-_⨾_ {X} _R_ _Q_ x x′ = Σ X (λ y → x R y ∧ y Q x′)
+_R_ ⨾ _Q_ = λ x x′ → Σ _ (λ y → x R y ∧ y Q x′)
 
 
 -- Stacks, or snoc-lists.
@@ -93,15 +94,6 @@ module _ {X : Set} where
   data _∈_ (A : X) : Stack X → Set where
     top : ∀ {Γ}   → A ∈ Γ , A
     pop : ∀ {Γ B} → A ∈ Γ → A ∈ Γ , B
-
-  i₀ : ∀ {Γ A} → A ∈ Γ , A
-  i₀ = top
-
-  i₁ : ∀ {Γ A B} → A ∈ Γ , A , B
-  i₁ = pop top
-
-  i₂ : ∀ {Γ A B C} → A ∈ Γ , A , B , C
-  i₂ = pop (pop top)
 
 
 -- Stack inclusion, or order-preserving embeddings.
@@ -137,7 +129,7 @@ module _ {X : Set} where
   mono∈ (keep η) (pop i) = pop (mono∈ η i)
 
 
--- Stack pairs.
+-- Pairs of stacks.
 
 infixl 4 _⁏_
 record Stack² (X Y : Set) : Set where

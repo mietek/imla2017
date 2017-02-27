@@ -3,6 +3,8 @@ module OnoSemantics where
 open import Syntax
 
 
+-- Persistent Kripke models, due to Ono.
+
 record Model : Set₁ where
   infix 3 _⊩ᵅ_
   field
@@ -19,28 +21,18 @@ record Model : Set₁ where
   _≤⨾R_ : World → World → Set
   _≤⨾R_ = _≤_ ⨾ _R_
 
-  _R⨾≤_ : World → World → Set
-  _R⨾≤_ = _R_ ⨾ _≤_
-
-  -- Persistence condition.
+  -- Persistence.
   field
     ≤⨾R→R : ∀ {v′ w} → w ≤⨾R v′ → w R v′
 
+  -- Steadiness, as a consequence of persistence.
   ≤→R : ∀ {v′ w} → w ≤ v′ → w R v′
   ≤→R {v′} ψ = ≤⨾R→R (v′ , (ψ , reflR))
 
-  -- Minor persistence condition, derived.
-  ≤⨾R→R⨾≤ : ∀ {v′ w} → w ≤⨾R v′ → w R⨾≤ v′
-  ≤⨾R→R⨾≤ {v′} ψ,ρ = v′ , (≤⨾R→R ψ,ρ , refl≤)
-
-  reflR⨾≤ : ∀ {w} → w R⨾≤ w
-  reflR⨾≤ {w} = w , (reflR , refl≤)
-
-  transR⨾≤ : ∀ {w′ w w″} → w R⨾≤ w′ → w′ R⨾≤ w″ → w R⨾≤ w″
-  transR⨾≤ {w′} (v , (ρ , ψ)) (v′ , (ρ′ , ψ′)) = let v″ , (ρ″ , ψ″) = ≤⨾R→R⨾≤ (w′ , (ψ , ρ′))
-                                                 in  v″ , (transR ρ ρ″ , trans≤ ψ″ ψ′)
-
 open Model {{…}} public
+
+
+-- Forcing in a particular world of a particular model.
 
 module _ {{_ : Model}} where
   infix 3 _⊩_
@@ -56,8 +48,12 @@ module _ {{_ : Model}} where
   infix 3 _⊩⋆_
   _⊩⋆_ : World → Stack Type → Set
   w ⊩⋆ ∅     = ⊤
-  w ⊩⋆ Ψ , A = w ⊩⋆ Ψ ∧ w ⊩ A
+  w ⊩⋆ Ξ , A = w ⊩⋆ Ξ ∧ w ⊩ A
 
+
+-- Monotonicity of forcing with respect to constructive accessibility.
+
+module _ {{_ : Model}} where
   mono⊩ : ∀ {A w w′} → w ≤ w′ → w ⊩ A → w′ ⊩ A
   mono⊩ {α P}    ψ s       = mono⊩ᵅ ψ s
   mono⊩ {A ⇒ B} ψ f       = λ ψ′ a → f (trans≤ ψ ψ′) a
@@ -72,9 +68,16 @@ module _ {{_ : Model}} where
   mono⊩⋆ {∅}     ψ ∙       = ∙
   mono⊩⋆ {Ξ , A} ψ (ξ , s) = mono⊩⋆ {Ξ} ψ ξ , mono⊩ {A} ψ s
 
+
+-- Additional equipment.
+
+module _ {{_ : Model}} where
   lookup : ∀ {Ξ A w} → A ∈ Ξ → w ⊩⋆ Ξ → w ⊩ A
   lookup top     (ξ , s) = s
   lookup (pop i) (ξ , s) = lookup i ξ
+
+
+-- Forcing in all worlds of all models, or semantic entailment.
 
 infix 3 _⊨_
 _⊨_ : Context → Type → Set₁
@@ -82,6 +85,9 @@ _⊨_ : Context → Type → Set₁
              w ⊩⋆ Γ →
              (∀ {v′} → w R v′ → v′ ⊩⋆ Δ) →
              w ⊩ A
+
+
+-- Soundness of syntax with respect to the semantics.
 
 reflect : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊨ A
 reflect (var i)      γ δ = lookup i γ

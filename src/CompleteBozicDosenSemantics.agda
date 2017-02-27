@@ -3,6 +3,8 @@ module CompleteBozicDosenSemantics where
 open import Syntax
 
 
+-- Introspective minor persistent Kripke models.
+
 record Model : Set₁ where
   infix 3 _⊩ᵅ_
   field
@@ -15,8 +17,11 @@ record Model : Set₁ where
     transR  : ∀ {w w′ w″} → w R w′ → w′ R w″ → w R w″
     _⊩ᵅ_   : World → Atom → Set
     mono⊩ᵅ : ∀ {w w′ P} → w ≤ w′ → w ⊩ᵅ P → w′ ⊩ᵅ P
-    peek    : World → Context
-    peek≤   : ∀ {w w′} → w ≤ w′ → peek w ⊆² peek w′
+
+  -- Introspection.
+  field
+    peek  : World → Context
+    peek≤ : ∀ {w w′} → w ≤ w′ → peek w ⊆² peek w′
 
   _≤⨾R_ : World → World → Set
   _≤⨾R_ = _≤_ ⨾ _R_
@@ -24,18 +29,14 @@ record Model : Set₁ where
   _R⨾≤_ : World → World → Set
   _R⨾≤_ = _R_ ⨾ _≤_
 
-  -- Minor persistence condition.
+  -- Minor persistence.
   field
     ≤⨾R→R⨾≤ : ∀ {v′ w} → w ≤⨾R v′ → w R⨾≤ v′
 
-  reflR⨾≤ : ∀ {w} → w R⨾≤ w
-  reflR⨾≤ {w} = w , (reflR , refl≤)
-
-  transR⨾≤ : ∀ {w′ w w″} → w R⨾≤ w′ → w′ R⨾≤ w″ → w R⨾≤ w″
-  transR⨾≤ {w′} (v , (ζ , ξ)) (v′ , (ζ′ , ξ′)) = let v″ , (ζ″ , ξ″) = ≤⨾R→R⨾≤ (w′ , (ξ , ζ′))
-                                                 in  v″ , (transR ζ ζ″ , trans≤ ξ″ ξ′)
-
 open Model {{…}} public
+
+
+-- Forcing in a particular world of a particular model.
 
 module _ {{_ : Model}} where
   mutual
@@ -60,6 +61,10 @@ module _ {{_ : Model}} where
   w ⊩⋆ ∅     = ⊤
   w ⊩⋆ Ξ , A = w ⊩⋆ Ξ ∧ w ⊩ A
 
+
+-- Monotonicity of forcing with respect to constructive accessibility.
+
+module _ {{_ : Model}} where
   mutual
     mono⊪ : ∀ {A w w′} → w ≤ w′ → w ⊪ A → w′ ⊪ A
     mono⊪ {α P}    ψ s       = mono⊩ᵅ ψ s
@@ -81,6 +86,10 @@ module _ {{_ : Model}} where
   mono⊩⋆ {∅}     ψ ∙       = ∙
   mono⊩⋆ {Ξ , A} ψ (ξ , s) = mono⊩⋆ {Ξ} ψ ξ , mono⊩ {A} ψ s
 
+
+-- Continuation-passing equipment.
+
+module _ {{_ : Model}} where
   return : ∀ {A w} → w ⊪ A → w ⊩ A
   return {A} a = λ ψ κ → κ refl≤ (mono⊪ {A} ψ a)
 
@@ -91,9 +100,16 @@ module _ {{_ : Model}} where
                λ ψ′ a′ → κ (trans≤ ψ ψ′) a′ refl≤
                  λ ψ″ a″ → κ′ (trans≤ ψ′ ψ″) a″
 
+
+-- Additional equipment.
+
+module _ {{_ : Model}} where
   lookup : ∀ {Ξ A w} → A ∈ Ξ → w ⊩⋆ Ξ → w ⊩ A
   lookup top     (ξ , s) = s
   lookup (pop i) (ξ , s) = lookup i ξ
+
+
+-- Forcing in all worlds of all models, or semantic entailment.
 
 infix 3 _⊨_
 _⊨_ : Context → Type → Set₁
@@ -102,6 +118,9 @@ _⊨_ : Context → Type → Set₁
              (∀ {v′} → w R v′ → ∅ ⁏ π₂ (peek v′) ⊢⋆ Δ) →
              (∀ {v′} → w R v′ → v′ ⊩⋆ Δ) →
              w ⊩ A
+
+
+-- Soundness of syntax with respect to the semantics.
 
 reflect : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊨ A
 reflect (var i)                  γ τ δ = lookup i γ
@@ -148,6 +167,9 @@ reflect (case {A} {B} {C} d e f) γ τ δ = bind {A ⩖ B} {C} (reflect d γ τ 
                                                                              in  mono⊩⋆ ψ′ (δ ρ′))
                                              }
 
+
+-- The canonical model.
+
 private
   instance
     canon : Model
@@ -166,6 +188,9 @@ private
       ; ≤⨾R→R⨾≤ = λ { (_ , ((_ , ρ) , ρ′)) → _ , (trans⊆ ρ ρ′ , refl⊆²) }
       }
 
+
+-- Soundness and completeness of syntax with respect to the canonical model.
+
 mutual
   reflectᶜ : ∀ {A Γ Δ} → Γ ⁏ Δ ⊢ⁿᵉ A → Γ ⁏ Δ ⊩ A
   reflectᶜ {α P}    d = return {α P} d
@@ -173,20 +198,20 @@ mutual
                           λ ψ a → reflectᶜ (appⁿᵉ (mono⊢ⁿᵉ ψ d) (reifyᶜ a))
   reflectᶜ {□ A}    d = λ ψ κ → neⁿᶠ (unboxⁿᵉ (mono⊢ⁿᵉ ψ d)
                                                (κ (refl⊆ , weak⊆)
-                                                 λ ρ′ → mono⊢ (done , ρ′) mv₀ ,
-                                                         reflectᶜ (mono⊢ⁿᵉ (done , ρ′) mv₀ⁿᵉ)))
+                                                 λ ρ′ → mono⊢ (done , ρ′) (mvar top) ,
+                                                         reflectᶜ (mono⊢ⁿᵉ (done , ρ′) (mvarⁿᵉ top))))
   reflectᶜ {A ⩕ B}  d = return {A ⩕ B} (reflectᶜ (fstⁿᵉ d) , reflectᶜ (sndⁿᵉ d))
   reflectᶜ {⫪}     d = return {⫪} ∙
   reflectᶜ {⫫}     d = λ ψ κ → neⁿᶠ (boomⁿᵉ (mono⊢ⁿᵉ ψ d))
   reflectᶜ {A ⩖ B}  d = λ ψ κ → neⁿᶠ (caseⁿᵉ (mono⊢ⁿᵉ ψ d)
-                                              (κ (weak⊆ , refl⊆) (ι₁ (reflectᶜ v₀ⁿᵉ)))
-                                              (κ (weak⊆ , refl⊆) (ι₂ (reflectᶜ v₀ⁿᵉ))))
+                                              (κ (weak⊆ , refl⊆) (ι₁ (reflectᶜ (varⁿᵉ top))))
+                                              (κ (weak⊆ , refl⊆) (ι₂ (reflectᶜ (varⁿᵉ top)))))
 
   reifyᶜ : ∀ {A Γ Δ} → Γ ⁏ Δ ⊩ A → Γ ⁏ Δ ⊢ⁿᶠ A
   reifyᶜ {α P}    κ = κ refl⊆²
                         λ ψ s → neⁿᶠ s
   reifyᶜ {A ⇒ B} κ = κ refl⊆²
-                        λ ψ f → lamⁿᶠ (reifyᶜ (f (weak⊆ , refl⊆) (reflectᶜ v₀ⁿᵉ)))
+                        λ ψ f → lamⁿᶠ (reifyᶜ (f (weak⊆ , refl⊆) (reflectᶜ (varⁿᵉ top))))
   reifyᶜ {□ A}    κ = κ refl⊆²
                         λ ψ f → boxⁿᶠ (π₁ (f {∅ ⁏ _} refl⊆))
   reifyᶜ {A ⩕ B}  κ = κ refl⊆²
@@ -200,17 +225,26 @@ mutual
                           ; ψ (ι₂ b) → rightⁿᶠ (reifyᶜ b)
                           }
 
+
+-- Reflexivity of simultaneous forcing.
+
 refl⊩⋆ : ∀ {Γ Δ} → Γ ⁏ Δ ⊩⋆ Γ
 refl⊩⋆ {∅}     = ∙
-refl⊩⋆ {Γ , A} = mono⊩⋆ (weak⊆ , refl⊆) refl⊩⋆ , reflectᶜ v₀ⁿᵉ
+refl⊩⋆ {Γ , A} = mono⊩⋆ (weak⊆ , refl⊆) refl⊩⋆ , reflectᶜ (varⁿᵉ top)
 
 mrefl⊩⋆ : ∀ {Δ Γ} → Γ ⁏ Δ ⊩⋆ Δ
 mrefl⊩⋆ {∅}     = ∙
-mrefl⊩⋆ {Δ , A} = mono⊩⋆ (refl⊆ , weak⊆) mrefl⊩⋆ , reflectᶜ mv₀ⁿᵉ
+mrefl⊩⋆ {Δ , A} = mono⊩⋆ (refl⊆ , weak⊆) mrefl⊩⋆ , reflectᶜ (mvarⁿᵉ top)
+
+
+-- Completeness of syntax with respect to the semantics.
 
 reify : ∀ {Γ Δ A} → Γ ⁏ Δ ⊨ A → Γ ⁏ Δ ⊢ⁿᶠ A
 reify s = reifyᶜ (s refl⊩⋆ (λ ρ → mono⊢⋆ (refl⊆ , ρ) mrefl⊢⋆)
                             (λ ρ → mono⊩⋆ (refl⊆ , ρ) mrefl⊩⋆))
 
+
+-- Normalisation by evaluation.
+
 nbe : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊢ⁿᶠ A
-nbe d = reify (reflect d)
+nbe = reify ∘ reflect
