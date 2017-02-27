@@ -19,6 +19,9 @@ data Type : Set where
   ⫫   : Type
   _⩖_  : Type → Type → Type
 
+⫬_ : Type → Type
+⫬ A = A ⇒ ⫫
+
 Context : Set
 Context = Stack² Type Type
 
