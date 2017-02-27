@@ -43,6 +43,8 @@ module _ {{_ : Model}} where
   w ⊩ □ A    = ∀ {v′} → w R v′ → v′ ⊩ A
   w ⊩ A ⩕ B  = w ⊩ A ∧ w ⊩ B
   w ⊩ ⫪     = ⊤
+  w ⊩ ⫫     = ⊥
+  w ⊩ A ⩖ B  = w ⊩ A ∨ w ⊩ B
 
   infix 3 _⊩⋆_
   _⊩⋆_ : World → Stack Type → Set
@@ -56,6 +58,9 @@ module _ {{_ : Model}} where
                                      in  mono⊩ {A} ψ′ (f ρ′)
   mono⊩ {A ⩕ B}  ψ (a , b) = mono⊩ {A} ψ a , mono⊩ {B} ψ b
   mono⊩ {⫪}     ψ ∙       = ∙
+  mono⊩ {⫫}     ψ ()
+  mono⊩ {A ⩖ B}  ψ (ι₁ a)  = ι₁ (mono⊩ {A} ψ a)
+  mono⊩ {A ⩖ B}  ψ (ι₂ b)  = ι₂ (mono⊩ {B} ψ b)
 
   mono⊩⋆ : ∀ {Ξ w w′} → w ≤ w′ → w ⊩⋆ Ξ → w′ ⊩⋆ Ξ
   mono⊩⋆ {∅}     ψ ∙       = ∙
@@ -73,16 +78,21 @@ _⊨_ : Context → Type → Set₁
              w ⊩ A
 
 reflect : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊨ A
-reflect (var i)     γ δ = lookup i γ
-reflect (mvar i)    γ δ = lookup i (δ reflR)
-reflect (lam d)     γ δ = λ ψ a → reflect d (mono⊩⋆ ψ γ , a)
-                                             (λ ρ → let _ , (ρ′ , ψ′) = ≤⨾R→R⨾≤ (_ , (ψ , ρ))
-                                                     in  mono⊩⋆ ψ′ (δ ρ′))
-reflect (app d e)   γ δ = (reflect d γ δ) refl≤ (reflect e γ δ)
-reflect (box d)     γ δ = λ ρ → reflect d ∙
-                                           (λ ρ′ → δ (transR ρ ρ′))
-reflect (unbox d e) γ δ = reflect e γ (λ ρ → δ ρ , (reflect d γ δ) ρ)
-reflect (pair d e)  γ δ = reflect d γ δ , reflect e γ δ
-reflect (fst d)     γ δ = π₁ (reflect d γ δ)
-reflect (snd d)     γ δ = π₂ (reflect d γ δ)
-reflect unit        γ δ = ∙
+reflect (var i)      γ δ = lookup i γ
+reflect (mvar i)     γ δ = lookup i (δ reflR)
+reflect (lam d)      γ δ = λ ψ a → reflect d (mono⊩⋆ ψ γ , a)
+                                              (λ ρ → let _ , (ρ′ , ψ′) = ≤⨾R→R⨾≤ (_ , (ψ , ρ))
+                                                      in  mono⊩⋆ ψ′ (δ ρ′))
+reflect (app d e)    γ δ = (reflect d γ δ) refl≤ (reflect e γ δ)
+reflect (box d)      γ δ = λ ρ → reflect d ∙
+                                            (λ ρ′ → δ (transR ρ ρ′))
+reflect (unbox d e)  γ δ = reflect e γ (λ ρ → δ ρ , (reflect d γ δ) ρ)
+reflect (pair d e)   γ δ = reflect d γ δ , reflect e γ δ
+reflect (fst d)      γ δ = π₁ (reflect d γ δ)
+reflect (snd d)      γ δ = π₂ (reflect d γ δ)
+reflect unit         γ δ = ∙
+reflect (boom d)     γ δ = elim⊥ (reflect d γ δ)
+reflect (left d)     γ δ = ι₁ (reflect d γ δ)
+reflect (right d)    γ δ = ι₂ (reflect d γ δ)
+reflect (case d e f) γ δ = elim∨ (reflect d γ δ) (λ a → reflect e (γ , a) δ)
+                                                 (λ b → reflect f (γ , b) δ)
