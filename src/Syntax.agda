@@ -7,6 +7,8 @@ abstract
   Atom : Set
   Atom = Nat
 
+infixl 9 _⩕_
+infixl 8 _⩖_
 infixr 7 _⇒_
 data Type : Set where
   α_   : Atom → Type
