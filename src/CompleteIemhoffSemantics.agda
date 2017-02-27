@@ -205,7 +205,7 @@ mutual
   reifyᶜ {A ⩕ B}  κ = κ refl⊆²
                         λ { ψ (a , b) → pairⁿᶠ (reifyᶜ a) (reifyᶜ b) }
   reifyᶜ {⫪}     κ = κ refl⊆²
-                        λ ψ ∙ → unitⁿᶠ
+                        λ { ψ ∙ → unitⁿᶠ }
   reifyᶜ {⫫}     κ = κ refl⊆²
                         λ ψ ()
   reifyᶜ {A ⩖ B}  κ = κ refl⊆²
