@@ -13,6 +13,8 @@ References
 
 • Abel, A. (2013) [“Normalization by evaluation: Dependent types and impredicativity”](http://www.cse.chalmers.se/~abela/habil.pdf)
 
+• Berger, U., Schwichtenberg, H. (1991) [“An inverse of the evaluation functional for typed λ-calculus”](http://doi.org/10.1109/LICS.1991.151645)
+
 • Bierman, G., de Paiva, V. (2000) [“On an intuitionistic modal logic”](http://dx.doi.org/10.1023/A:1005291931660)
 
 • Chapman, J. (2008) [“Type checking and normalisation”](http://jmchapman.github.io/papers/thesis.pdf)
