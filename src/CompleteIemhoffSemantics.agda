@@ -20,7 +20,7 @@ record Model : Set₁ where
 
   -- Introspection.
   field
-    peek    : World → Context
+    peek : World → Context
 
   _R⨾≤_ : World → World → Set
   _R⨾≤_ = _R_ ⨾ _≤_
