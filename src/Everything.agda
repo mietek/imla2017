@@ -3,6 +3,8 @@ module Everything where
 import Common
 
 import Syntax
+
+import Semantics
 import CompleteSemantics
 
 import OnoSemantics
