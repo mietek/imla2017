@@ -25,7 +25,7 @@ record Model : Set₁ where
   field
     R⨾≤→R : ∀ {w v′} → w R⨾≤ v′ → w R v′
 
-  -- Steadiness, as a consequence of brilliance.
+  -- Vindication, as a consequence of brilliance.
   ≤→R : ∀ {w v′} → w ≤ v′ → w R v′
   ≤→R {w} ψ = R⨾≤→R (w , (reflR , ψ))
 

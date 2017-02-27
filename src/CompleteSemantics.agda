@@ -3,7 +3,7 @@ module CompleteSemantics where
 open import Syntax
 
 
--- Introspective steady Kripke models.
+-- Introspective vindicative Kripke models.
 
 record Model : Set₁ where
   infix 3 _⊩ᵅ_
@@ -22,7 +22,7 @@ record Model : Set₁ where
   field
     peek : World → Context
 
-  -- Steadiness, a consequence of brilliance and persistence.
+  -- Vindication, a consequence of brilliance and persistence.
   field
     ≤→R : ∀ {v′ w} → w ≤ v′ → w R v′
 

@@ -25,7 +25,7 @@ record Model : Set₁ where
   field
     ≤⨾R→R : ∀ {v′ w} → w ≤⨾R v′ → w R v′
 
-  -- Steadiness, as a consequence of persistence.
+  -- Vindication, as a consequence of persistence.
   ≤→R : ∀ {v′ w} → w ≤ v′ → w R v′
   ≤→R {v′} ψ = ≤⨾R→R (v′ , (ψ , reflR))
 

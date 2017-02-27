@@ -3,7 +3,7 @@ module Semantics where
 open import Syntax
 
 
--- Steady Kripke models.
+-- Vindicative Kripke models.
 
 record Model : Set₁ where
   infix 3 _⊩ᵅ_
@@ -18,7 +18,7 @@ record Model : Set₁ where
     _⊩ᵅ_   : World → Atom → Set
     mono⊩ᵅ : ∀ {w w′ P} → w ≤ w′ → w ⊩ᵅ P → w′ ⊩ᵅ P
 
-  -- Steadiness, a consequence of brilliance and persistence.
+  -- Vindication, a consequence of brilliance and persistence.
   field
     ≤→R : ∀ {v′ w} → w ≤ v′ → w R v′
 
