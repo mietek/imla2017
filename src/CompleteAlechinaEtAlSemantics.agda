@@ -1,6 +1,6 @@
 module CompleteAlechinaEtAlSemantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Introspective minor brilliant Kripke models.

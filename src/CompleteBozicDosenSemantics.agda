@@ -1,6 +1,6 @@
 module CompleteBozicDosenSemantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Introspective minor persistent Kripke models.

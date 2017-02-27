@@ -1,6 +1,6 @@
 module Semantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Vindicative Kripke models.

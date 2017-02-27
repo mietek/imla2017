@@ -1,6 +1,6 @@
 module IemhoffSemantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Brilliant Kripke models.

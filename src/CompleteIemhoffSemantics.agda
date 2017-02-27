@@ -1,6 +1,6 @@
 module CompleteIemhoffSemantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Introspective brilliant Kripke models.

@@ -1,6 +1,6 @@
 module AlechinaEtAlSemantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Minor brilliant Kripke models, due to Alechina-Mendler-de Paiva-Ritter.

@@ -1,6 +1,6 @@
 module BozicDosenSemantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Minor persistent Kripke models, due to Božić-Došen.

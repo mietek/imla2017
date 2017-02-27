@@ -1,6 +1,6 @@
 module OnoSemantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Persistent Kripke models, due to Ono.

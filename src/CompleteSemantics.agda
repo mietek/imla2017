@@ -1,6 +1,6 @@
 module CompleteSemantics where
 
-open import Syntax
+open import Syntax public
 
 
 -- Introspective vindicative Kripke models.
