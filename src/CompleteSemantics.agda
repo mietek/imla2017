@@ -130,8 +130,8 @@ mutual
                           λ ψ a → reflectᶜ (appⁿᵉ (mono⊢ⁿᵉ ψ d) (reifyᶜ a))
   reflectᶜ {□ A}    d = λ ψ κ → neⁿᶠ (unboxⁿᵉ (mono⊢ⁿᵉ ψ d)
                                                (κ (refl⊆ , weak⊆)
-                                                  λ ρ′ → mono⊢ (done , ρ′) mv₀ ,
-                                                          reflectᶜ (mono⊢ⁿᵉ (done , ρ′) mv₀ⁿᵉ)))
+                                                 λ ρ′ → mono⊢ (done , ρ′) mv₀ ,
+                                                         reflectᶜ (mono⊢ⁿᵉ (done , ρ′) mv₀ⁿᵉ)))
   reflectᶜ {A ⩕ B}  d = return {A ⩕ B} (reflectᶜ (fstⁿᵉ d) , reflectᶜ (sndⁿᵉ d))
   reflectᶜ {⫪}     d = return {⫪} ∙
 
