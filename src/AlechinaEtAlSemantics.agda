@@ -86,7 +86,7 @@ _⊨_ : Context → Type → Set₁
              w ⊩ A
 
 
--- Soundness of syntax with respect to the semantics.
+-- Soundness of the semantics with respect to the syntax.
 
 reflect : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊨ A
 reflect (var i)      γ δ = lookup i γ

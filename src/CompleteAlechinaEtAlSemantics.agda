@@ -116,7 +116,7 @@ _⊨_ : Context → Type → Set₁
              w ⊩ A
 
 
--- Soundness of syntax with respect to the semantics.
+-- Soundness of the semantics with respect to the syntax.
 
 reflect : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊨ A
 reflect (var i)                  γ τ δ = lookup i γ
@@ -178,7 +178,7 @@ private
       }
 
 
--- Soundness and completeness of syntax with respect to the canonical model.
+-- Soundness and completeness of the canonical model with respect to the syntax.
 
 mutual
   reflectᶜ : ∀ {A Γ Δ} → Γ ⁏ Δ ⊢ⁿᵉ A → Γ ⁏ Δ ⊩ A
@@ -226,7 +226,7 @@ mrefl⊩⋆ {∅}     = ∙
 mrefl⊩⋆ {Δ , A} = mono⊩⋆ (refl⊆ , weak⊆) mrefl⊩⋆ , reflectᶜ (mvarⁿᵉ top)
 
 
--- Completeness of syntax with respect to the semantics.
+-- Completeness of the semantics with respect to the syntax.
 
 reify : ∀ {Γ Δ A} → Γ ⁏ Δ ⊨ A → Γ ⁏ Δ ⊢ⁿᶠ A
 reify s = reifyᶜ (s refl⊩⋆ (λ { (η , ρ) ρ′ → mono⊢⋆ (refl⊆ , trans⊆ ρ ρ′) mrefl⊢⋆ })
