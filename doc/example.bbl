@@ -1,0 +1,218 @@
+\begin{thebibliography}{10}
+\providecommand{\bibitemdeclare}[2]{}
+\providecommand{\surnamestart}{}
+\providecommand{\surnameend}{}
+\providecommand{\urlprefix}{Available at }
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{\texttt{#2}}
+\providecommand{\urlalt}[2]{\href{#1}{#2}}
+\providecommand{\doi}[1]{doi:\urlalt{http://dx.doi.org/#1}{#1}}
+\providecommand{\bibinfo}[2]{#2}
+
+\bibitemdeclare{misc}{multipleauthors}
+\bibitem{multipleauthors}
+\bibinfo{author}{Stack~Exchange: \surnamestart gernot~answering
+  effeffe\surnameend} (\bibinfo{year}{2016}): \emph{\bibinfo{title}{Centering
+  issues with multiple authors with the same affiliation, {EPTCS} format}}.
+\newblock \urlprefix\url{http://tex.stackexchange.com/q/344794/63917}.
+
+\bibitemdeclare{misc}{bibliographystylewebpage}
+\bibitem{bibliographystylewebpage}
+\bibinfo{author}{R.J. \surnamestart van Glabbeek\surnameend}
+  (\bibinfo{year}{2010}): \emph{\bibinfo{title}{The EPTCS bibliography style}}.
+\newblock \urlprefix\url{http://biblio.eptcs.org}.
+
+\bibitemdeclare{book}{bookE}
+\bibitem{bookE}
+\bibinfo{editor}{E.D.I. \surnamestart Thor\surnameend} \&
+  \bibinfo{editor}{E.~\surnamestart di~Thor\surnameend}, editors
+  (\bibinfo{year}{1987}): \emph{\bibinfo{title}{Title B1: A Book with
+  editors}}, \bibinfo{edition}{second} edition.
+\newblock {\sl \bibinfo{series}{Series}}~\bibinfo{volume}{21},
+  \bibinfo{publisher}{Publisher}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{inbook}{inbookE}
+\bibitem{inbookE}
+\bibinfo{editor}{E.D.I. \surnamestart Thor\surnameend} \&
+  \bibinfo{editor}{E.~\surnamestart di~Thor\surnameend}, editors
+  (\bibinfo{year}{1987}): \emph{\bibinfo{title}{Title B2: An Inbook with
+  editors}}, \bibinfo{edition}{second} edition, \bibinfo{type}{type (of
+  chapter)}~\bibinfo{chapter}{II}, pp. \bibinfo{pages}{1--999}.
+\newblock {\sl \bibinfo{series}{Series}} \bibinfo{volume}{443},
+  \bibinfo{publisher}{Publisher}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{proceedings}{proceedings}
+\bibitem{proceedings}
+\bibinfo{editor}{E.D.I. \surnamestart Thor\surnameend} \&
+  \bibinfo{editor}{E.~\surnamestart di~Thor\surnameend}, editors
+  (\bibinfo{year}{1987}): \emph{\bibinfo{title}{Title B3: A Proceedings}}. {\sl
+  \bibinfo{series}{Series}} \bibinfo{volume}{443},
+  \bibinfo{organization}{Organization}, \bibinfo{publisher}{Publisher},
+  \bibinfo{address}{Address}, \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{article}{article}
+\bibitem{article}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title A: An Article}}.
+\newblock {\sl \bibinfo{journal}{Jounal}}
+  \bibinfo{volume}{443}(\bibinfo{number}{21}):\bibinfo{eid}{4},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{book}{bookA}
+\bibitem{bookA}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title B1: A Book with authors}},
+  \bibinfo{edition}{second} edition.
+\newblock {\sl \bibinfo{series}{Series}} \bibinfo{volume}{443},
+  \bibinfo{publisher}{Publisher}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{inbook}{inbookA}
+\bibitem{inbookA}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title B2: An Inbook with authors}},
+  \bibinfo{edition}{second} edition, \bibinfo{type}{type (of
+  chapter)}~\bibinfo{chapter}{II}, pp. \bibinfo{pages}{1--999}.
+\newblock {\sl \bibinfo{series}{Series}} \bibinfo{volume}{443},
+  \bibinfo{publisher}{Publisher}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{inproceedings}{inproceedings}
+\bibitem{inproceedings}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title C1: An Inproceedings}}.
+\newblock In \bibinfo{editor}{E.D.I. \surnamestart Thor\surnameend} \&
+  \bibinfo{editor}{E.~\surnamestart di~Thor\surnameend}, editors: {\sl
+  \bibinfo{booktitle}{Booktitle}}, {\sl \bibinfo{series}{Series}}
+  \bibinfo{volume}{443}, \bibinfo{organization}{Organization},
+  \bibinfo{publisher}{Publisher}, \bibinfo{address}{Address}, pp.
+  \bibinfo{pages}{1--999}, \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{incollection}{incollection}
+\bibitem{incollection}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title C2: An Incollection}}.
+\newblock In \bibinfo{editor}{E.D.I. \surnamestart Thor\surnameend} \&
+  \bibinfo{editor}{E.~\surnamestart di~Thor\surnameend}, editors: {\sl
+  \bibinfo{booktitle}{Booktitle}}, \bibinfo{edition}{second} edition,
+  \bibinfo{type}{type}~\bibinfo{chapter}{II}, {\sl \bibinfo{series}{Series}}
+  \bibinfo{volume}{443}, \bibinfo{publisher}{Publisher},
+  \bibinfo{address}{Address}, pp. \bibinfo{pages}{1--999}, \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{techreport}{report}
+\bibitem{report}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title R: A Techreport}}.
+\newblock \bibinfo{type}{Type (of report)} \bibinfo{number}{21},
+  \bibinfo{institution}{Institution}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{techreport}{techreport}
+\bibitem{techreport}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title R1: A Techreport}}.
+\newblock \bibinfo{type}{Technical Report} \bibinfo{number}{21},
+  \bibinfo{institution}{Institution}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{phdthesis}{phdthesis}
+\bibitem{phdthesis}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title R2: A PhDthesis}}.
+\newblock Ph.D. thesis, \bibinfo{school}{School}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{mastersthesis}{mastersthesis}
+\bibitem{mastersthesis}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title R3: A Masterthesis}}.
+\newblock Master's thesis, \bibinfo{school}{School},
+  \bibinfo{address}{Address}, \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{manual}{manual}
+\bibitem{manual}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title R4: A Manual}}, \bibinfo{edition}{second}
+  edition.
+\newblock \bibinfo{organization}{Organization}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{booklet}{booklet}
+\bibitem{booklet}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title U: A Booklet}}.
+\newblock \bibinfo{howpublished}{Howpublished}, \bibinfo{address}{Address},
+  \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{misc}{misc}
+\bibitem{misc}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title U: A Misc}}.
+\newblock \bibinfo{howpublished}{Howpublished}, \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\bibitemdeclare{unpublished}{unpublished}
+\bibitem{unpublished}
+\bibinfo{author}{A.~\surnamestart Ut\surnameend},
+  \bibinfo{author}{H.~\surnamestart Or\surnameend} \&
+  \bibinfo{author}{Co~\surnamestart Author\surnameend} (\bibinfo{year}{1987}):
+  \emph{\bibinfo{title}{Title U: An Unpublished}}, \doi{10.4204/EPTCS}.
+\newblock \urlprefix\url{http://arxiv.org/abs/1009.3306}.
+\newblock \bibinfo{note}{Note}.
+
+\end{thebibliography}
