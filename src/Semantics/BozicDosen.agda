@@ -1,9 +1,9 @@
-module OnoSemantics where
+module Semantics.BozicDosen where
 
 open import Syntax public
 
 
--- Persistent Kripke models, due to Ono.
+-- Minor persistent Kripke models, due to Božić-Došen.
 
 record Model : Set₁ where
   infix 3 _⊩ᵅ_
@@ -21,13 +21,12 @@ record Model : Set₁ where
   _≤⨾R_ : World → World → Set
   _≤⨾R_ = _≤_ ⨾ _R_
 
-  -- Persistence.
-  field
-    ≤⨾R→R : ∀ {v′ w} → w ≤⨾R v′ → w R v′
+  _R⨾≤_ : World → World → Set
+  _R⨾≤_ = _R_ ⨾ _≤_
 
-  -- Vindication, as a consequence of persistence.
-  ≤→R : ∀ {v′ w} → w ≤ v′ → w R v′
-  ≤→R {v′} ψ = ≤⨾R→R (v′ , (ψ , reflR))
+  -- Minor persistence.
+  field
+    ≤⨾R→R⨾≤ : ∀ {v′ w} → w ≤⨾R v′ → w R⨾≤ v′
 
 open Model {{…}} public
 
@@ -57,7 +56,8 @@ module _ {{_ : Model}} where
   mono⊩ : ∀ {A w w′} → w ≤ w′ → w ⊩ A → w′ ⊩ A
   mono⊩ {α P}    ψ s       = mono⊩ᵅ ψ s
   mono⊩ {A ⇒ B} ψ f       = λ ψ′ a → f (trans≤ ψ ψ′) a
-  mono⊩ {□ A}    ψ f       = λ ρ → f (transR (≤→R ψ) ρ)
+  mono⊩ {□ A}    ψ f       = λ ρ → let _ , (ρ′ , ψ′) = ≤⨾R→R⨾≤ (_ , (ψ , ρ))
+                                     in  mono⊩ {A} ψ′ (f ρ′)
   mono⊩ {A ⩕ B}  ψ (a , b) = mono⊩ {A} ψ a , mono⊩ {B} ψ b
   mono⊩ {⫪}     ψ ∙       = ∙
   mono⊩ {⫫}     ψ ()
@@ -93,7 +93,8 @@ reflect : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊨ A
 reflect (var i)      γ δ = lookup i γ
 reflect (mvar i)     γ δ = lookup i (δ reflR)
 reflect (lam d)      γ δ = λ ψ a → reflect d (mono⊩⋆ ψ γ , a)
-                                              (λ ρ → δ (transR (≤→R ψ) ρ))
+                                              (λ ρ → let _ , (ρ′ , ψ′) = ≤⨾R→R⨾≤ (_ , (ψ , ρ))
+                                                      in  mono⊩⋆ ψ′ (δ ρ′))
 reflect (app d e)    γ δ = (reflect d γ δ) refl≤ (reflect e γ δ)
 reflect (box d)      γ δ = λ ρ → reflect d ∙
                                             (λ ρ′ → δ (transR ρ ρ′))

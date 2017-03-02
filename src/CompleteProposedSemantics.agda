@@ -1,4 +1,4 @@
-module CompleteSemantics where
+module CompleteProposedSemantics where
 
 open import Syntax public
 

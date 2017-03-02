@@ -1,4 +1,4 @@
-module CompleteAlechinaEtAlSemantics where
+module CompleteSemantics.AlechinaEtAl where
 
 open import Syntax public
 

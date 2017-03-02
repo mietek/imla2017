@@ -5,15 +5,14 @@ import Stack
 
 import Syntax
 
-import Semantics
-import CompleteSemantics
+import ProposedSemantics
+import Semantics.Ono
+import Semantics.BozicDosen
+import Semantics.AlechinaEtAl
+import Semantics.Iemhoff
 
-import OnoSemantics
-import BozicDosenSemantics
-import AlechinaEtAlSemantics
-import IemhoffSemantics
-
-import CompleteOnoSemantics
-import CompleteBozicDosenSemantics
-import CompleteAlechinaEtAlSemantics
-import CompleteIemhoffSemantics
+import CompleteProposedSemantics
+import CompleteSemantics.Ono
+import CompleteSemantics.BozicDosen
+import CompleteSemantics.AlechinaEtAl
+import CompleteSemantics.Iemhoff

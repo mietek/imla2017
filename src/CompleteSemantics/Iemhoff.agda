@@ -1,4 +1,4 @@
-module CompleteIemhoffSemantics where
+module CompleteSemantics.Iemhoff where
 
 open import Syntax public
 
