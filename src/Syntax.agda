@@ -99,17 +99,13 @@ mrefl⊢⋆ {Δ , A} = mono⊢⋆ (refl⊆ , weak⊆) mrefl⊢⋆ , mvar top
 
 -- Grafting of derivation trees, or simultaneous substitution, or cut.
 
-graft∈ : ∀ {Γ Γ′ Δ C} → Γ′ ⁏ Δ ⊢⋆ Γ → C ∈ Γ → Γ′ ⁏ Δ ⊢ C
-graft∈ (σ , s) top     = s
-graft∈ (σ , s) (pop i) = graft∈ σ i
-
-mgraft∈ : ∀ {Γ Δ Δ′ C} → ∅ ⁏ Δ′ ⊢⋆ Δ → C ∈ Δ → Γ ⁏ Δ′ ⊢ C
-mgraft∈ (τ , t) top     = mono⊢ (done , refl⊆) t
-mgraft∈ (τ , t) (pop i) = mgraft∈ τ i
+graft∈ : ∀ {Ξ Γ Δ C} → Γ ⁏ Δ ⊢⋆ Ξ → C ∈ Ξ → Γ ⁏ Δ ⊢ C
+graft∈ (ξ , d) top     = d
+graft∈ (ξ , d) (pop i) = graft∈ ξ i
 
 graft⊢ : ∀ {Γ Γ′ Δ Δ′ C} → Γ′ ⁏ Δ′ ⊢⋆ Γ → ∅ ⁏ Δ′ ⊢⋆ Δ → Γ ⁏ Δ ⊢ C → Γ′ ⁏ Δ′ ⊢ C
 graft⊢ σ τ (var i)      = graft∈ σ i
-graft⊢ σ τ (mvar i)     = mgraft∈ τ i
+graft⊢ σ τ (mvar i)     = mono⊢ (bot , refl⊆) (graft∈ τ i)
 graft⊢ σ τ (lam d)      = lam (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , var top) τ d)
 graft⊢ σ τ (app d e)    = app (graft⊢ σ τ d) (graft⊢ σ τ e)
 graft⊢ σ τ (box d)      = box (graft⊢ ∙ τ d)
