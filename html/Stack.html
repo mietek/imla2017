@@ -1,0 +1,2222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Stack</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Stack.html#1" class="Module"
+      >Stack</a
+      ><a name="13"
+      > </a
+      ><a name="14" class="Keyword"
+      >where</a
+      ><a name="19"
+      >
+
+</a
+      ><a name="21" class="Keyword"
+      >open</a
+      ><a name="25"
+      > </a
+      ><a name="26" class="Keyword"
+      >import</a
+      ><a name="32"
+      > </a
+      ><a name="33" href="Prelude.html#1" class="Module"
+      >Prelude</a
+      ><a name="40"
+      > </a
+      ><a name="41" class="Keyword"
+      >public</a
+      ><a name="47"
+      >
+
+
+</a
+      ><a name="50" class="Comment"
+      >-- Stacks, or snoc-lists.</a
+      ><a name="75"
+      >
+
+</a
+      ><a name="77" class="Keyword"
+      >data</a
+      ><a name="81"
+      > </a
+      ><a name="82" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="87"
+      > </a
+      ><a name="88" class="Symbol"
+      >(</a
+      ><a name="89" href="Stack.html#89" class="Bound"
+      >X</a
+      ><a name="90"
+      > </a
+      ><a name="91" class="Symbol"
+      >:</a
+      ><a name="92"
+      > </a
+      ><a name="93" class="PrimitiveType"
+      >Set</a
+      ><a name="96" class="Symbol"
+      >)</a
+      ><a name="97"
+      > </a
+      ><a name="98" class="Symbol"
+      >:</a
+      ><a name="99"
+      > </a
+      ><a name="100" class="PrimitiveType"
+      >Set</a
+      ><a name="103"
+      > </a
+      ><a name="104" class="Keyword"
+      >where</a
+      ><a name="109"
+      >
+  </a
+      ><a name="112" href="Stack.html#112" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="113"
+      >   </a
+      ><a name="116" class="Symbol"
+      >:</a
+      ><a name="117"
+      > </a
+      ><a name="118" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="123"
+      > </a
+      ><a name="124" href="Stack.html#89" class="Bound"
+      >X</a
+      ><a name="125"
+      >
+  </a
+      ><a name="128" href="Stack.html#128" class="InductiveConstructor Operator"
+      >_,_</a
+      ><a name="131"
+      > </a
+      ><a name="132" class="Symbol"
+      >:</a
+      ><a name="133"
+      > </a
+      ><a name="134" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="139"
+      > </a
+      ><a name="140" href="Stack.html#89" class="Bound"
+      >X</a
+      ><a name="141"
+      > </a
+      ><a name="142" class="Symbol"
+      >&#8594;</a
+      ><a name="143"
+      > </a
+      ><a name="144" href="Stack.html#89" class="Bound"
+      >X</a
+      ><a name="145"
+      > </a
+      ><a name="146" class="Symbol"
+      >&#8594;</a
+      ><a name="147"
+      > </a
+      ><a name="148" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="153"
+      > </a
+      ><a name="154" href="Stack.html#89" class="Bound"
+      >X</a
+      ><a name="155"
+      >
+
+
+</a
+      ><a name="158" class="Comment"
+      >-- Stack membership, or de Bruijn indices.</a
+      ><a name="200"
+      >
+
+</a
+      ><a name="202" class="Keyword"
+      >module</a
+      ><a name="208"
+      > </a
+      ><a name="209" href="Stack.html#209" class="Module"
+      >_</a
+      ><a name="210"
+      > </a
+      ><a name="211" class="Symbol"
+      >{</a
+      ><a name="212" href="Stack.html#212" class="Bound"
+      >X</a
+      ><a name="213"
+      > </a
+      ><a name="214" class="Symbol"
+      >:</a
+      ><a name="215"
+      > </a
+      ><a name="216" class="PrimitiveType"
+      >Set</a
+      ><a name="219" class="Symbol"
+      >}</a
+      ><a name="220"
+      > </a
+      ><a name="221" class="Keyword"
+      >where</a
+      ><a name="226"
+      >
+  </a
+      ><a name="229" class="Keyword"
+      >infix</a
+      ><a name="234"
+      > </a
+      ><a name="235" class="Number"
+      >3</a
+      ><a name="236"
+      > </a
+      ><a name="237" href="Stack.html#248" class="Datatype Operator"
+      >_&#8712;_</a
+      ><a name="240"
+      >
+  </a
+      ><a name="243" class="Keyword"
+      >data</a
+      ><a name="247"
+      > </a
+      ><a name="248" href="Stack.html#248" class="Datatype Operator"
+      >_&#8712;_</a
+      ><a name="251"
+      > </a
+      ><a name="252" class="Symbol"
+      >(</a
+      ><a name="253" href="Stack.html#253" class="Bound"
+      >A</a
+      ><a name="254"
+      > </a
+      ><a name="255" class="Symbol"
+      >:</a
+      ><a name="256"
+      > </a
+      ><a name="257" href="Stack.html#212" class="Bound"
+      >X</a
+      ><a name="258" class="Symbol"
+      >)</a
+      ><a name="259"
+      > </a
+      ><a name="260" class="Symbol"
+      >:</a
+      ><a name="261"
+      > </a
+      ><a name="262" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="267"
+      > </a
+      ><a name="268" href="Stack.html#212" class="Bound"
+      >X</a
+      ><a name="269"
+      > </a
+      ><a name="270" class="Symbol"
+      >&#8594;</a
+      ><a name="271"
+      > </a
+      ><a name="272" class="PrimitiveType"
+      >Set</a
+      ><a name="275"
+      > </a
+      ><a name="276" class="Keyword"
+      >where</a
+      ><a name="281"
+      >
+    </a
+      ><a name="286" href="Stack.html#286" class="InductiveConstructor"
+      >top</a
+      ><a name="289"
+      > </a
+      ><a name="290" class="Symbol"
+      >:</a
+      ><a name="291"
+      > </a
+      ><a name="292" class="Symbol"
+      >&#8704;</a
+      ><a name="293"
+      > </a
+      ><a name="294" class="Symbol"
+      >{</a
+      ><a name="295" href="Stack.html#295" class="Bound"
+      >&#915;</a
+      ><a name="296" class="Symbol"
+      >}</a
+      ><a name="297"
+      >   </a
+      ><a name="300" class="Symbol"
+      >&#8594;</a
+      ><a name="301"
+      > </a
+      ><a name="302" href="Stack.html#253" class="Bound"
+      >A</a
+      ><a name="303"
+      > </a
+      ><a name="304" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="305"
+      > </a
+      ><a name="306" href="Stack.html#295" class="Bound"
+      >&#915;</a
+      ><a name="307"
+      > </a
+      ><a name="308" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="309"
+      > </a
+      ><a name="310" href="Stack.html#253" class="Bound"
+      >A</a
+      ><a name="311"
+      >
+    </a
+      ><a name="316" href="Stack.html#316" class="InductiveConstructor"
+      >pop</a
+      ><a name="319"
+      > </a
+      ><a name="320" class="Symbol"
+      >:</a
+      ><a name="321"
+      > </a
+      ><a name="322" class="Symbol"
+      >&#8704;</a
+      ><a name="323"
+      > </a
+      ><a name="324" class="Symbol"
+      >{</a
+      ><a name="325" href="Stack.html#325" class="Bound"
+      >&#915;</a
+      ><a name="326"
+      > </a
+      ><a name="327" href="Stack.html#327" class="Bound"
+      >B</a
+      ><a name="328" class="Symbol"
+      >}</a
+      ><a name="329"
+      > </a
+      ><a name="330" class="Symbol"
+      >&#8594;</a
+      ><a name="331"
+      > </a
+      ><a name="332" href="Stack.html#253" class="Bound"
+      >A</a
+      ><a name="333"
+      > </a
+      ><a name="334" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="335"
+      > </a
+      ><a name="336" href="Stack.html#325" class="Bound"
+      >&#915;</a
+      ><a name="337"
+      > </a
+      ><a name="338" class="Symbol"
+      >&#8594;</a
+      ><a name="339"
+      > </a
+      ><a name="340" href="Stack.html#253" class="Bound"
+      >A</a
+      ><a name="341"
+      > </a
+      ><a name="342" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="343"
+      > </a
+      ><a name="344" href="Stack.html#325" class="Bound"
+      >&#915;</a
+      ><a name="345"
+      > </a
+      ><a name="346" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="347"
+      > </a
+      ><a name="348" href="Stack.html#327" class="Bound"
+      >B</a
+      ><a name="349"
+      >
+
+  </a
+      ><a name="353" href="Stack.html#353" class="Function Operator"
+      >&#8970;_&#8971;&#8712;</a
+      ><a name="357"
+      > </a
+      ><a name="358" class="Symbol"
+      >:</a
+      ><a name="359"
+      > </a
+      ><a name="360" class="Symbol"
+      >&#8704;</a
+      ><a name="361"
+      > </a
+      ><a name="362" class="Symbol"
+      >{</a
+      ><a name="363" href="Stack.html#363" class="Bound"
+      >&#915;</a
+      ><a name="364"
+      > </a
+      ><a name="365" href="Stack.html#365" class="Bound"
+      >A</a
+      ><a name="366" class="Symbol"
+      >}</a
+      ><a name="367"
+      > </a
+      ><a name="368" class="Symbol"
+      >&#8594;</a
+      ><a name="369"
+      > </a
+      ><a name="370" href="Stack.html#365" class="Bound"
+      >A</a
+      ><a name="371"
+      > </a
+      ><a name="372" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="373"
+      > </a
+      ><a name="374" href="Stack.html#363" class="Bound"
+      >&#915;</a
+      ><a name="375"
+      > </a
+      ><a name="376" class="Symbol"
+      >&#8594;</a
+      ><a name="377"
+      > </a
+      ><a name="378" href="Agda.Builtin.Nat.html#97" class="Datatype"
+      >Nat</a
+      ><a name="381"
+      >
+  </a
+      ><a name="384" href="Stack.html#353" class="Function Operator"
+      >&#8970;</a
+      ><a name="385"
+      > </a
+      ><a name="386" href="Stack.html#286" class="InductiveConstructor"
+      >top</a
+      ><a name="389"
+      > </a
+      ><a name="390" href="Stack.html#353" class="Function Operator"
+      >&#8971;&#8712;</a
+      ><a name="392"
+      >   </a
+      ><a name="395" class="Symbol"
+      >=</a
+      ><a name="396"
+      > </a
+      ><a name="397" href="Agda.Builtin.Nat.html#115" class="InductiveConstructor"
+      >zero</a
+      ><a name="401"
+      >
+  </a
+      ><a name="404" href="Stack.html#353" class="Function Operator"
+      >&#8970;</a
+      ><a name="405"
+      > </a
+      ><a name="406" href="Stack.html#316" class="InductiveConstructor"
+      >pop</a
+      ><a name="409"
+      > </a
+      ><a name="410" href="Stack.html#410" class="Bound"
+      >i</a
+      ><a name="411"
+      > </a
+      ><a name="412" href="Stack.html#353" class="Function Operator"
+      >&#8971;&#8712;</a
+      ><a name="414"
+      > </a
+      ><a name="415" class="Symbol"
+      >=</a
+      ><a name="416"
+      > </a
+      ><a name="417" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor"
+      >suc</a
+      ><a name="420"
+      > </a
+      ><a name="421" href="Stack.html#353" class="Function Operator"
+      >&#8970;</a
+      ><a name="422"
+      > </a
+      ><a name="423" href="Stack.html#410" class="Bound"
+      >i</a
+      ><a name="424"
+      > </a
+      ><a name="425" href="Stack.html#353" class="Function Operator"
+      >&#8971;&#8712;</a
+      ><a name="427"
+      >
+
+  </a
+      ><a name="431" href="Stack.html#431" class="Function"
+      >i&#8320;</a
+      ><a name="433"
+      > </a
+      ><a name="434" class="Symbol"
+      >:</a
+      ><a name="435"
+      > </a
+      ><a name="436" class="Symbol"
+      >&#8704;</a
+      ><a name="437"
+      > </a
+      ><a name="438" class="Symbol"
+      >{</a
+      ><a name="439" href="Stack.html#439" class="Bound"
+      >&#915;</a
+      ><a name="440"
+      > </a
+      ><a name="441" href="Stack.html#441" class="Bound"
+      >A</a
+      ><a name="442" class="Symbol"
+      >}</a
+      ><a name="443"
+      > </a
+      ><a name="444" class="Symbol"
+      >&#8594;</a
+      ><a name="445"
+      > </a
+      ><a name="446" href="Stack.html#441" class="Bound"
+      >A</a
+      ><a name="447"
+      > </a
+      ><a name="448" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="449"
+      > </a
+      ><a name="450" href="Stack.html#439" class="Bound"
+      >&#915;</a
+      ><a name="451"
+      > </a
+      ><a name="452" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="Stack.html#441" class="Bound"
+      >A</a
+      ><a name="455"
+      >
+  </a
+      ><a name="458" href="Stack.html#431" class="Function"
+      >i&#8320;</a
+      ><a name="460"
+      > </a
+      ><a name="461" class="Symbol"
+      >=</a
+      ><a name="462"
+      > </a
+      ><a name="463" href="Stack.html#286" class="InductiveConstructor"
+      >top</a
+      ><a name="466"
+      >
+
+  </a
+      ><a name="470" href="Stack.html#470" class="Function"
+      >i&#8321;</a
+      ><a name="472"
+      > </a
+      ><a name="473" class="Symbol"
+      >:</a
+      ><a name="474"
+      > </a
+      ><a name="475" class="Symbol"
+      >&#8704;</a
+      ><a name="476"
+      > </a
+      ><a name="477" class="Symbol"
+      >{</a
+      ><a name="478" href="Stack.html#478" class="Bound"
+      >&#915;</a
+      ><a name="479"
+      > </a
+      ><a name="480" href="Stack.html#480" class="Bound"
+      >A</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Stack.html#482" class="Bound"
+      >B</a
+      ><a name="483" class="Symbol"
+      >}</a
+      ><a name="484"
+      > </a
+      ><a name="485" class="Symbol"
+      >&#8594;</a
+      ><a name="486"
+      > </a
+      ><a name="487" href="Stack.html#480" class="Bound"
+      >A</a
+      ><a name="488"
+      > </a
+      ><a name="489" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="490"
+      > </a
+      ><a name="491" href="Stack.html#478" class="Bound"
+      >&#915;</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="494"
+      > </a
+      ><a name="495" href="Stack.html#480" class="Bound"
+      >A</a
+      ><a name="496"
+      > </a
+      ><a name="497" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="498"
+      > </a
+      ><a name="499" href="Stack.html#482" class="Bound"
+      >B</a
+      ><a name="500"
+      >
+  </a
+      ><a name="503" href="Stack.html#470" class="Function"
+      >i&#8321;</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="Symbol"
+      >=</a
+      ><a name="507"
+      > </a
+      ><a name="508" href="Stack.html#316" class="InductiveConstructor"
+      >pop</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="Stack.html#431" class="Function"
+      >i&#8320;</a
+      ><a name="514"
+      >
+
+  </a
+      ><a name="518" href="Stack.html#518" class="Function"
+      >i&#8322;</a
+      ><a name="520"
+      > </a
+      ><a name="521" class="Symbol"
+      >:</a
+      ><a name="522"
+      > </a
+      ><a name="523" class="Symbol"
+      >&#8704;</a
+      ><a name="524"
+      > </a
+      ><a name="525" class="Symbol"
+      >{</a
+      ><a name="526" href="Stack.html#526" class="Bound"
+      >&#915;</a
+      ><a name="527"
+      > </a
+      ><a name="528" href="Stack.html#528" class="Bound"
+      >A</a
+      ><a name="529"
+      > </a
+      ><a name="530" href="Stack.html#530" class="Bound"
+      >B</a
+      ><a name="531"
+      > </a
+      ><a name="532" href="Stack.html#532" class="Bound"
+      >C</a
+      ><a name="533" class="Symbol"
+      >}</a
+      ><a name="534"
+      > </a
+      ><a name="535" class="Symbol"
+      >&#8594;</a
+      ><a name="536"
+      > </a
+      ><a name="537" href="Stack.html#528" class="Bound"
+      >A</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="540"
+      > </a
+      ><a name="541" href="Stack.html#526" class="Bound"
+      >&#915;</a
+      ><a name="542"
+      > </a
+      ><a name="543" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="544"
+      > </a
+      ><a name="545" href="Stack.html#528" class="Bound"
+      >A</a
+      ><a name="546"
+      > </a
+      ><a name="547" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="548"
+      > </a
+      ><a name="549" href="Stack.html#530" class="Bound"
+      >B</a
+      ><a name="550"
+      > </a
+      ><a name="551" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="552"
+      > </a
+      ><a name="553" href="Stack.html#532" class="Bound"
+      >C</a
+      ><a name="554"
+      >
+  </a
+      ><a name="557" href="Stack.html#518" class="Function"
+      >i&#8322;</a
+      ><a name="559"
+      > </a
+      ><a name="560" class="Symbol"
+      >=</a
+      ><a name="561"
+      > </a
+      ><a name="562" href="Stack.html#316" class="InductiveConstructor"
+      >pop</a
+      ><a name="565"
+      > </a
+      ><a name="566" href="Stack.html#470" class="Function"
+      >i&#8321;</a
+      ><a name="568"
+      >
+
+
+</a
+      ><a name="571" class="Comment"
+      >-- Stack inclusion, or order-preserving embeddings.</a
+      ><a name="622"
+      >
+
+</a
+      ><a name="624" class="Keyword"
+      >module</a
+      ><a name="630"
+      > </a
+      ><a name="631" href="Stack.html#631" class="Module"
+      >_</a
+      ><a name="632"
+      > </a
+      ><a name="633" class="Symbol"
+      >{</a
+      ><a name="634" href="Stack.html#634" class="Bound"
+      >X</a
+      ><a name="635"
+      > </a
+      ><a name="636" class="Symbol"
+      >:</a
+      ><a name="637"
+      > </a
+      ><a name="638" class="PrimitiveType"
+      >Set</a
+      ><a name="641" class="Symbol"
+      >}</a
+      ><a name="642"
+      > </a
+      ><a name="643" class="Keyword"
+      >where</a
+      ><a name="648"
+      >
+  </a
+      ><a name="651" class="Keyword"
+      >infix</a
+      ><a name="656"
+      > </a
+      ><a name="657" class="Number"
+      >3</a
+      ><a name="658"
+      > </a
+      ><a name="659" href="Stack.html#670" class="Datatype Operator"
+      >_&#8838;_</a
+      ><a name="662"
+      >
+  </a
+      ><a name="665" class="Keyword"
+      >data</a
+      ><a name="669"
+      > </a
+      ><a name="670" href="Stack.html#670" class="Datatype Operator"
+      >_&#8838;_</a
+      ><a name="673"
+      > </a
+      ><a name="674" class="Symbol"
+      >:</a
+      ><a name="675"
+      > </a
+      ><a name="676" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="681"
+      > </a
+      ><a name="682" href="Stack.html#634" class="Bound"
+      >X</a
+      ><a name="683"
+      > </a
+      ><a name="684" class="Symbol"
+      >&#8594;</a
+      ><a name="685"
+      > </a
+      ><a name="686" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="691"
+      > </a
+      ><a name="692" href="Stack.html#634" class="Bound"
+      >X</a
+      ><a name="693"
+      > </a
+      ><a name="694" class="Symbol"
+      >&#8594;</a
+      ><a name="695"
+      > </a
+      ><a name="696" class="PrimitiveType"
+      >Set</a
+      ><a name="699"
+      > </a
+      ><a name="700" class="Keyword"
+      >where</a
+      ><a name="705"
+      >
+    </a
+      ><a name="710" href="Stack.html#710" class="InductiveConstructor"
+      >bot</a
+      ><a name="713"
+      >  </a
+      ><a name="715" class="Symbol"
+      >:</a
+      ><a name="716"
+      > </a
+      ><a name="717" class="Symbol"
+      >&#8704;</a
+      ><a name="718"
+      > </a
+      ><a name="719" class="Symbol"
+      >{</a
+      ><a name="720" href="Stack.html#720" class="Bound"
+      >&#915;</a
+      ><a name="721" class="Symbol"
+      >}</a
+      ><a name="722"
+      >      </a
+      ><a name="728" class="Symbol"
+      >&#8594;</a
+      ><a name="729"
+      > </a
+      ><a name="730" href="Stack.html#112" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="731"
+      > </a
+      ><a name="732" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Stack.html#720" class="Bound"
+      >&#915;</a
+      ><a name="735"
+      >
+    </a
+      ><a name="740" href="Stack.html#740" class="InductiveConstructor"
+      >skip</a
+      ><a name="744"
+      > </a
+      ><a name="745" class="Symbol"
+      >:</a
+      ><a name="746"
+      > </a
+      ><a name="747" class="Symbol"
+      >&#8704;</a
+      ><a name="748"
+      > </a
+      ><a name="749" class="Symbol"
+      >{</a
+      ><a name="750" href="Stack.html#750" class="Bound"
+      >&#915;</a
+      ><a name="751"
+      > </a
+      ><a name="752" href="Stack.html#752" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="754"
+      > </a
+      ><a name="755" href="Stack.html#755" class="Bound"
+      >A</a
+      ><a name="756" class="Symbol"
+      >}</a
+      ><a name="757"
+      > </a
+      ><a name="758" class="Symbol"
+      >&#8594;</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Stack.html#750" class="Bound"
+      >&#915;</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Stack.html#752" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="766"
+      > </a
+      ><a name="767" class="Symbol"
+      >&#8594;</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Stack.html#750" class="Bound"
+      >&#915;</a
+      ><a name="770"
+      > </a
+      ><a name="771" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="772"
+      > </a
+      ><a name="773" href="Stack.html#752" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="777"
+      > </a
+      ><a name="778" href="Stack.html#755" class="Bound"
+      >A</a
+      ><a name="779"
+      >
+    </a
+      ><a name="784" href="Stack.html#784" class="InductiveConstructor"
+      >keep</a
+      ><a name="788"
+      > </a
+      ><a name="789" class="Symbol"
+      >:</a
+      ><a name="790"
+      > </a
+      ><a name="791" class="Symbol"
+      >&#8704;</a
+      ><a name="792"
+      > </a
+      ><a name="793" class="Symbol"
+      >{</a
+      ><a name="794" href="Stack.html#794" class="Bound"
+      >&#915;</a
+      ><a name="795"
+      > </a
+      ><a name="796" href="Stack.html#796" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="798"
+      > </a
+      ><a name="799" href="Stack.html#799" class="Bound"
+      >A</a
+      ><a name="800" class="Symbol"
+      >}</a
+      ><a name="801"
+      > </a
+      ><a name="802" class="Symbol"
+      >&#8594;</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="Stack.html#794" class="Bound"
+      >&#915;</a
+      ><a name="805"
+      > </a
+      ><a name="806" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="807"
+      > </a
+      ><a name="808" href="Stack.html#796" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="810"
+      > </a
+      ><a name="811" class="Symbol"
+      >&#8594;</a
+      ><a name="812"
+      > </a
+      ><a name="813" href="Stack.html#794" class="Bound"
+      >&#915;</a
+      ><a name="814"
+      > </a
+      ><a name="815" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="816"
+      > </a
+      ><a name="817" href="Stack.html#799" class="Bound"
+      >A</a
+      ><a name="818"
+      > </a
+      ><a name="819" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="820"
+      > </a
+      ><a name="821" href="Stack.html#796" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="823"
+      > </a
+      ><a name="824" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="825"
+      > </a
+      ><a name="826" href="Stack.html#799" class="Bound"
+      >A</a
+      ><a name="827"
+      >
+
+  </a
+      ><a name="831" href="Stack.html#831" class="Function"
+      >refl&#8838;</a
+      ><a name="836"
+      > </a
+      ><a name="837" class="Symbol"
+      >:</a
+      ><a name="838"
+      > </a
+      ><a name="839" class="Symbol"
+      >&#8704;</a
+      ><a name="840"
+      > </a
+      ><a name="841" class="Symbol"
+      >{</a
+      ><a name="842" href="Stack.html#842" class="Bound"
+      >&#915;</a
+      ><a name="843" class="Symbol"
+      >}</a
+      ><a name="844"
+      > </a
+      ><a name="845" class="Symbol"
+      >&#8594;</a
+      ><a name="846"
+      > </a
+      ><a name="847" href="Stack.html#842" class="Bound"
+      >&#915;</a
+      ><a name="848"
+      > </a
+      ><a name="849" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Stack.html#842" class="Bound"
+      >&#915;</a
+      ><a name="852"
+      >
+  </a
+      ><a name="855" href="Stack.html#831" class="Function"
+      >refl&#8838;</a
+      ><a name="860"
+      > </a
+      ><a name="861" class="Symbol"
+      >{</a
+      ><a name="862" href="Stack.html#112" class="InductiveConstructor"
+      >&#8709;</a
+      ><a name="863" class="Symbol"
+      >}</a
+      ><a name="864"
+      >     </a
+      ><a name="869" class="Symbol"
+      >=</a
+      ><a name="870"
+      > </a
+      ><a name="871" href="Stack.html#710" class="InductiveConstructor"
+      >bot</a
+      ><a name="874"
+      >
+  </a
+      ><a name="877" href="Stack.html#831" class="Function"
+      >refl&#8838;</a
+      ><a name="882"
+      > </a
+      ><a name="883" class="Symbol"
+      >{</a
+      ><a name="884" href="Stack.html#884" class="Bound"
+      >&#915;</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="887"
+      > </a
+      ><a name="888" href="Stack.html#888" class="Bound"
+      >A</a
+      ><a name="889" class="Symbol"
+      >}</a
+      ><a name="890"
+      > </a
+      ><a name="891" class="Symbol"
+      >=</a
+      ><a name="892"
+      > </a
+      ><a name="893" href="Stack.html#784" class="InductiveConstructor"
+      >keep</a
+      ><a name="897"
+      > </a
+      ><a name="898" href="Stack.html#831" class="Function"
+      >refl&#8838;</a
+      ><a name="903"
+      >
+
+  </a
+      ><a name="907" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="913"
+      > </a
+      ><a name="914" class="Symbol"
+      >:</a
+      ><a name="915"
+      > </a
+      ><a name="916" class="Symbol"
+      >&#8704;</a
+      ><a name="917"
+      > </a
+      ><a name="918" class="Symbol"
+      >{</a
+      ><a name="919" href="Stack.html#919" class="Bound"
+      >&#915;</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Stack.html#921" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="923"
+      > </a
+      ><a name="924" href="Stack.html#924" class="Bound"
+      >&#915;&#8243;</a
+      ><a name="926" class="Symbol"
+      >}</a
+      ><a name="927"
+      > </a
+      ><a name="928" class="Symbol"
+      >&#8594;</a
+      ><a name="929"
+      > </a
+      ><a name="930" href="Stack.html#919" class="Bound"
+      >&#915;</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Stack.html#921" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="936"
+      > </a
+      ><a name="937" class="Symbol"
+      >&#8594;</a
+      ><a name="938"
+      > </a
+      ><a name="939" href="Stack.html#921" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="941"
+      > </a
+      ><a name="942" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Stack.html#924" class="Bound"
+      >&#915;&#8243;</a
+      ><a name="946"
+      > </a
+      ><a name="947" class="Symbol"
+      >&#8594;</a
+      ><a name="948"
+      > </a
+      ><a name="949" href="Stack.html#919" class="Bound"
+      >&#915;</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="952"
+      > </a
+      ><a name="953" href="Stack.html#924" class="Bound"
+      >&#915;&#8243;</a
+      ><a name="955"
+      >
+  </a
+      ><a name="958" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="964"
+      > </a
+      ><a name="965" href="Stack.html#710" class="InductiveConstructor"
+      >bot</a
+      ><a name="968"
+      >      </a
+      ><a name="974" href="Stack.html#974" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="976"
+      >        </a
+      ><a name="984" class="Symbol"
+      >=</a
+      ><a name="985"
+      > </a
+      ><a name="986" href="Stack.html#710" class="InductiveConstructor"
+      >bot</a
+      ><a name="989"
+      >
+  </a
+      ><a name="992" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="998"
+      > </a
+      ><a name="999" href="Stack.html#999" class="Bound"
+      >&#951;</a
+      ><a name="1000"
+      >        </a
+      ><a name="1008" class="Symbol"
+      >(</a
+      ><a name="1009" href="Stack.html#740" class="InductiveConstructor"
+      >skip</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" href="Stack.html#1014" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="1016" class="Symbol"
+      >)</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" class="Symbol"
+      >=</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Stack.html#740" class="InductiveConstructor"
+      >skip</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" class="Symbol"
+      >(</a
+      ><a name="1026" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" href="Stack.html#999" class="Bound"
+      >&#951;</a
+      ><a name="1034"
+      > </a
+      ><a name="1035" href="Stack.html#1014" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="1037" class="Symbol"
+      >)</a
+      ><a name="1038"
+      >
+  </a
+      ><a name="1041" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" class="Symbol"
+      >(</a
+      ><a name="1049" href="Stack.html#740" class="InductiveConstructor"
+      >skip</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" href="Stack.html#1054" class="Bound"
+      >&#951;</a
+      ><a name="1055" class="Symbol"
+      >)</a
+      ><a name="1056"
+      > </a
+      ><a name="1057" class="Symbol"
+      >(</a
+      ><a name="1058" href="Stack.html#784" class="InductiveConstructor"
+      >keep</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" href="Stack.html#1063" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="1065" class="Symbol"
+      >)</a
+      ><a name="1066"
+      > </a
+      ><a name="1067" class="Symbol"
+      >=</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" href="Stack.html#740" class="InductiveConstructor"
+      >skip</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" class="Symbol"
+      >(</a
+      ><a name="1075" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" href="Stack.html#1054" class="Bound"
+      >&#951;</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" href="Stack.html#1063" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="1086" class="Symbol"
+      >)</a
+      ><a name="1087"
+      >
+  </a
+      ><a name="1090" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" class="Symbol"
+      >(</a
+      ><a name="1098" href="Stack.html#784" class="InductiveConstructor"
+      >keep</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" href="Stack.html#1103" class="Bound"
+      >&#951;</a
+      ><a name="1104" class="Symbol"
+      >)</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" class="Symbol"
+      >(</a
+      ><a name="1107" href="Stack.html#784" class="InductiveConstructor"
+      >keep</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" href="Stack.html#1112" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="1114" class="Symbol"
+      >)</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" class="Symbol"
+      >=</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Stack.html#784" class="InductiveConstructor"
+      >keep</a
+      ><a name="1122"
+      > </a
+      ><a name="1123" class="Symbol"
+      >(</a
+      ><a name="1124" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="1130"
+      > </a
+      ><a name="1131" href="Stack.html#1103" class="Bound"
+      >&#951;</a
+      ><a name="1132"
+      > </a
+      ><a name="1133" href="Stack.html#1112" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="1135" class="Symbol"
+      >)</a
+      ><a name="1136"
+      >
+
+  </a
+      ><a name="1140" href="Stack.html#1140" class="Function"
+      >weak&#8838;</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" class="Symbol"
+      >:</a
+      ><a name="1147"
+      > </a
+      ><a name="1148" class="Symbol"
+      >&#8704;</a
+      ><a name="1149"
+      > </a
+      ><a name="1150" class="Symbol"
+      >{</a
+      ><a name="1151" href="Stack.html#1151" class="Bound"
+      >&#915;</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" href="Stack.html#1153" class="Bound"
+      >A</a
+      ><a name="1154" class="Symbol"
+      >}</a
+      ><a name="1155"
+      > </a
+      ><a name="1156" class="Symbol"
+      >&#8594;</a
+      ><a name="1157"
+      > </a
+      ><a name="1158" href="Stack.html#1151" class="Bound"
+      >&#915;</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="1161"
+      > </a
+      ><a name="1162" href="Stack.html#1151" class="Bound"
+      >&#915;</a
+      ><a name="1163"
+      > </a
+      ><a name="1164" href="Stack.html#128" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1165"
+      > </a
+      ><a name="1166" href="Stack.html#1153" class="Bound"
+      >A</a
+      ><a name="1167"
+      >
+  </a
+      ><a name="1170" href="Stack.html#1140" class="Function"
+      >weak&#8838;</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" class="Symbol"
+      >=</a
+      ><a name="1177"
+      > </a
+      ><a name="1178" href="Stack.html#740" class="InductiveConstructor"
+      >skip</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" href="Stack.html#831" class="Function"
+      >refl&#8838;</a
+      ><a name="1188"
+      >
+
+
+</a
+      ><a name="1191" class="Comment"
+      >-- Monotonicity of stack membership with respect to stack inclusion.</a
+      ><a name="1259"
+      >
+
+</a
+      ><a name="1261" class="Keyword"
+      >module</a
+      ><a name="1267"
+      > </a
+      ><a name="1268" href="Stack.html#1268" class="Module"
+      >_</a
+      ><a name="1269"
+      > </a
+      ><a name="1270" class="Symbol"
+      >{</a
+      ><a name="1271" href="Stack.html#1271" class="Bound"
+      >X</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" class="Symbol"
+      >:</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" class="PrimitiveType"
+      >Set</a
+      ><a name="1278" class="Symbol"
+      >}</a
+      ><a name="1279"
+      > </a
+      ><a name="1280" class="Keyword"
+      >where</a
+      ><a name="1285"
+      >
+  </a
+      ><a name="1288" href="Stack.html#1288" class="Function"
+      >mono&#8712;</a
+      ><a name="1293"
+      > </a
+      ><a name="1294" class="Symbol"
+      >:</a
+      ><a name="1295"
+      > </a
+      ><a name="1296" class="Symbol"
+      >&#8704;</a
+      ><a name="1297"
+      > </a
+      ><a name="1298" class="Symbol"
+      >{</a
+      ><a name="1299" href="Stack.html#1299" class="Bound"
+      >&#915;</a
+      ><a name="1300"
+      > </a
+      ><a name="1301" href="Stack.html#1301" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="1303"
+      > </a
+      ><a name="1304" class="Symbol"
+      >:</a
+      ><a name="1305"
+      > </a
+      ><a name="1306" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="1311"
+      > </a
+      ><a name="1312" href="Stack.html#1271" class="Bound"
+      >X</a
+      ><a name="1313" class="Symbol"
+      >}</a
+      ><a name="1314"
+      > </a
+      ><a name="1315" class="Symbol"
+      >{</a
+      ><a name="1316" href="Stack.html#1316" class="Bound"
+      >A</a
+      ><a name="1317" class="Symbol"
+      >}</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" class="Symbol"
+      >&#8594;</a
+      ><a name="1320"
+      > </a
+      ><a name="1321" href="Stack.html#1299" class="Bound"
+      >&#915;</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" href="Stack.html#1301" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="1327"
+      > </a
+      ><a name="1328" class="Symbol"
+      >&#8594;</a
+      ><a name="1329"
+      > </a
+      ><a name="1330" href="Stack.html#1316" class="Bound"
+      >A</a
+      ><a name="1331"
+      > </a
+      ><a name="1332" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="1333"
+      > </a
+      ><a name="1334" href="Stack.html#1299" class="Bound"
+      >&#915;</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" class="Symbol"
+      >&#8594;</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" href="Stack.html#1316" class="Bound"
+      >A</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" href="Stack.html#248" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="1341"
+      > </a
+      ><a name="1342" href="Stack.html#1301" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="1344"
+      >
+  </a
+      ><a name="1347" href="Stack.html#1288" class="Function"
+      >mono&#8712;</a
+      ><a name="1352"
+      > </a
+      ><a name="1353" href="Stack.html#710" class="InductiveConstructor"
+      >bot</a
+      ><a name="1356"
+      >      </a
+      ><a name="1362" class="Symbol"
+      >()</a
+      ><a name="1364"
+      >
+  </a
+      ><a name="1367" href="Stack.html#1288" class="Function"
+      >mono&#8712;</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" class="Symbol"
+      >(</a
+      ><a name="1374" href="Stack.html#740" class="InductiveConstructor"
+      >skip</a
+      ><a name="1378"
+      > </a
+      ><a name="1379" href="Stack.html#1379" class="Bound"
+      >&#951;</a
+      ><a name="1380" class="Symbol"
+      >)</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" href="Stack.html#1382" class="Bound"
+      >i</a
+      ><a name="1383"
+      >       </a
+      ><a name="1390" class="Symbol"
+      >=</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" href="Stack.html#316" class="InductiveConstructor"
+      >pop</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" class="Symbol"
+      >(</a
+      ><a name="1397" href="Stack.html#1288" class="Function"
+      >mono&#8712;</a
+      ><a name="1402"
+      > </a
+      ><a name="1403" href="Stack.html#1379" class="Bound"
+      >&#951;</a
+      ><a name="1404"
+      > </a
+      ><a name="1405" href="Stack.html#1382" class="Bound"
+      >i</a
+      ><a name="1406" class="Symbol"
+      >)</a
+      ><a name="1407"
+      >
+  </a
+      ><a name="1410" href="Stack.html#1288" class="Function"
+      >mono&#8712;</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" class="Symbol"
+      >(</a
+      ><a name="1417" href="Stack.html#784" class="InductiveConstructor"
+      >keep</a
+      ><a name="1421"
+      > </a
+      ><a name="1422" href="Stack.html#1422" class="Bound"
+      >&#951;</a
+      ><a name="1423" class="Symbol"
+      >)</a
+      ><a name="1424"
+      > </a
+      ><a name="1425" href="Stack.html#286" class="InductiveConstructor"
+      >top</a
+      ><a name="1428"
+      >     </a
+      ><a name="1433" class="Symbol"
+      >=</a
+      ><a name="1434"
+      > </a
+      ><a name="1435" href="Stack.html#286" class="InductiveConstructor"
+      >top</a
+      ><a name="1438"
+      >
+  </a
+      ><a name="1441" href="Stack.html#1288" class="Function"
+      >mono&#8712;</a
+      ><a name="1446"
+      > </a
+      ><a name="1447" class="Symbol"
+      >(</a
+      ><a name="1448" href="Stack.html#784" class="InductiveConstructor"
+      >keep</a
+      ><a name="1452"
+      > </a
+      ><a name="1453" href="Stack.html#1453" class="Bound"
+      >&#951;</a
+      ><a name="1454" class="Symbol"
+      >)</a
+      ><a name="1455"
+      > </a
+      ><a name="1456" class="Symbol"
+      >(</a
+      ><a name="1457" href="Stack.html#316" class="InductiveConstructor"
+      >pop</a
+      ><a name="1460"
+      > </a
+      ><a name="1461" href="Stack.html#1461" class="Bound"
+      >i</a
+      ><a name="1462" class="Symbol"
+      >)</a
+      ><a name="1463"
+      > </a
+      ><a name="1464" class="Symbol"
+      >=</a
+      ><a name="1465"
+      > </a
+      ><a name="1466" href="Stack.html#316" class="InductiveConstructor"
+      >pop</a
+      ><a name="1469"
+      > </a
+      ><a name="1470" class="Symbol"
+      >(</a
+      ><a name="1471" href="Stack.html#1288" class="Function"
+      >mono&#8712;</a
+      ><a name="1476"
+      > </a
+      ><a name="1477" href="Stack.html#1453" class="Bound"
+      >&#951;</a
+      ><a name="1478"
+      > </a
+      ><a name="1479" href="Stack.html#1461" class="Bound"
+      >i</a
+      ><a name="1480" class="Symbol"
+      >)</a
+      ><a name="1481"
+      >
+
+
+</a
+      ><a name="1484" class="Comment"
+      >-- Pairs of stacks.</a
+      ><a name="1503"
+      >
+
+</a
+      ><a name="1505" class="Keyword"
+      >infixl</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" class="Number"
+      >4</a
+      ><a name="1513"
+      > </a
+      ><a name="1514" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >_&#8271;_</a
+      ><a name="1517"
+      >
+</a
+      ><a name="1518" class="Keyword"
+      >record</a
+      ><a name="1524"
+      > </a
+      ><a name="1525" href="Stack.html#1525" class="Record"
+      >Stack&#178;</a
+      ><a name="1531"
+      > </a
+      ><a name="1532" class="Symbol"
+      >(</a
+      ><a name="1533" href="Stack.html#1533" class="Bound"
+      >X</a
+      ><a name="1534"
+      > </a
+      ><a name="1535" href="Stack.html#1535" class="Bound"
+      >Y</a
+      ><a name="1536"
+      > </a
+      ><a name="1537" class="Symbol"
+      >:</a
+      ><a name="1538"
+      > </a
+      ><a name="1539" class="PrimitiveType"
+      >Set</a
+      ><a name="1542" class="Symbol"
+      >)</a
+      ><a name="1543"
+      > </a
+      ><a name="1544" class="Symbol"
+      >:</a
+      ><a name="1545"
+      > </a
+      ><a name="1546" class="PrimitiveType"
+      >Set</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" class="Keyword"
+      >where</a
+      ><a name="1555"
+      >
+  </a
+      ><a name="1558" class="Keyword"
+      >constructor</a
+      ><a name="1569"
+      > </a
+      ><a name="1570" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >_&#8271;_</a
+      ><a name="1573"
+      >
+  </a
+      ><a name="1576" class="Keyword"
+      >field</a
+      ><a name="1581"
+      >
+    </a
+      ><a name="1586" href="Stack.html#1586" class="Field"
+      >&#960;&#8321;</a
+      ><a name="1588"
+      > </a
+      ><a name="1589" class="Symbol"
+      >:</a
+      ><a name="1590"
+      > </a
+      ><a name="1591" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="1596"
+      > </a
+      ><a name="1597" href="Stack.html#1533" class="Bound"
+      >X</a
+      ><a name="1598"
+      >
+    </a
+      ><a name="1603" href="Stack.html#1603" class="Field"
+      >&#960;&#8322;</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" class="Symbol"
+      >:</a
+      ><a name="1607"
+      > </a
+      ><a name="1608" href="Stack.html#82" class="Datatype"
+      >Stack</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="Stack.html#1535" class="Bound"
+      >Y</a
+      ><a name="1615"
+      >
+
+</a
+      ><a name="1617" class="Keyword"
+      >open</a
+      ><a name="1621"
+      > </a
+      ><a name="1622" href="Stack.html#1525" class="Module"
+      >Stack&#178;</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" class="Keyword"
+      >public</a
+      ><a name="1635"
+      >
+
+
+</a
+      ><a name="1638" class="Comment"
+      >-- Stack pair inclusion.</a
+      ><a name="1662"
+      >
+
+</a
+      ><a name="1664" class="Keyword"
+      >module</a
+      ><a name="1670"
+      > </a
+      ><a name="1671" href="Stack.html#1671" class="Module"
+      >_</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" class="Symbol"
+      >{</a
+      ><a name="1674" href="Stack.html#1674" class="Bound"
+      >X</a
+      ><a name="1675"
+      > </a
+      ><a name="1676" href="Stack.html#1676" class="Bound"
+      >Y</a
+      ><a name="1677"
+      > </a
+      ><a name="1678" class="Symbol"
+      >:</a
+      ><a name="1679"
+      > </a
+      ><a name="1680" class="PrimitiveType"
+      >Set</a
+      ><a name="1683" class="Symbol"
+      >}</a
+      ><a name="1684"
+      > </a
+      ><a name="1685" class="Keyword"
+      >where</a
+      ><a name="1690"
+      >
+  </a
+      ><a name="1693" class="Keyword"
+      >infix</a
+      ><a name="1698"
+      > </a
+      ><a name="1699" class="Number"
+      >3</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" href="Stack.html#1708" class="Function Operator"
+      >_&#8838;&#178;_</a
+      ><a name="1705"
+      >
+  </a
+      ><a name="1708" href="Stack.html#1708" class="Function Operator"
+      >_&#8838;&#178;_</a
+      ><a name="1712"
+      > </a
+      ><a name="1713" class="Symbol"
+      >:</a
+      ><a name="1714"
+      > </a
+      ><a name="1715" href="Stack.html#1525" class="Record"
+      >Stack&#178;</a
+      ><a name="1721"
+      > </a
+      ><a name="1722" href="Stack.html#1674" class="Bound"
+      >X</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" href="Stack.html#1676" class="Bound"
+      >Y</a
+      ><a name="1725"
+      > </a
+      ><a name="1726" class="Symbol"
+      >&#8594;</a
+      ><a name="1727"
+      > </a
+      ><a name="1728" href="Stack.html#1525" class="Record"
+      >Stack&#178;</a
+      ><a name="1734"
+      > </a
+      ><a name="1735" href="Stack.html#1674" class="Bound"
+      >X</a
+      ><a name="1736"
+      > </a
+      ><a name="1737" href="Stack.html#1676" class="Bound"
+      >Y</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" class="Symbol"
+      >&#8594;</a
+      ><a name="1740"
+      > </a
+      ><a name="1741" class="PrimitiveType"
+      >Set</a
+      ><a name="1744"
+      >
+  </a
+      ><a name="1747" href="Stack.html#1747" class="Bound"
+      >&#915;</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" href="Stack.html#1751" class="Bound"
+      >&#916;</a
+      ><a name="1752"
+      > </a
+      ><a name="1753" href="Stack.html#1708" class="Function Operator"
+      >&#8838;&#178;</a
+      ><a name="1755"
+      > </a
+      ><a name="1756" href="Stack.html#1756" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="1758"
+      > </a
+      ><a name="1759" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1760"
+      > </a
+      ><a name="1761" href="Stack.html#1761" class="Bound"
+      >&#916;&#8242;</a
+      ><a name="1763"
+      > </a
+      ><a name="1764" class="Symbol"
+      >=</a
+      ><a name="1765"
+      > </a
+      ><a name="1766" href="Stack.html#1747" class="Bound"
+      >&#915;</a
+      ><a name="1767"
+      > </a
+      ><a name="1768" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="1769"
+      > </a
+      ><a name="1770" href="Stack.html#1756" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" href="Prelude.html#2693" class="Function Operator"
+      >&#8743;</a
+      ><a name="1774"
+      > </a
+      ><a name="1775" href="Stack.html#1751" class="Bound"
+      >&#916;</a
+      ><a name="1776"
+      > </a
+      ><a name="1777" href="Stack.html#670" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="1778"
+      > </a
+      ><a name="1779" href="Stack.html#1761" class="Bound"
+      >&#916;&#8242;</a
+      ><a name="1781"
+      >
+
+  </a
+      ><a name="1785" href="Stack.html#1785" class="Function"
+      >refl&#8838;&#178;</a
+      ><a name="1791"
+      > </a
+      ><a name="1792" class="Symbol"
+      >:</a
+      ><a name="1793"
+      > </a
+      ><a name="1794" class="Symbol"
+      >&#8704;</a
+      ><a name="1795"
+      > </a
+      ><a name="1796" class="Symbol"
+      >{</a
+      ><a name="1797" href="Stack.html#1797" class="Bound"
+      >&#915;</a
+      ><a name="1798"
+      > </a
+      ><a name="1799" href="Stack.html#1799" class="Bound"
+      >&#916;</a
+      ><a name="1800" class="Symbol"
+      >}</a
+      ><a name="1801"
+      > </a
+      ><a name="1802" class="Symbol"
+      >&#8594;</a
+      ><a name="1803"
+      > </a
+      ><a name="1804" href="Stack.html#1797" class="Bound"
+      >&#915;</a
+      ><a name="1805"
+      > </a
+      ><a name="1806" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1807"
+      > </a
+      ><a name="1808" href="Stack.html#1799" class="Bound"
+      >&#916;</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" href="Stack.html#1708" class="Function Operator"
+      >&#8838;&#178;</a
+      ><a name="1812"
+      > </a
+      ><a name="1813" href="Stack.html#1797" class="Bound"
+      >&#915;</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1816"
+      > </a
+      ><a name="1817" href="Stack.html#1799" class="Bound"
+      >&#916;</a
+      ><a name="1818"
+      >
+  </a
+      ><a name="1821" href="Stack.html#1785" class="Function"
+      >refl&#8838;&#178;</a
+      ><a name="1827"
+      > </a
+      ><a name="1828" class="Symbol"
+      >=</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" href="Stack.html#831" class="Function"
+      >refl&#8838;</a
+      ><a name="1835"
+      > </a
+      ><a name="1836" href="Prelude.html#2609" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1837"
+      > </a
+      ><a name="1838" href="Stack.html#831" class="Function"
+      >refl&#8838;</a
+      ><a name="1843"
+      >
+
+  </a
+      ><a name="1847" href="Stack.html#1847" class="Function"
+      >trans&#8838;&#178;</a
+      ><a name="1854"
+      > </a
+      ><a name="1855" class="Symbol"
+      >:</a
+      ><a name="1856"
+      > </a
+      ><a name="1857" class="Symbol"
+      >&#8704;</a
+      ><a name="1858"
+      > </a
+      ><a name="1859" class="Symbol"
+      >{</a
+      ><a name="1860" href="Stack.html#1860" class="Bound"
+      >&#915;</a
+      ><a name="1861"
+      > </a
+      ><a name="1862" href="Stack.html#1862" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="1864"
+      > </a
+      ><a name="1865" href="Stack.html#1865" class="Bound"
+      >&#915;&#8243;</a
+      ><a name="1867"
+      > </a
+      ><a name="1868" href="Stack.html#1868" class="Bound"
+      >&#916;</a
+      ><a name="1869"
+      > </a
+      ><a name="1870" href="Stack.html#1870" class="Bound"
+      >&#916;&#8242;</a
+      ><a name="1872"
+      > </a
+      ><a name="1873" href="Stack.html#1873" class="Bound"
+      >&#916;&#8243;</a
+      ><a name="1875" class="Symbol"
+      >}</a
+      ><a name="1876"
+      > </a
+      ><a name="1877" class="Symbol"
+      >&#8594;</a
+      ><a name="1878"
+      > </a
+      ><a name="1879" href="Stack.html#1860" class="Bound"
+      >&#915;</a
+      ><a name="1880"
+      > </a
+      ><a name="1881" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1882"
+      > </a
+      ><a name="1883" href="Stack.html#1868" class="Bound"
+      >&#916;</a
+      ><a name="1884"
+      > </a
+      ><a name="1885" href="Stack.html#1708" class="Function Operator"
+      >&#8838;&#178;</a
+      ><a name="1887"
+      > </a
+      ><a name="1888" href="Stack.html#1862" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="1890"
+      > </a
+      ><a name="1891" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1892"
+      > </a
+      ><a name="1893" href="Stack.html#1870" class="Bound"
+      >&#916;&#8242;</a
+      ><a name="1895"
+      > </a
+      ><a name="1896" class="Symbol"
+      >&#8594;</a
+      ><a name="1897"
+      > </a
+      ><a name="1898" href="Stack.html#1862" class="Bound"
+      >&#915;&#8242;</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1902"
+      > </a
+      ><a name="1903" href="Stack.html#1870" class="Bound"
+      >&#916;&#8242;</a
+      ><a name="1905"
+      > </a
+      ><a name="1906" href="Stack.html#1708" class="Function Operator"
+      >&#8838;&#178;</a
+      ><a name="1908"
+      > </a
+      ><a name="1909" href="Stack.html#1865" class="Bound"
+      >&#915;&#8243;</a
+      ><a name="1911"
+      > </a
+      ><a name="1912" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1913"
+      > </a
+      ><a name="1914" href="Stack.html#1873" class="Bound"
+      >&#916;&#8243;</a
+      ><a name="1916"
+      > </a
+      ><a name="1917" class="Symbol"
+      >&#8594;</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" href="Stack.html#1860" class="Bound"
+      >&#915;</a
+      ><a name="1920"
+      > </a
+      ><a name="1921" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1922"
+      > </a
+      ><a name="1923" href="Stack.html#1868" class="Bound"
+      >&#916;</a
+      ><a name="1924"
+      > </a
+      ><a name="1925" href="Stack.html#1708" class="Function Operator"
+      >&#8838;&#178;</a
+      ><a name="1927"
+      > </a
+      ><a name="1928" href="Stack.html#1865" class="Bound"
+      >&#915;&#8243;</a
+      ><a name="1930"
+      > </a
+      ><a name="1931" href="Stack.html#1570" class="InductiveConstructor Operator"
+      >&#8271;</a
+      ><a name="1932"
+      > </a
+      ><a name="1933" href="Stack.html#1873" class="Bound"
+      >&#916;&#8243;</a
+      ><a name="1935"
+      >
+  </a
+      ><a name="1938" href="Stack.html#1847" class="Function"
+      >trans&#8838;&#178;</a
+      ><a name="1945"
+      > </a
+      ><a name="1946" class="Symbol"
+      >(</a
+      ><a name="1947" href="Stack.html#1947" class="Bound"
+      >&#951;</a
+      ><a name="1948"
+      > </a
+      ><a name="1949" href="Prelude.html#2609" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1950"
+      > </a
+      ><a name="1951" href="Stack.html#1951" class="Bound"
+      >&#961;</a
+      ><a name="1952" class="Symbol"
+      >)</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" class="Symbol"
+      >(</a
+      ><a name="1955" href="Stack.html#1955" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="1957"
+      > </a
+      ><a name="1958" href="Prelude.html#2609" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1959"
+      > </a
+      ><a name="1960" href="Stack.html#1960" class="Bound"
+      >&#961;&#8242;</a
+      ><a name="1962" class="Symbol"
+      >)</a
+      ><a name="1963"
+      > </a
+      ><a name="1964" class="Symbol"
+      >=</a
+      ><a name="1965"
+      > </a
+      ><a name="1966" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="1972"
+      > </a
+      ><a name="1973" href="Stack.html#1947" class="Bound"
+      >&#951;</a
+      ><a name="1974"
+      > </a
+      ><a name="1975" href="Stack.html#1955" class="Bound"
+      >&#951;&#8242;</a
+      ><a name="1977"
+      > </a
+      ><a name="1978" href="Prelude.html#2609" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1979"
+      > </a
+      ><a name="1980" href="Stack.html#907" class="Function"
+      >trans&#8838;</a
+      ><a name="1986"
+      > </a
+      ><a name="1987" href="Stack.html#1951" class="Bound"
+      >&#961;</a
+      ><a name="1988"
+      > </a
+      ><a name="1989" href="Stack.html#1960" class="Bound"
+      >&#961;&#8242;</a
+      ><a name="1991"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>
