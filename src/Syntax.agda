@@ -10,7 +10,7 @@ abstract
   Atom = Nat
 
 
--- Types of constructive modal logic S4.
+-- Types, or propositions in constructive modal logic S4.
 
 infixl 9 _⩕_
 infixl 8 _⩖_
