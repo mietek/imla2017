@@ -1,83 +1,6 @@
-module Common where
+module Stack where
 
-
--- Identity and composition.
-
-id : ∀ {ℓ} {X : Set ℓ} → X → X
-id x = x
-
-_∘_ : ∀ {ℓ ℓ′ ℓ″} {X : Set ℓ} {Y : Set ℓ′} {Z : Set ℓ″} →
-      (Y → Z) → (X → Y) → X → Z
-f ∘ g = λ x → f (g x)
-
-
--- Verum.
-
-open import Agda.Builtin.Unit public
-  using (⊤)
-  renaming (tt to ∙)
-
-
--- Falsum.
-
-data ⊥ : Set where
-
-elim⊥ : ∀ {X : Set} → ⊥ → X
-elim⊥ ()
-
-
--- Negation.
-
-infix 3 ¬_
-¬_ : Set → Set
-¬ X = X → ⊥
-
-
--- Constructive existence.
-
-infixl 5 _,_
-record Σ (X : Set) (Y : X → Set) : Set where
-  constructor _,_
-  field
-    π₁ : X
-    π₂ : Y π₁
-
-open Σ public
-
-
--- Conjunction.
-
-infixr 2 _∧_
-_∧_ : Set → Set → Set
-X ∧ Y = Σ X (λ _ → Y)
-
-
--- Disjunction.
-
-infixr 1 _∨_
-data _∨_ (X Y : Set) : Set where
-  ι₁ : X → X ∨ Y
-  ι₂ : Y → X ∨ Y
-
-elim∨ : ∀ {X Y Z : Set} → X ∨ Y → (X → Z) → (Y → Z) → Z
-elim∨ (ι₁ x) f g = f x
-elim∨ (ι₂ y) f g = g y
-
-
--- Naturals.
-
-open import Agda.Builtin.Nat public
-  using (Nat ; zero ; suc)
-
-elimNat : ∀ {X : Set} → Nat → X → (Nat → X → X) → X
-elimNat zero    z f = z
-elimNat (suc n) z f = f n (elimNat n z f)
-
-
--- Composition of relations.
-
-_⨾_ : ∀ {X : Set} → (X → X → Set) → (X → X → Set) → (X → X → Set)
-_R_ ⨾ _Q_ = λ x x′ → Σ _ (λ y → x R y ∧ y Q x′)
+open import Prelude public
 
 
 -- Stacks, or snoc-lists.
@@ -94,6 +17,19 @@ module _ {X : Set} where
   data _∈_ (A : X) : Stack X → Set where
     top : ∀ {Γ}   → A ∈ Γ , A
     pop : ∀ {Γ B} → A ∈ Γ → A ∈ Γ , B
+
+  ⌊_⌋∈ : ∀ {Γ A} → A ∈ Γ → Nat
+  ⌊ top ⌋∈   = zero
+  ⌊ pop i ⌋∈ = suc ⌊ i ⌋∈
+
+  i₀ : ∀ {Γ A} → A ∈ Γ , A
+  i₀ = top
+
+  i₁ : ∀ {Γ A B} → A ∈ Γ , A , B
+  i₁ = pop i₀
+
+  i₂ : ∀ {Γ A B C} → A ∈ Γ , A , B , C
+  i₂ = pop i₁
 
 
 -- Stack inclusion, or order-preserving embeddings.

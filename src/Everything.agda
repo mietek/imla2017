@@ -1,6 +1,7 @@
 module Everything where
 
-import Common
+import Prelude
+import Stack
 
 import Syntax
 

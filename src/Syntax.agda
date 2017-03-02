@@ -1,6 +1,6 @@
 module Syntax where
 
-open import Common public
+open import Stack public
 
 
 -- Abstract symbols, or atoms.
