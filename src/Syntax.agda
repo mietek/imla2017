@@ -148,13 +148,13 @@ graft⊢ σ τ (case d e f) = case (graft⊢ σ τ d) (graft⊢ (mono⊢⋆ (wea
 mutual
   infix 3 _⊢ⁿᶠ_
   data _⊢ⁿᶠ_ : Context → Type → Set where
-    lamⁿᶠ   : ∀ {A B Γ Δ} → Γ , A ⁏ Δ ⊢ⁿᶠ B → Γ ⁏ Δ ⊢ⁿᶠ A ⇒ B
-    boxⁿᶠ   : ∀ {A Γ Δ}   → ∅ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊢ⁿᶠ □ A
-    pairⁿᶠ  : ∀ {A B Γ Δ} → Γ ⁏ Δ ⊢ⁿᶠ A → Γ ⁏ Δ ⊢ⁿᶠ B → Γ ⁏ Δ ⊢ⁿᶠ A ⩕ B
-    unitⁿᶠ  : ∀ {Γ Δ}     → Γ ⁏ Δ ⊢ⁿᶠ ⫪
-    leftⁿᶠ  : ∀ {A B Γ Δ} → Γ ⁏ Δ ⊢ⁿᶠ A → Γ ⁏ Δ ⊢ⁿᶠ A ⩖ B
-    rightⁿᶠ : ∀ {A B Γ Δ} → Γ ⁏ Δ ⊢ⁿᶠ B → Γ ⁏ Δ ⊢ⁿᶠ A ⩖ B
-    neⁿᶠ    : ∀ {A Γ Δ}   → Γ ⁏ Δ ⊢ⁿᵉ A → Γ ⁏ Δ ⊢ⁿᶠ A
+    lamⁿᶠ   : ∀ {A B Γ Δ}   → Γ , A ⁏ Δ ⊢ⁿᶠ B → Γ ⁏ Δ ⊢ⁿᶠ A ⇒ B
+    boxⁿᶠ   : ∀ {A Γ Δ}     → ∅ ⁏ Δ ⊢ A → Γ ⁏ Δ ⊢ⁿᶠ □ A
+    pairⁿᶠ  : ∀ {A B Γ Δ}   → Γ ⁏ Δ ⊢ⁿᶠ A → Γ ⁏ Δ ⊢ⁿᶠ B → Γ ⁏ Δ ⊢ⁿᶠ A ⩕ B
+    unitⁿᶠ  : ∀ {Γ Δ}       → Γ ⁏ Δ ⊢ⁿᶠ ⫪
+    leftⁿᶠ  : ∀ {A B Γ Δ}   → Γ ⁏ Δ ⊢ⁿᶠ A → Γ ⁏ Δ ⊢ⁿᶠ A ⩖ B
+    rightⁿᶠ : ∀ {A B Γ Δ}   → Γ ⁏ Δ ⊢ⁿᶠ B → Γ ⁏ Δ ⊢ⁿᶠ A ⩖ B
+    neⁿᶠ    : ∀ {A Γ Δ}     → Γ ⁏ Δ ⊢ⁿᵉ A → Γ ⁏ Δ ⊢ⁿᶠ A
 
   infix 3 _⊢ⁿᵉ_
   data _⊢ⁿᵉ_ : Context → Type → Set where
@@ -189,13 +189,13 @@ _⊢⋆ⁿᵉ_ : Context → Stack Type → Set
 
 mutual
   mono⊢ⁿᶠ : ∀ {Γ Γ′ Δ Δ′ A} → Γ ⁏ Δ ⊆² Γ′ ⁏ Δ′ → Γ ⁏ Δ ⊢ⁿᶠ A → Γ′ ⁏ Δ′ ⊢ⁿᶠ A
-  mono⊢ⁿᶠ (η , ρ) (lamⁿᶠ d)     = lamⁿᶠ (mono⊢ⁿᶠ (keep η , ρ) d)
-  mono⊢ⁿᶠ (η , ρ) (boxⁿᶠ d)     = boxⁿᶠ (mono⊢ (bot , ρ) d)
-  mono⊢ⁿᶠ ψ       (pairⁿᶠ d e)  = pairⁿᶠ (mono⊢ⁿᶠ ψ d) (mono⊢ⁿᶠ ψ e)
-  mono⊢ⁿᶠ ψ       unitⁿᶠ        = unitⁿᶠ
-  mono⊢ⁿᶠ ψ       (leftⁿᶠ d)    = leftⁿᶠ (mono⊢ⁿᶠ ψ d)
-  mono⊢ⁿᶠ ψ       (rightⁿᶠ d)   = rightⁿᶠ (mono⊢ⁿᶠ ψ d)
-  mono⊢ⁿᶠ ψ       (neⁿᶠ d)      = neⁿᶠ (mono⊢ⁿᵉ ψ d)
+  mono⊢ⁿᶠ (η , ρ) (lamⁿᶠ d)      = lamⁿᶠ (mono⊢ⁿᶠ (keep η , ρ) d)
+  mono⊢ⁿᶠ (η , ρ) (boxⁿᶠ d)      = boxⁿᶠ (mono⊢ (bot , ρ) d)
+  mono⊢ⁿᶠ ψ       (pairⁿᶠ d e)   = pairⁿᶠ (mono⊢ⁿᶠ ψ d) (mono⊢ⁿᶠ ψ e)
+  mono⊢ⁿᶠ ψ       unitⁿᶠ         = unitⁿᶠ
+  mono⊢ⁿᶠ ψ       (leftⁿᶠ d)     = leftⁿᶠ (mono⊢ⁿᶠ ψ d)
+  mono⊢ⁿᶠ ψ       (rightⁿᶠ d)    = rightⁿᶠ (mono⊢ⁿᶠ ψ d)
+  mono⊢ⁿᶠ ψ       (neⁿᶠ d)       = neⁿᶠ (mono⊢ⁿᵉ ψ d)
 
   mono⊢ⁿᵉ : ∀ {Γ Γ′ Δ Δ′ A} → Γ ⁏ Δ ⊆² Γ′ ⁏ Δ′ → Γ ⁏ Δ ⊢ⁿᵉ A → Γ′ ⁏ Δ′ ⊢ⁿᵉ A
   mono⊢ⁿᵉ (η , ρ) (varⁿᵉ i)      = varⁿᵉ (mono∈ η i)
