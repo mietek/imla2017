@@ -69,7 +69,7 @@ mono⊢ (η , ρ) (var i)      = var (mono∈ η i)
 mono⊢ (η , ρ) (mvar i)     = mvar (mono∈ ρ i)
 mono⊢ (η , ρ) (lam d)      = lam (mono⊢ (keep η , ρ) d)
 mono⊢ ψ       (app d e)    = app (mono⊢ ψ d) (mono⊢ ψ e)
-mono⊢ (η , ρ) (box d)      = box (mono⊢ (done , ρ) d)
+mono⊢ (η , ρ) (box d)      = box (mono⊢ (bot , ρ) d)
 mono⊢ (η , ρ) (unbox d e)  = unbox (mono⊢ (η , ρ) d) (mono⊢ (η , keep ρ) e)
 mono⊢ ψ       (pair d e)   = pair (mono⊢ ψ d) (mono⊢ ψ e)
 mono⊢ ψ       (fst d)      = fst (mono⊢ ψ d)
@@ -164,7 +164,7 @@ _⊢⋆ⁿᵉ_ : Context → Stack Type → Set
 mutual
   mono⊢ⁿᶠ : ∀ {Γ Γ′ Δ Δ′ A} → Γ ⁏ Δ ⊆² Γ′ ⁏ Δ′ → Γ ⁏ Δ ⊢ⁿᶠ A → Γ′ ⁏ Δ′ ⊢ⁿᶠ A
   mono⊢ⁿᶠ (η , ρ) (lamⁿᶠ d)     = lamⁿᶠ (mono⊢ⁿᶠ (keep η , ρ) d)
-  mono⊢ⁿᶠ (η , ρ) (boxⁿᶠ d)     = boxⁿᶠ (mono⊢ (done , ρ) d)
+  mono⊢ⁿᶠ (η , ρ) (boxⁿᶠ d)     = boxⁿᶠ (mono⊢ (bot , ρ) d)
   mono⊢ⁿᶠ ψ       (pairⁿᶠ d e)  = pairⁿᶠ (mono⊢ⁿᶠ ψ d) (mono⊢ⁿᶠ ψ e)
   mono⊢ⁿᶠ ψ       unitⁿᶠ        = unitⁿᶠ
   mono⊢ⁿᶠ ψ       (leftⁿᶠ d)    = leftⁿᶠ (mono⊢ⁿᶠ ψ d)

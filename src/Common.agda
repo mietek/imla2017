@@ -101,16 +101,16 @@ module _ {X : Set} where
 module _ {X : Set} where
   infix 3 _⊆_
   data _⊆_ : Stack X → Stack X → Set where
-    done : ∀ {Γ}      → ∅ ⊆ Γ
+    bot  : ∀ {Γ}      → ∅ ⊆ Γ
     skip : ∀ {Γ Γ′ A} → Γ ⊆ Γ′ → Γ ⊆ Γ′ , A
     keep : ∀ {Γ Γ′ A} → Γ ⊆ Γ′ → Γ , A ⊆ Γ′ , A
 
   refl⊆ : ∀ {Γ} → Γ ⊆ Γ
-  refl⊆ {∅}     = done
+  refl⊆ {∅}     = bot
   refl⊆ {Γ , A} = keep refl⊆
 
   trans⊆ : ∀ {Γ Γ′ Γ″} → Γ ⊆ Γ′ → Γ′ ⊆ Γ″ → Γ ⊆ Γ″
-  trans⊆ done     η′        = done
+  trans⊆ bot      η′        = bot
   trans⊆ η        (skip η′) = skip (trans⊆ η η′)
   trans⊆ (skip η) (keep η′) = skip (trans⊆ η η′)
   trans⊆ (keep η) (keep η′) = keep (trans⊆ η η′)
@@ -123,7 +123,7 @@ module _ {X : Set} where
 
 module _ {X : Set} where
   mono∈ : ∀ {Γ Γ′ : Stack X} {A} → Γ ⊆ Γ′ → A ∈ Γ → A ∈ Γ′
-  mono∈ done     ()
+  mono∈ bot      ()
   mono∈ (skip η) i       = pop (mono∈ η i)
   mono∈ (keep η) top     = top
   mono∈ (keep η) (pop i) = pop (mono∈ η i)
