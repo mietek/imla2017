@@ -54,6 +54,27 @@ data _⊢_ : Context → Type → Set where
   case  : ∀ {A B C Γ Δ} → Γ ⁏ Δ ⊢ A ⩖ B → Γ , A ⁏ Δ ⊢ C → Γ , B ⁏ Δ ⊢ C → Γ ⁏ Δ ⊢ C
 
 
+-- Shorthand for variables.
+
+v₀ : ∀ {Γ Δ A} → Γ , A ⁏ Δ ⊢ A
+v₀ = var i₀
+
+v₁ : ∀ {Γ Δ A B} → Γ , A , B ⁏ Δ ⊢ A
+v₁ = var i₁
+
+v₂ : ∀ {Γ Δ A B C} → Γ , A , B , C ⁏ Δ ⊢ A
+v₂ = var i₂
+
+mv₀ : ∀ {Γ Δ A} → Γ ⁏ Δ , A ⊢ A
+mv₀ = mvar i₀
+
+mv₁ : ∀ {Γ Δ A B} → Γ ⁏ Δ , A , B ⊢ A
+mv₁ = mvar i₁
+
+mv₂ : ∀ {Γ Δ A B C} → Γ ⁏ Δ , A , B , C ⊢ A
+mv₂ = mvar i₂
+
+
 -- Stacks of derivations, or simultaneous syntactic entailment.
 
 infix 3 _⊢⋆_
@@ -90,11 +111,11 @@ mono⊢⋆ {Ξ , A} ψ (ξ , d) = mono⊢⋆ ψ ξ , mono⊢ ψ d
 
 refl⊢⋆ : ∀ {Γ Δ} → Γ ⁏ Δ ⊢⋆ Γ
 refl⊢⋆ {∅}     = ∙
-refl⊢⋆ {Γ , A} = mono⊢⋆ (weak⊆ , refl⊆) refl⊢⋆ , var top
+refl⊢⋆ {Γ , A} = mono⊢⋆ (weak⊆ , refl⊆) refl⊢⋆ , v₀
 
 mrefl⊢⋆ : ∀ {Δ Γ} → Γ ⁏ Δ ⊢⋆ Δ
 mrefl⊢⋆ {∅}     = ∙
-mrefl⊢⋆ {Δ , A} = mono⊢⋆ (refl⊆ , weak⊆) mrefl⊢⋆ , mvar top
+mrefl⊢⋆ {Δ , A} = mono⊢⋆ (refl⊆ , weak⊆) mrefl⊢⋆ , mv₀
 
 
 -- Grafting of derivation trees, or simultaneous substitution, or cut.
@@ -106,11 +127,11 @@ graft∈ (ξ , d) (pop i) = graft∈ ξ i
 graft⊢ : ∀ {Γ Γ′ Δ Δ′ C} → Γ′ ⁏ Δ′ ⊢⋆ Γ → ∅ ⁏ Δ′ ⊢⋆ Δ → Γ ⁏ Δ ⊢ C → Γ′ ⁏ Δ′ ⊢ C
 graft⊢ σ τ (var i)      = graft∈ σ i
 graft⊢ σ τ (mvar i)     = mono⊢ (bot , refl⊆) (graft∈ τ i)
-graft⊢ σ τ (lam d)      = lam (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , var top) τ d)
+graft⊢ σ τ (lam d)      = lam (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , v₀) τ d)
 graft⊢ σ τ (app d e)    = app (graft⊢ σ τ d) (graft⊢ σ τ e)
 graft⊢ σ τ (box d)      = box (graft⊢ ∙ τ d)
 graft⊢ σ τ (unbox d e)  = unbox (graft⊢ σ τ d) (graft⊢ (mono⊢⋆ (refl⊆ , weak⊆) σ)
-                                                          (mono⊢⋆ (refl⊆ , weak⊆) τ , mvar top) e)
+                                                          (mono⊢⋆ (refl⊆ , weak⊆) τ , mv₀) e)
 graft⊢ σ τ (pair d e)   = pair (graft⊢ σ τ d) (graft⊢ σ τ e)
 graft⊢ σ τ (fst d)      = fst (graft⊢ σ τ d)
 graft⊢ σ τ (snd d)      = snd (graft⊢ σ τ d)
@@ -118,8 +139,8 @@ graft⊢ σ τ unit         = unit
 graft⊢ σ τ (boom d)     = boom (graft⊢ σ τ d)
 graft⊢ σ τ (left d)     = left (graft⊢ σ τ d)
 graft⊢ σ τ (right d)    = right (graft⊢ σ τ d)
-graft⊢ σ τ (case d e f) = case (graft⊢ σ τ d) (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , var top) τ e)
-                                                (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , var top) τ f)
+graft⊢ σ τ (case d e f) = case (graft⊢ σ τ d) (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , v₀) τ e)
+                                                (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , v₀) τ f)
 
 
 -- Derivations, or syntactic entailment, in normal and neutral form.
@@ -145,6 +166,15 @@ mutual
     sndⁿᵉ   : ∀ {A B Γ Δ}   → Γ ⁏ Δ ⊢ⁿᵉ A ⩕ B → Γ ⁏ Δ ⊢ⁿᵉ B
     boomⁿᵉ  : ∀ {C Γ Δ}     → Γ ⁏ Δ ⊢ⁿᵉ ⫫ → Γ ⁏ Δ ⊢ⁿᵉ C
     caseⁿᵉ  : ∀ {A B C Γ Δ} → Γ ⁏ Δ ⊢ⁿᵉ A ⩖ B → Γ , A ⁏ Δ ⊢ⁿᶠ C → Γ , B ⁏ Δ ⊢ⁿᶠ C → Γ ⁏ Δ ⊢ⁿᵉ C
+
+
+-- Shorthand for variables.
+
+v₀ⁿᵉ : ∀ {Γ Δ A} → Γ , A ⁏ Δ ⊢ⁿᵉ A
+v₀ⁿᵉ = varⁿᵉ top
+
+mv₀ⁿᵉ : ∀ {Γ Δ A} → Γ ⁏ Δ , A ⊢ⁿᵉ A
+mv₀ⁿᵉ = mvarⁿᵉ top
 
 
 -- Stacks of derivations, or reflexivity of syntactic entailment, in neutral form.
@@ -187,8 +217,8 @@ mono⊢⋆ⁿᵉ {Ξ , A} ψ (ξ , d) = mono⊢⋆ⁿᵉ ψ ξ , mono⊢ⁿᵉ �
 
 refl⊢⋆ⁿᵉ : ∀ {Γ Δ} → Γ ⁏ Δ ⊢⋆ⁿᵉ Γ
 refl⊢⋆ⁿᵉ {∅}     = ∙
-refl⊢⋆ⁿᵉ {Γ , A} = mono⊢⋆ⁿᵉ (weak⊆ , refl⊆) refl⊢⋆ⁿᵉ , varⁿᵉ top
+refl⊢⋆ⁿᵉ {Γ , A} = mono⊢⋆ⁿᵉ (weak⊆ , refl⊆) refl⊢⋆ⁿᵉ , v₀ⁿᵉ
 
 mrefl⊢⋆ⁿᵉ : ∀ {Δ Γ} → Γ ⁏ Δ ⊢⋆ⁿᵉ Δ
 mrefl⊢⋆ⁿᵉ {∅}     = ∙
-mrefl⊢⋆ⁿᵉ {Δ , A} = mono⊢⋆ⁿᵉ (refl⊆ , weak⊆) mrefl⊢⋆ⁿᵉ , mvarⁿᵉ top
+mrefl⊢⋆ⁿᵉ {Δ , A} = mono⊢⋆ⁿᵉ (refl⊆ , weak⊆) mrefl⊢⋆ⁿᵉ , mv₀ⁿᵉ

@@ -187,20 +187,20 @@ mutual
                           λ ψ a → reflectᶜ (appⁿᵉ (mono⊢ⁿᵉ ψ d) (reifyᶜ a))
   reflectᶜ {□ A}    d = λ ψ κ → neⁿᶠ (unboxⁿᵉ (mono⊢ⁿᵉ ψ d)
                                                (κ (refl⊆ , weak⊆)
-                                                  λ { (η , ρ′) ρ″ → mono⊢ (bot , trans⊆ ρ′ ρ″) (mvar top) ,
-                                                                     reflectᶜ (mono⊢ⁿᵉ (bot , trans⊆ ρ′ ρ″) (mvarⁿᵉ top)) } ))
+                                                  λ { (η , ρ′) ρ″ → mono⊢ (bot , trans⊆ ρ′ ρ″) mv₀ ,
+                                                                     reflectᶜ (mono⊢ⁿᵉ (bot , trans⊆ ρ′ ρ″) mv₀ⁿᵉ) } ))
   reflectᶜ {A ⩕ B}  d = return {A ⩕ B} (reflectᶜ (fstⁿᵉ d) , reflectᶜ (sndⁿᵉ d))
   reflectᶜ {⫪}     d = return {⫪} ∙
   reflectᶜ {⫫}     d = λ ψ κ → neⁿᶠ (boomⁿᵉ (mono⊢ⁿᵉ ψ d))
   reflectᶜ {A ⩖ B}  d = λ ψ κ → neⁿᶠ (caseⁿᵉ (mono⊢ⁿᵉ ψ d)
-                                              (κ (weak⊆ , refl⊆) (ι₁ (reflectᶜ (varⁿᵉ top))))
-                                              (κ (weak⊆ , refl⊆) (ι₂ (reflectᶜ (varⁿᵉ top)))))
+                                              (κ (weak⊆ , refl⊆) (ι₁ (reflectᶜ v₀ⁿᵉ)))
+                                              (κ (weak⊆ , refl⊆) (ι₂ (reflectᶜ v₀ⁿᵉ))))
 
   reifyᶜ : ∀ {A Γ Δ} → Γ ⁏ Δ ⊩ A → Γ ⁏ Δ ⊢ⁿᶠ A
   reifyᶜ {α P}    κ = κ refl⊆²
                         λ ψ s → neⁿᶠ s
   reifyᶜ {A ⇒ B} κ = κ refl⊆²
-                        λ ψ f → lamⁿᶠ (reifyᶜ (f (weak⊆ , refl⊆) (reflectᶜ (varⁿᵉ top))))
+                        λ ψ f → lamⁿᶠ (reifyᶜ (f (weak⊆ , refl⊆) (reflectᶜ v₀ⁿᵉ)))
   reifyᶜ {□ A}    κ = κ refl⊆²
                         λ ψ f → boxⁿᶠ (π₁ (f refl⊆² {(∅ ⁏ _)} refl⊆))
   reifyᶜ {A ⩕ B}  κ = κ refl⊆²
@@ -219,11 +219,11 @@ mutual
 
 refl⊩⋆ : ∀ {Γ Δ} → Γ ⁏ Δ ⊩⋆ Γ
 refl⊩⋆ {∅}     = ∙
-refl⊩⋆ {Γ , A} = mono⊩⋆ (weak⊆ , refl⊆) refl⊩⋆ , reflectᶜ (varⁿᵉ top)
+refl⊩⋆ {Γ , A} = mono⊩⋆ (weak⊆ , refl⊆) refl⊩⋆ , reflectᶜ v₀ⁿᵉ
 
 mrefl⊩⋆ : ∀ {Δ Γ} → Γ ⁏ Δ ⊩⋆ Δ
 mrefl⊩⋆ {∅}     = ∙
-mrefl⊩⋆ {Δ , A} = mono⊩⋆ (refl⊆ , weak⊆) mrefl⊩⋆ , reflectᶜ (mvarⁿᵉ top)
+mrefl⊩⋆ {Δ , A} = mono⊩⋆ (refl⊆ , weak⊆) mrefl⊩⋆ , reflectᶜ mv₀ⁿᵉ
 
 
 -- Completeness of the semantics with respect to the syntax.
