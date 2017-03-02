@@ -143,7 +143,7 @@ graft⊢ σ τ (case d e f) = case (graft⊢ σ τ d) (graft⊢ (mono⊢⋆ (wea
                                                 (graft⊢ (mono⊢⋆ (weak⊆ , refl⊆) σ , v₀) τ f)
 
 
--- Derivations, or syntactic entailment, in normal and neutral form.
+-- Derivations, or syntactic entailment, in normal form.
 
 mutual
   infix 3 _⊢ⁿᶠ_
@@ -177,7 +177,7 @@ mv₀ⁿᵉ : ∀ {Γ Δ A} → Γ ⁏ Δ , A ⊢ⁿᵉ A
 mv₀ⁿᵉ = mvarⁿᵉ top
 
 
--- Stacks of derivations, or reflexivity of syntactic entailment, in neutral form.
+-- Stacks of derivations, or simultaneous syntactic entailment, in normal form.
 
 infix 3 _⊢⋆ⁿᵉ_
 _⊢⋆ⁿᵉ_ : Context → Stack Type → Set
@@ -185,7 +185,7 @@ _⊢⋆ⁿᵉ_ : Context → Stack Type → Set
 Γ ⁏ Δ ⊢⋆ⁿᵉ Ξ , A = Γ ⁏ Δ ⊢⋆ⁿᵉ Ξ ∧ Γ ⁏ Δ ⊢ⁿᵉ A
 
 
--- Monotonicity of syntactic entailment with respect to context inclusion, in normal and neutral form.
+-- Monotonicity of syntactic entailment with respect to context inclusion, in normal form.
 
 mutual
   mono⊢ⁿᶠ : ∀ {Γ Γ′ Δ Δ′ A} → Γ ⁏ Δ ⊆² Γ′ ⁏ Δ′ → Γ ⁏ Δ ⊢ⁿᶠ A → Γ′ ⁏ Δ′ ⊢ⁿᶠ A
@@ -213,7 +213,7 @@ mono⊢⋆ⁿᵉ {∅}     ψ ∙       = ∙
 mono⊢⋆ⁿᵉ {Ξ , A} ψ (ξ , d) = mono⊢⋆ⁿᵉ ψ ξ , mono⊢ⁿᵉ ψ d
 
 
--- Reflexivity of simultaneous syntactic entailment, in neutral form.
+-- Reflexivity of simultaneous syntactic entailment, in normal form.
 
 refl⊢⋆ⁿᵉ : ∀ {Γ Δ} → Γ ⁏ Δ ⊢⋆ⁿᵉ Γ
 refl⊢⋆ⁿᵉ {∅}     = ∙
