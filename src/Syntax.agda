@@ -185,6 +185,29 @@ _⊢⋆ⁿᵉ_ : Context → Stack Type → Set
 Γ ⁏ Δ ⊢⋆ⁿᵉ Ξ , A = Γ ⁏ Δ ⊢⋆ⁿᵉ Ξ ∧ Γ ⁏ Δ ⊢ⁿᵉ A
 
 
+-- Translation from normal form to arbitrary form.
+
+mutual
+  nf→af : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ⁿᶠ A → Γ ⁏ Δ ⊢ A
+  nf→af (neⁿᶠ d)       = ne→af d
+  nf→af (lamⁿᶠ d)      = lam (nf→af d)
+  nf→af (boxⁿᶠ d)      = box d
+  nf→af (pairⁿᶠ d e)   = pair (nf→af d) (nf→af e)
+  nf→af unitⁿᶠ         = unit
+  nf→af (leftⁿᶠ d)     = left (nf→af d)
+  nf→af (rightⁿᶠ d)    = right (nf→af d)
+
+  ne→af : ∀ {Γ Δ A} → Γ ⁏ Δ ⊢ⁿᵉ A → Γ ⁏ Δ ⊢ A
+  ne→af (varⁿᵉ i)      = var i
+  ne→af (mvarⁿᵉ i)     = mvar i
+  ne→af (appⁿᵉ d e)    = app (ne→af d) (nf→af e)
+  ne→af (unboxⁿᵉ d e)  = unbox (ne→af d) (nf→af e)
+  ne→af (fstⁿᵉ d)      = fst (ne→af d)
+  ne→af (sndⁿᵉ d)      = snd (ne→af d)
+  ne→af (boomⁿᵉ d)     = boom (ne→af d)
+  ne→af (caseⁿᵉ d e f) = case (ne→af d) (nf→af e) (nf→af f)
+
+
 -- Monotonicity of syntactic entailment with respect to context inclusion, in normal form.
 
 mutual
