@@ -210,6 +210,20 @@ elimBool false z s = z
 elimBool true  z s = s
 
 
+-- Conditionals.
+
+data Maybe {ℓ} (X : Set ℓ) : Set ℓ where
+  nothing : Maybe X
+  just    : X → Maybe X
+
+{-# HASKELL type AgdaMaybe _ x = Maybe x #-}
+{-# COMPILED_DATA Maybe MAlonzo.Code.Data.Maybe.Base.AgdaMaybe Just Nothing #-}
+
+elimMaybe : ∀ {ℓ ℓ′} {X : Set ℓ} {Y : Set ℓ′} → Maybe X → Y → (X → Y) → Y
+elimMaybe nothing  z f = z
+elimMaybe (just x) z f = f x
+
+
 -- Naturals.
 
 open import Agda.Builtin.Nat public
