@@ -1,11 +1,13 @@
 _imla2017_
 ==========
 
-An Agda formalisation of a normalisation by evaluation procedure for the λ□-calculus, as a composition of constructive soundness and completeness proofs for the necessity-only fragment of the intensional modal logic S4.
+An Agda formalisation of a normalisation by evaluation procedure for the λ□-calculus, as composition of constructive soundness and completeness proofs for the necessity-only fragment of the intensional modal logic S4.
 
 Part of my submission for the [7th Workshop on Intuitionistic Modal Logic and Applications](https://sites.google.com/site/modallogicimla2017/) (IMLA 2017), University of Toulouse, 17th to 28th July 2017.
 
-Read the [hyperlinked source](https://mietek.github.io/imla2017/).
+[Paper](https://github.com/mietek/imla2017/blob/master/doc/imla2017.pdf)
+
+[Hyperlinked source](https://mietek.github.io/imla2017/)
 
 
 References
