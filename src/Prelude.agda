@@ -45,9 +45,6 @@ open import Agda.Builtin.Unit public
 
 data ⊥ : Set where
 
-{-# HASKELL data AgdaEmpty #-}
-{-# COMPILED_DATA ⊥ MAlonzo.Code.Data.Empty.AgdaEmpty #-}
-
 elim⊥ : ∀ {ℓ} {X : Set ℓ} → ⊥ → X
 elim⊥ ()
 
@@ -143,9 +140,6 @@ data _∨_ {ℓ ℓ′} (X : Set ℓ) (Y : Set ℓ′) : Set (ℓ ⊔ ℓ′) wh
   ι₁ : X → X ∨ Y
   ι₂ : Y → X ∨ Y
 
-{-# HASKELL type AgdaEither _ _ x y = Either x y #-}
-{-# COMPILED_DATA _∨_ MAlonzo.Code.Data.Sum.AgdaEither Left Right #-}
-
 elim∨ : ∀ {ℓ ℓ′ ℓ″} {X : Set ℓ} {Y : Set ℓ′} {Z : Set ℓ″} →
         X ∨ Y → (X → Z) → (Y → Z) → Z
 elim∨ (ι₁ x) f g = f x
@@ -215,9 +209,6 @@ elimBool true  z s = s
 data Maybe {ℓ} (X : Set ℓ) : Set ℓ where
   nothing : Maybe X
   just    : X → Maybe X
-
-{-# HASKELL type AgdaMaybe _ x = Maybe x #-}
-{-# COMPILED_DATA Maybe MAlonzo.Code.Data.Maybe.Base.AgdaMaybe Just Nothing #-}
 
 elimMaybe : ∀ {ℓ ℓ′} {X : Set ℓ} {Y : Set ℓ′} → Maybe X → Y → (X → Y) → Y
 elimMaybe nothing  z f = z
