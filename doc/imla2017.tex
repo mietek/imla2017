@@ -2,75 +2,142 @@
 
 
 \documentclass{entcs}
-
 \usepackage{entcsmacro}
-\usepackage{amsmath}
 
-\usepackage[final,
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+
+\usepackage[activate={true,nocompatibility},
+            final,
             tracking=true,
             kerning=true,
-            spacing=true]{microtype}
+            spacing=true,
+            factor=1100,
+            stretch=10,
+            shrink=10]{microtype}
 \microtypecontext{spacing=nonfrench}
 \SetTracking{encoding={*},
              shape=sc}{10}
-\hyphenpenalty=9999
-\emergencystretch=10pt
 
-\usepackage{epigraph}
+\usepackage{prftree}
+\prfinterspace=1em
+% \prflinepadbefore=1pt
+% \prflinepadafter=3pt
 
+\usepackage{environ}
+\NewEnviron{proofalign*}{%
+  \setlength{\abovedisplayskip}{0pt}%
+  \setlength{\belowdisplayskip}{0pt}%
+  \setlength{\abovedisplayshortskip}{0pt}%
+  \setlength{\belowdisplayshortskip}{0pt}%
+  \begin{proof}%
+    \vspace{-\baselineskip}%
+    \begin{align*}%
+      \BODY%
+    \end{align*}%
+    \vspace{-2.75\baselineskip}\[\]%
+  \end{proof}}
+\NewEnviron{proofalignat*}[1]{%
+  \setlength{\abovedisplayskip}{0pt}%
+  \setlength{\belowdisplayskip}{0pt}%
+  \setlength{\abovedisplayshortskip}{0pt}%
+  \setlength{\belowdisplayshortskip}{0pt}%
+  \begin{proof}%
+    \vspace{-\baselineskip}%
+    \begin{alignat*}{#1}%
+      \BODY%
+    \end{alignat*}%
+    \vspace{-2.75\baselineskip}\[\]%
+  \end{proof}}
 
-\newcommand{\ssZ}{\textsf{\small{2}}}
-\newcommand{\ssm}{\textsf{\small{m}}}
-\newcommand{\ssmv}{\textsf{\small{mv}}}
-\newcommand{\ssv}{\textsf{\small{v}}}
-\newcommand{\ssnf}{\textsf{\small{nf}}}
-\newcommand{\ssne}{\textsf{\small{ne}}}
-\newcommand{\ssr}{\textsf{\small{r}}}
-\newcommand{\sss}{\textsf{\small{s}}}
-\newcommand{\sse}{\textsf{\small{e}}}
+% NOTE: Used to get "de Bruijn" to sort under "B"
+\newcommand{\noopsort}[2]{#2}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%% Syntax
+
+
+\newcommand{\lambdabox}{\lambda^{\mkern-1mu\sq\mkern-2mu}}
+
+\newcommand{\Set}{\tsf{Set}}
+\renewcommand{\r}{\mathrel{\rightarrow}}
+\newcommand{\id}{\operatorname{\tsf{id}}}
+\newcommand{\comp}{\mathrel{\circ}}
+\renewcommand{\:}{\mathrel{:}}
+\newcommand{\widecolon}{\mathrel{\rlap{$\mkern4.5mu:$}\hphantom{=}}}
+\newcommand{\narrowcolon}{\mathord{\mkern2mu:\mkern2mu}}
+\renewcommand{\;}{\mathbin{;}}
+\newcommand{\comma}{\mathbin{,}}
+\newcommand{\period}{\mathbin{.}}
+\newcommand{\preop}[1]{\mathord{#1}-}
+\newcommand{\postop}[1]{-\mathord{#1}}
+\newcommand{\binop}[1]{-\mathord{#1}-}
+
+\let\oldforall\forall
+\renewcommand{\forall}{\oldforall\,}
+
+\let\oldexists\exists
+\renewcommand{\exists}{\oldexists\,}
+
+\newcommand{\tsf}[1]{\textsf{\upshape{#1}}}
+\newcommand{\stsf}[1]{\tsf{\small{#1}}}
+
+\newcommand{\tyrule}[1]{\prftree[l]{${#1} \:\,$}}
+\newcommand{\padtyrule}[1]{\prftree[l]{${#1} \widecolon\,$}}
+\newcommand{\eqrule}[1]{\prftree[l]{${#1} =$}}
+
+\newcommand{\projI}{\tsf{proj}_{\stsf{1}}}
+\newcommand{\projZ}{\tsf{proj}_{\stsf{2}}}
+
+\newcommand{\List}{\tsf{List}}
+\newcommand{\All}{\tsf{All}}
+
+
+%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+
+% Syntax
 
 % Types
 \newcommand{\T}{\mathcal{T}}
 % \ast
-\newcommand{\R}{\mathrel{\Rightarrow}}
-\newcommand{\sq}{\mathop{\Box}}
+\newcommand{\R}{\Rightarrow}
+\newcommand{\sq}{\Box}
 
 % Contexts
 \newcommand{\C}{\mathcal{C}}
-\newcommand{\CZ}{\mathcal{C}^{\ssZ}}
+\newcommand{\CZ}{\mathcal{C}^{\stsf{2}}}
 \renewcommand{\O}{\varnothing}
 
 % Variables
 % \ni
-\newcommand{\zero}{\operatorname{\textsf{zero}}}
-\newcommand{\suc}{\operatorname{\textsf{suc}}}
+\newcommand{\zero}{\operatorname{\tsf{zero}}}
+\newcommand{\suc}{\operatorname{\tsf{suc}}}
 
 % Syntactic entailment
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\E}{\mathcal{E}}
 \renewcommand{\e}{\mathrel{\vdash}}
-\newcommand{\mvar}{\operatorname{^{\ssmv}}}
-\newcommand{\var}{\operatorname{^{\ssv}}}
-\newcommand{\lam}{\operatorname{\lambda}}
-\newcommand{\app}{\mathbin{\cdot}}
+\newcommand{\mvar}{\operatorname{^{\stsf{mv}\mkern-1mu}}}
+\newcommand{\var}{\operatorname{^{\stsf{v}\mkern-1mu}}}
+% \newcommand{\lam}{\operatorname{\lambda\mkern-9mu\raisebox{0.8ex}{\rotatebox[origin=c]{30}{$-$}}}}
+\newcommand{\lam}{\operatorname{\underline{\lambda}}}
+\newcommand{\app}{\mathbin{\$}}
 \newcommand{\quo}[1]{\mathopen{\ulcorner}{#1}\mathclose{\urcorner}}
-\newcommand{\unquo}[2]{\mathopen{\llcorner}{#1}\mathclose{\lrcorner}{#2}}
-\newcommand{\mvO}{\operatorname{^{\ssmv\mkern-1mu}\textsf{0}}}
-\newcommand{\mvI}{\operatorname{^{\ssmv\mkern-1mu}\textsf{1}}}
-\newcommand{\mvZ}{\operatorname{^{\ssmv\mkern-1mu}\textsf{2}}}
-\newcommand{\vO}{\operatorname{^{\ssv\mkern-1mu}\textsf{0}}}
-\newcommand{\vI}{\operatorname{^{\ssv\mkern-1mu}\textsf{1}}}
-\newcommand{\vZ}{\operatorname{^{\ssv\mkern-1mu}\textsf{2}}}
+\newcommand{\unquo}[1]{\mathopen{\llcorner}{#1}\mathclose{\lrcorner}\,}
+\newcommand{\mvO}{\operatorname{^{\stsf{mv}\mkern-1mu}\tsf{0}}}
+\newcommand{\mvI}{\operatorname{^{\stsf{mv}\mkern-1mu}\tsf{1}}}
+\newcommand{\mvZ}{\operatorname{^{\stsf{mv}\mkern-1mu}\tsf{2}}}
+\newcommand{\vO}{\operatorname{^{\stsf{v}\mkern-1mu}\tsf{0}}}
+\newcommand{\vI}{\operatorname{^{\stsf{v}\mkern-1mu}\tsf{1}}}
+\newcommand{\vZ}{\operatorname{^{\stsf{v}\mkern-1mu}\tsf{2}}}
 
 % Normal and neutral forms
-\newcommand{\enf}{\mathrel{\vdash_{\mkern-1mu\ssnf}}}
-\newcommand{\ene}{\mathrel{\vdash_{\mkern-1mu\rlap{$\ssne$}\hphantom{\ssnf}}}}
-\renewcommand{\ne}{\operatorname{\textsf{ne}}}
-\newcommand{\embnf}{\operatorname{\textsf{emb}_{\ssnf}}}
-\newcommand{\embne}{\operatorname{\textsf{emb}_{\ssne}}}
+\newcommand{\enf}{\mathrel{\vdash_{\mkern-2mu\stsf{nf}}}}
+\newcommand{\ene}{\mathrel{\vdash_{\mkern-2mu\rlap{$\stsf{ne}$}\hphantom{\stsf{nf}}}}}
+\renewcommand{\ne}{\operatorname{\tsf{ne}}}
+\newcommand{\embnf}{\operatorname{\tsf{emb}_{\stsf{nf}}}}
+\newcommand{\embne}{\operatorname{\tsf{emb}_{\stsf{ne}}}}
 
 % Convertibility
 \newcommand{\conv}{\mathrel{\sim}}
@@ -78,66 +145,145 @@
 \newcommand{\bhconv}{\mathrel{\sim_{\beta\eta}}}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%% Renaming
+%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+
+% Renaming
 
 % Order-preserving embeddings
 \renewcommand{\geq}{\mathrel{\supseteq}}
-\newcommand{\geqZ}{\mathrel{\supseteq^{\ssZ}}}
-\newcommand{\doner}{\operatorname{\textsf{done}_{\ssr}}}
-\newcommand{\wkr}{\operatorname{\textsf{wk}_{\ssr}}}
-\newcommand{\liftr}{\operatorname{\textsf{lift}_{\ssr}}}
+\newcommand{\geqZ}{\mathrel{\supseteq^{\stsf{2}}}}
+\newcommand{\doner}{\operatorname{\tsf{done}_{\stsf{r}}}}
+\newcommand{\wkr}{\operatorname{\tsf{wk}_{\stsf{r}}}}
+\newcommand{\liftr}{\operatorname{\tsf{lift}_{\stsf{r}}}}
 
-\newcommand{\mwkrZ}{\operatorname{^{\ssm\mkern-1mu}\textsf{wk}_{\ssr}^{\ssZ}}}
-\newcommand{\wkrZ}{\operatorname{\textsf{wk}_{\ssr}^{\ssZ}}}
-\newcommand{\infr}{\operatorname{\textsf{inf}_{\ssr}}}
-\newcommand{\idr}{\operatorname{\textsf{id}_{\ssr}}}
-\newcommand{\idrZ}{\operatorname{\textsf{id}_{\ssr}^{\ssZ}}}
-\newcommand{\Or}{\mathbin{\circ_{\mkern-1mu\ssr}}}
-\newcommand{\lookupr}{\operatorname{\textsf{lookup}_{\ssr}}}
-\newcommand{\mlookuprZ}{\operatorname{^{\ssm\mkern-1mu}\textsf{lookup}_{\ssr}^{\ssZ}}}
-\newcommand{\lookuprZ}{\operatorname{\textsf{lookup}_{\ssr}^{\ssZ}}}
+\newcommand{\mwkrZ}{\operatorname{^{\stsf{m}\mkern-1mu}\tsf{wk}_{\stsf{r}}^{\stsf{2}}}}
+\newcommand{\wkrZ}{\operatorname{\tsf{wk}_{\stsf{r}}^{\stsf{2}}}}
+\newcommand{\infr}{\operatorname{\tsf{inf}_{\stsf{r}}}}
+\newcommand{\idr}{\operatorname{\tsf{id}_{\stsf{r}}}}
+\newcommand{\idrZ}{\operatorname{\tsf{id}_{\stsf{r}}^{\stsf{2}}}}
+\newcommand{\compr}{\mathrel{\circ_{\mkern-1mu\stsf{r}}}}
+\newcommand{\comprZ}{\mathrel{\circ_{\mkern-1mu\stsf{r}}^{\stsf{2}}}}
+\newcommand{\lookupr}{\operatorname{\tsf{lookup}_{\stsf{r}}}}
+\newcommand{\mlookuprZ}{\operatorname{^{\stsf{m}\mkern-1mu}\tsf{lookup}_{\stsf{r}}^{\stsf{2}}}}
+\newcommand{\lookuprZ}{\operatorname{\tsf{lookup}_{\stsf{r}}^{\stsf{2}}}}
 
 % Renaming
-\newcommand{\mren}{\operatorname{^{\ssm\mkern-1mu}\textsf{ren}}}
-\newcommand{\ren}{\operatorname{\textsf{ren}}}
-\newcommand{\renZ}{\operatorname{\textsf{ren}^{\ssZ}}}
-\newcommand{\mrennf}{\operatorname{^{\ssm\mkern-1mu}\textsf{ren}_{\ssnf}}}
-\newcommand{\mrenne}{\operatorname{^{\ssm\mkern-1mu}\textsf{ren}_{\ssne}}}
-\newcommand{\rennf}{\operatorname{\textsf{ren}_{\ssnf}}}
-\newcommand{\renne}{\operatorname{\textsf{ren}_{\ssne}}}
-\newcommand{\rennfZ}{\operatorname{\textsf{ren}_{\ssnf}^{\ssZ}}}
-\newcommand{\renneZ}{\operatorname{\textsf{ren}_{\ssne}^{\ssZ}}}
+\newcommand{\mren}{\operatorname{^{\stsf{m}\mkern-2mu}\tsf{ren}}}
+\newcommand{\ren}{\operatorname{\tsf{ren}}}
+\newcommand{\renZ}{\operatorname{\tsf{ren}^{\stsf{2}}}}
+\newcommand{\mrennf}{\operatorname{^{\stsf{m}\mkern-2mu}\tsf{ren}_{\stsf{nf}}}}
+\newcommand{\mrenne}{\operatorname{^{\stsf{m}\mkern-2mu}\tsf{ren}_{\stsf{ne}}}}
+\newcommand{\rennf}{\operatorname{\tsf{ren}_{\stsf{nf}}}}
+\newcommand{\renne}{\operatorname{\tsf{ren}_{\stsf{ne}}}}
+\newcommand{\rennfZ}{\operatorname{\tsf{ren}_{\stsf{nf}}^{\stsf{2}}}}
+\newcommand{\renneZ}{\operatorname{\tsf{ren}_{\stsf{ne}}^{\stsf{2}}}}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%% Substitution
+%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+
+% Substitution
 
 
+% \newcommand{\starr}{\text{\raisebox{-0.465pt}{\raisebox{0.5ex}{\scalebox{0.75}{\rotatebox[origin=c]{90}{$\star$}}}}}}
+
+\newcommand{\es}{\mathrel{\vdash^{\mkern-2mu\star}}}
 
 
+% XXX
 
 
-\newcommand{\es}{\mathrel{\vdash\star}}
+%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+
+% Semantics
+
+
+\newcommand{\M}{\mathfrak{M}}
+\newcommand{\Mc}{\mathfrak{M}_{\stsf{c}}}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\V}{\mathcal{V}}
+\newcommand{\ida}{\operatorname{\tsf{id}_{\stsf{a}}}}
+\newcommand{\compa}{\mathrel{\circ_{\stsf{a}}}}
+\newcommand{\accv}{\operatorname{\tsf{acc}_{\stsf{v}}}}
+\newcommand{\peek}[1]{\mathopen{\lfloor}{#1}\mathclose{\rfloor}}
+\newcommand{\peeka}[1]{\mathopen{\lfloor}{#1}\mathclose{\rfloor_{\mkern-2mu\stsf{a}}}}
+
+\newcommand{\mpeek}[1]{\mathopen{^{\stsf{m}\mkern-3mu}\lfloor}{#1}\mathclose{\rfloor}}
+% \newcommand{\peek}[1]{\mathopen{\lfloor}{#1}\mathclose{\rfloor}}
+\newcommand{\mpeeka}[1]{\mathopen{^{\stsf{m}\mkern-3mu}\lfloor}{#1}\mathclose{\rfloor_{\mkern-2mu\stsf{a}}}}
+% \newcommand{\peeka}[1]{\mathopen{\lfloor}{#1}\mathclose{\rfloor_{\stsf{a}}}}
+
+% \newcommand{\peekZ}{\operatorname{\tsf{peek}^{\stsf{2}}}}
+% \newcommand{\peekaZ}{\operatorname{\tsf{peek}_{\stsf{a}}^{\stsf{2}}}}
+
+% \newcommand{\mpeek}{\operatorname{^{\stsf{m}\mkern-2mu}\tsf{peek}}}
+% \newcommand{\peek}{\operatorname{\tsf{peek}}}
+% \newcommand{\mpeeka}{\operatorname{^{\stsf{m}\mkern-2mu}\tsf{peek}_{\stsf{a}}}}
+% \newcommand{\peeka}{\operatorname{\tsf{peek}_{\stsf{a}}}}
+
 \newcommand{\ee}{\mathrel{\Vdash}}
-\newcommand{\ees}{\mathrel{\Vdash\star}}
-\newcommand{\eee}{\mathrel{\Vvdash}}
-\newcommand{\ef}{\mathrel{\vDash}}
+\newcommand{\ees}{\mathrel{\Vdash^{\mkern-2mu\star}}}
+\newcommand{\mee}{\mathrel{^{\stsf{m}\mkern-7mu}\Vdash}}
+\newcommand{\dee}{\mathrel{^{\partial\mkern-7mu}\Vdash}}
+\newcommand{\mdee}{\mathrel{^{\stsf{m}\partial\mkern-7mu}\Vdash}}
+\newcommand{\dees}{\mathrel{^{\partial\mkern-7mu}\Vdash^{\mkern-2mu\star}}}
+\newcommand{\mdees}{\mathrel{^{\stsf{m}\partial\mkern-7mu}\Vdash^{\mkern-2mu\star}}}
 
-\renewcommand{\r}{\mathrel{\rightarrow}}
+% \newcommand{\eee}{\mathrel{\Vvdash}}
+% \newcommand{\eees}{\mathrel{\Vvdash^{\mkern-2mu\star}}}
+% \newcommand{\deee}{\mathrel{^{\partial\mkern-7mu}\Vvdash}}
+% \newcommand{\deees}{\mathrel{^{\partial\mkern-7mu}\Vvdash^{\mkern-2mu\star}}}
+
+\newcommand{\syn}{\operatorname{\tsf{syn}}}
+\newcommand{\sem}{\operatorname{\tsf{sem}}}
+
+\newcommand{\eeq}{\mathrel{\vDash}}
+
+\newcommand{\acc}{\operatorname{\tsf{acc}}}
+\newcommand{\dacc}{\operatorname{^{\partial\mkern-4mu}\tsf{acc}}}
+\newcommand{\mdacc}{\operatorname{^{\stsf{m}\partial\mkern-4mu}\tsf{acc}}}
+\newcommand{\daccs}{\operatorname{^{\partial\mkern-4mu}\tsf{acc}^{\star}}}
+\newcommand{\mdaccs}{\operatorname{^{\stsf{m}\partial\mkern-4mu}\tsf{acc}^{\star}}}
+
+\newcommand{\return}{\operatorname{\tsf{return}}}
+\newcommand{\bind}{\operatorname{\tsf{bind}}}
+
+% \newcommand{\reflect}[1]{\mathopen{\llbracket}{#1}\mathclose{\rrbracket}}
+\newcommand{\reflect}{\uparrow\mkern-4mu}
+\newcommand{\menv}{\operatorname{^{\stsf{m}\mkern-6mu}\rho}}
+\newcommand{\env}{\operatorname{\rho}}
 
 
-\newcommand{\eval}{\operatorname{\textsf{eval}}}
-\newcommand{\code}{\operatorname{\textsf{code}}}
-\newcommand{\N}{\mathbb{N}}
+%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+
+% Canonical model
 
 
-\newcommand{\Agda}{\textsc{Agda}}
-\newcommand{\lambdabox}{\lambda^{\mkern-1mu\sq\mkern-3mu}}
-\newcommand{\Fomega}{\textbf{F}_{\omega}}
-\renewcommand{\L}{\textbf{L}}
+\newcommand{\canon}{\operatorname{\tsf{canon}}}
+
+% \newcommand{\reifyc}{\operatorname{\tsf{reify}_{\mkern-1mu\stsf{c}}}}
+% \newcommand{\reflectc}[1]{\mathopen{\llbracket}{#1}\mathclose{\rrbracket_{\mkern-1mu\stsf{c}}}}
+\newcommand{\reifyc}{\downarrow_{\stsf{c}}\mkern-4mu}
+\newcommand{\reflectc}{\uparrow_{\mkern-2mu\stsf{c}}\mkern-4mu}
+
+\newcommand{\mide}{\operatorname{^{\stsf{m}\mkern-2mu}\tsf{id}_{\stsf{e}}}}
+\newcommand{\ide}{\operatorname{\tsf{id}_{\stsf{e}}}}
+% \newcommand{\reify}{\operatorname{\tsf{reify}}}
+\newcommand{\reify}{\downarrow\mkern-4mu}
+
+\newcommand{\nf}{\operatorname{\tsf{nf}}}
+
+
+%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+
+% Conclusion
+
+
+\newcommand{\Taxiom}{\operatorname{\tsf{T}}}
+\newcommand{\code}{\operatorname{\tsf{code}}}
+\newcommand{\eval}{\operatorname{\tsf{eval}}}
+
+\newcommand{\Kaxiom}{\operatorname{\tsf{K}}}
+\newcommand{\dist}{\operatorname{\tsf{dist}}}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,9 +296,9 @@
 \begin{frontmatter}
 
 
-\title{Introspective Kripke models and\\normalisation by evaluation for the $\lambdabox$-calculus}
+\title{Introspective Kripke models\\and normalisation-by-evaluation\\for the $\lambdabox$-calculus}
 
-\author{Mi{\"e}tek Bak\thanksref{email}}
+\author{Mi\"{e}tek Bak\thanksref{email}}
 
 \address{Least Fixed Ltd, Cambridge, UK}
 
@@ -160,11 +306,11 @@
 
 
 \begin{abstract}
-  We consider the Pfenning-Davies system of natural deduction: the $\lambdabox$-calculus, an extension of the simply typed $\lambda$-calculus with an intensional quotation modality, which corresponds to the necessity fragment of the modal logic S4.  We present a class of introspective Kripke models, and prove that the syntax of the $\lambdabox$-calculus is sound and complete with respect to these models.  All proofs are fully formalised in \Agda, a dependently typed total functional programming language, and have been constructed interactively, in dialogue with the machine.  The composition of the soundness and completeness proofs is a program that performs normalisation by evaluation for the $\lambdabox$-calculus.
+  We consider the $\lambdabox$-calculus, an extension of the simply typed $\lambda$-calculus with a \emph{type of quoted programs} that corresponds to the $\sq$ connective of the modal logic S4.  We present a novel class of \emph{introspective Kripke models,} constructed in continuation-passing style, and prove the syntax of the $\lambdabox$-calculus sound and complete with respect to these models.  We fully formalise the arguments in \textsc{Agda}, a dependently typed total functional programming language based on intensional type theory.  The composition of our soundness and completeness proofs is an \textsc{Agda} program that performs normalisation-by-evaluation for the $\lambdabox$-calculus.
 \end{abstract}
 
 \begin{keyword}
-  constructive logic, completeness, Curry-Howard correspondence, intensionality, intuitionistic logic, Kripke semantics, modal logic S4, normalisation by evaluation, quotation, typed $\lambda$-calculus
+  constructive logic, continuation-passing style, completeness, Curry-Howard correspondence, intensionality, intuitionistic logic, Kripke semantics, meta-programming, modal logic S4, normalisation-by-evaluation, quotation, self-interpretation, typed $\lambda$-calculus
 \end{keyword}
 
 \end{frontmatter}
@@ -174,245 +320,480 @@
 
 
 \section{Introduction}
-XXX
 
-\subsection*{Related work}
-XXX
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\section{Syntax}
-XXX
-
-
-\begin{definition}
-  Types.
-  
-$\T$ $\ast$ $\R$ $\sq$
-\end{definition}
-
-
-\begin{definition}
-  Contexts.
-  
-$\C$ $\CZ$ $\O$
-\end{definition}
-
-
-\begin{definition}
-  Variables.
-  
-$\ni$ $\zero$ $\suc$
-\end{definition}
-
-
-\begin{definition}
-  Syntactic entailment.
-  
-$\e$ $\mvar$ $\var$ $\lam$ $\quo{-}$ $\unquo{-}{-}$ $\mvO$ $\mvI$ $\mvZ$ $\vO$ $\vI$ $\vZ$
-\end{definition}
-
-
-\begin{definition}
-  Normal and neutral forms.
-  
-$\enf$ $\ene$ $\ne$ $\embnf$ $\embne$
-\end{definition}
-
-
-\begin{definition}
-  Convertibility.
-  
-$\sim$
-\end{definition}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\subsection*{Renaming}
-XXX
-
-
-\begin{definition}
-  Order-preserving embeddings.
-  
-$\geq$ $\geqZ$ $\doner$ $\wkr$ $\liftr$
-\end{definition}
-
-
-$\mwkrZ$ $\wkrZ$ $\infr$ $\idr$ $\idrZ$ $\Or$ $\lookupr$ $\mlookuprZ$ $\lookuprZ$
-
-
-\begin{lemma}[Renaming]
-
-\end{lemma}
-$\mren$ $\ren$ $\renZ$ $\mrennf$ $\mrenne$ $\rennf$ $\renne$ $\rennfZ$ $\renneZ$
-\begin{proof}
-  XXX
-\end{proof}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\subsection*{Substitution}
-XXX
-
-
-\begin{definition}
-  Simultaneous substitutions.
-  
-XXX
-\end{definition}
-
-
-\begin{lemma}[Substitution]
-
-XXX
-\end{lemma}
-\begin{proof}
-  XXX
-\end{proof}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\section{Semantics}
-XXX
-
-
-\begin{definition}
-  Introspective Kripke models.
-  
-XXX
-\end{definition}
-
-
-\begin{definition}
-  Values.
-  
-XXX
-\end{definition}
-
-
-\begin{definition}
-  Environments.
-
-XXX
-\end{definition}
-
-
-\begin{definition}
-  Semantic entailment.
-
-XXX
-\end{definition}
-
-
-\begin{lemma}[Accessibility]
-
-XXX
-\end{lemma}
-\begin{proof}
-  XXX
-\end{proof}
-
-
-\begin{theorem}[Soundness]
-  
-XXX
-\end{theorem}
-\begin{proof}
-  XXX
-\end{proof}
-
-
-\begin{definition}
-  Canonical model.
-  
-XXX
-\end{definition}
-
-
-\begin{lemma}[Canonical soundness]
-  XXX
-\end{lemma}
-\begin{proof}
-  XXX
-\end{proof}
-
-
-\begin{lemma}[Canonical completeness]
-  XXX
-\end{lemma}
-\begin{proof}
-  XXX
-\end{proof}
-
-
-\begin{theorem}[Completeness]
-  
-XXX
-\end{theorem}
-\begin{proof}
-  XXX
-\end{proof}
-
-
-\begin{corollary}[Normalisation]
-  
-XXX
-\end{corollary}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\section{Conclusion}
-
-We presented a class of introspective Kripke models, and gave a fully formalised proof of soundness and completeness of the syntax of the $\lambdabox$-calculus with respect to these models.
-
-The author believes that this work contains the first published \emph{constructive} proof of completeness for the modal logic S4.  The proofs given by Ono \cite{Ono77}, Bo\v{z}i\'{c} and Do\v{s}en \cite{BozicD84}, Fischer Servi \cite{FischerServi84}, Ewald \cite{Ewald86}, Plotkin and Stirling \cite{PlotkinS86}, Wijesekera \cite{Wijesekera90}, Simpson \cite{Simpson94}, and Alechina \emph{et al.} \cite{AlechinaMPR01} are proceed by contradiction.
-
-Additionally, the author believes that the normalisation by evaluation program presented in this work is the first published \emph{direct} proof of weak normalisation for the $\lambdabox$-calculus.  A proof of strong normalisation for contextual modal type theory (CMTT), which can be viewed as an extension of the $\lambdabox$-calculus, has been given by Nanevski, Pfenning, and Pientka \cite{NanevskiPP08}.
-
-\pagebreak
-
-
-\subsection*{On self-interpretation}
-
-Self-interpretation for a total functional programming language has been almost universally considered impossible, until Brown's and Palsberg's \cite{BrownP16} demonstration of a self-interpreter for System $\Fomega$.  Bauer \cite{Bauer16} gives a precise definition of a Brown-Palsberg self-interpreter, which we adopt here.
-
-Following Bauer, we write $\mathfrak{g}(M)$ for the G\"{o}del code of a term $M$, which is a suitable encoding of $M$ by a natural number, and $\underline{n}$ for the numeral that represents a natural number $n$.
-
-\begin{definition}
-  A \emph{Brown-Palsberg self-interpreter} is an evaluation function, $\textsf{t} : \O \e \sq A \R A$, such that $\textsf{t} \quo{M} \bconv M$ for all $M : \O \e A$.  A quotation operator is \emph{normal} when $\quo{M}$ is $\beta$-normal for all $M : \O \e A$, and \emph{acceptable} when there is a G\"{o}del-coding function, $\textsf{g} : \O \e \sq A \R \underline{\N}$, such that $\textsf{g} \quo{M} = \underline{\mathfrak{g}(M)}$ for all $M : \O \e A$.
-\end{definition}
-
-\begin{theorem}
-  The $\lambdabox$-calculus has a Brown-Palsberg self-interpreter.
-\end{theorem}
-\begin{proof}
-  Define $\textsf{t} = \lam (\unquo{\vO}{\mvO})$.
-\end{proof}
-
-It is clear that the $\lambdabox$-calculus has a normal quotation operator.  However
-
-
+I'd like to have a total functional programming language that works like Lisp; that is, a language that allows programs to be quoted, inspected, and evaluated, in which types are propositions and programs are proofs.  Some people have been using the modal logic S4 for similar purposes.  I quickly found a reasonable $\lambda$-calculus based on S4, that is, the $\lambdabox$-calculus, and I set out to write an interpreter for it.
+\begin{gather*}
+  \tyrule{\mvar i}{\Delta \ni A}
+                  {\Delta; \Gamma \e A}
+  \qquad
+  \tyrule{\quo{M}}{\Delta; \O \e A}
+                  {\Delta; \Gamma \e \sq A}
+  \qquad
+  \tyrule{\unquo{M}{N}}{\Delta; \Gamma \e \sq A}{\Delta, A; \Gamma \e C}
+                       {\Delta; \Gamma \e C}
+\end{gather*}
+It's well-known that if we prove a language sound and complete with respect to some class of models, then an interpreter falls out --- as long as the proofs are constructive.  Unfortunately, all I could find was classical proofs of completeness for S4, and so I decided to do the proofs myself.
+
+It's also well-known how to prove STLC sound and complete with respect to intuitionistic Kripke semantics.  Since the $\lambdabox$-calculus is an extension of STLC, I thought it should be simple to extend intuitionistic Kripke semantics and obtain the desired proofs.  Famous last words!  Eventually, I realised that the interpretation of $\sq A$ should be a syntactically-justified interpretation of $A$; that is, a pair consisting of a derivation of $A$ and an interpretation of $A$.
+\begin{gather*}
+  \Delta; \Gamma \mee A\ =\ \Delta; \O \e A\,\times\,\Delta; \Gamma \ee A\\[0.5\baselineskip]
+  \Delta; \Gamma \ee \sq A\ =\ \forall \Delta' \geq \Delta, \Gamma' \geq \Gamma.\ \Delta'; \Gamma' \mee A
+\end{gather*}
+This puts the syntax in the semantics --- peeks beneath the veil sooner than expected.  We can still keep the abstraction of a Kripke semantics, as long as we can discard it when we need to.
+\begin{gather*}
+  \M\ =\ \langle\,\W,\,\V,\,\binop{\ge},\,\ida,\,\binop{\compa},\,\accv,\,\peek{-},\,\peeka{-}\,\rangle\\[0.5\baselineskip]
+  \M\,|\,w \mee A\ =\ \mpeek{w}; \O \e A\,\times\,\M\,|\,w \ee A\\[0.5\baselineskip]
+  \M\,|\,w \ee \sq A\ =\ \forall w' \ge w.\ \M\,|\,w' \mee A
+\end{gather*}
+However, adding this interpretation to intuitionistic Kripke semantics allows us to prove soundness, but not completeness.  The problem with proving completeness with respect to the modified semantics is similar to the problem with proving completeness of full STLC, with disjunction and the empty type.  Some people have already come up with a solution to that, which is a CPS transformation of the semantics.
+\begin{gather*}
+  \M\,|\,w \dee A\ =\ \forall C, w' \ge w.\ \prftree{\forall w'' \ge w'.\ \prftree{\M\,|\,w'' \ee A}{\lfloor w'' \rfloor \enf C}}{\lfloor w' \rfloor \enf C}\\[0.5\baselineskip]
+  \M\,|\,w \mdee A\ =\ \mpeek{w}; \O \e A\,\times\,\M\,|\,w \dee A\\[0.5\baselineskip]
+  \M\,|\,w \ee \sq A\ =\ \forall w' \ge w.\ \M\,|\,w' \mdee A
+\end{gather*}
+It turns out that CPS transforming the modified semantics allows us to prove soundness and completeness, and so, to write an interpreter for the $\lambdabox$-calculus.  I've done that now, and I think this interpreter can be used to decide $\beta\eta$-equivalence according to the following convertibility relation, but I haven't managed to prove this yet.
+\begin{gather*}
+  \Delta; \Gamma \eeq A\ =\ \forall \M, w.\ \prftree{\M\,|\,w \mdees \Delta}{\M\,|\,w \dees \Gamma}{\M\,|\,w \dee A}\\[\baselineskip]
+  \tyrule{\reflect{-}}{\Delta; \Gamma \e A}{\Delta; \Gamma \eeq A}
+  \qquad
+  \tyrule{\reify{-}}{\Delta; \Gamma \eeq A}{\Delta; \Gamma \enf A}
+\end{gather*}
+To prove completeness, we need a canonical model.  We first prove soundness and completeness with respect to this canonical model, and then use that to prove completeness proper.
+\begin{gather*}
+  \Mc\ =\ \langle\,\CZ,\,\postop{\enf \ast},\,\binop{\geqZ},\,\idrZ,\,\binop{\comprZ},\,\rennfZ,\,\id,\,\id\,\rangle\\[0.5\baselineskip]
+  \tyrule{\reflectc{-}}{\Delta; \Gamma \ene A}{\Delta; \Gamma \dee A}
+  \qquad
+  \tyrule{\reifyc{-}}{\Delta; \Gamma \dee A}{\Delta; \Gamma \enf A}
+\end{gather*}
+%
+%
+% Some say that in \textsc{Lisp}, code is data.  Instead, we say that code may be $\quot$ed to become data, and data may be $\eval$uated to become code.
+
+
+% McCarthy \emph{et al.} \cite{McCarthyAEHL62}.  Turner \cite{Turner04}.  Sheard \cite{Sheard01}.  Pfenning and Davies \cite{PfenningD01}.  Davies and Pfenning \cite{DaviesP01}.  C.~Coquand \cite{Coquand02}.  Norell \cite{Norell07}.  Stump \cite{Stump16}.
+%
+%
+% %.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+%
+%
+% \subsection*{Related work}
+%
+% Syntax.  Bierman and de~Paiva \cite{BiermanP00}.  Dyckhoff \cite{Dyckhoff16}.  Girard \emph{et al.} \cite{GirardTL89}.  \cite{Kovacs17}.
+%
+% Normalisation-by-evaluation.  Martin-L\"{o}f \cite{MartinLof75}.  Berger and Schwichtenberg \cite{BergerS91}.  C.~Coquand \cite{Coquand93}.  Dybjer and Filinski \cite{DybjerF02}.  Abel \cite{Abel13}.  Wadler \cite{Wadler15}.
+%
+% Semantics.  Ili\'{c} \cite{Ilic13}.  Danvy \cite{Danvy96}.
+%
+% Kripke \cite{Kripke65}.  Ili\'{c} \cite{Ilic13}.  Iemhoff \cite{Iemhoff01}.  Boolos \cite{Boolos94}.  T.~Coquand and Dybjer \cite{CoquandD97}.  Gabbay and Nanevski \cite{GabbayN13}.  Art\"{e}mov \cite{Artemov01}.  G\"{o}del \cite{Godel33}.  McKinsey and Tarski \cite{McKinseyT48}.
+%
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+% \section{Syntax}
+%
+% We begin by formalising the syntax of the $\lambdabox$-calculus.
+%
+%
+% \begin{definition}
+%   Types.
+%
+% $\T$ $\ast$ $\binop{\R}$ $\sq$
+% \end{definition}
+%
+%
+% \begin{definition}
+%   Contexts.
+%
+% $\C$ $\CZ$ $\O$
+% \end{definition}
+%
+%
+% \begin{definition}
+%   Variables.  De Bruijn \cite{DeBruijn72}.
+%
+% $\binop{\ni}$ $\zero$ $\suc$
+% \end{definition}
+%
+%
+% \begin{definition}
+%   Syntactic entailment.  Unlike Pfenning and Davies \cite{PfenningD01}, we define only the well-typed terms.  Altenkirch and Reus \cite{AltenkirchR99}.
+%
+%
+%
+% $\binop{\e}$ $\mvar$ $\var$ $\lam$ $\binop{\app}$ $\quo{-}$ $\unquo{-}{-}$ $\mvO$ $\mvI$ $\mvZ$ $\vO$ $\vI$ $\vZ$
+% \end{definition}
+%
+%
+% \begin{definition}
+%   Normal and neutral forms.  Altenkirch \cite{Altenkirch93}.  Joachimski and Matthes \cite{JoachimskiM03}.
+%
+% $\binop{\enf}$ $\binop{\ene}$ $\ne$ $\embnf$ $\embne$
+% \end{definition}
+%
+%
+% \begin{definition}
+%   Convertibility.
+%
+% $\binop{\conv}$
+% \end{definition}
+%
+%
+% %.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+%
+%
+% \subsection*{Renaming}
+% XXX
+%
+%
+% \begin{definition}
+%   Order-preserving embeddings.  Altenkirch, Hofmann, and Streicher \cite{AltenkirchHS95}.  McBride \cite{McBride05}.  Chapman \cite{Chapman09}.
+%
+% $\binop{\geq}$ $\binop{\geqZ}$ $\doner$ $\wkr$ $\liftr$
+% \end{definition}
+%
+%
+% $\mwkrZ$ $\wkrZ$ $\infr$ $\idr$ $\idrZ$ $\binop{\compr}$ $\lookupr$ $\mlookuprZ$ $\lookuprZ$
+%
+%
+% \begin{lemma}[Renaming]
+%
+% $\mren$ $\ren$ $\renZ$ $\mrennf$ $\mrenne$ $\rennf$ $\renne$ $\rennfZ$ $\renneZ$
+% \begin{proof}
+%   XXX
+% \end{proof}
+% \end{lemma}
+%
+%
+% %.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+%
+%
+% \subsection*{Substitution}
+% XXX
+%
+%
+% \begin{definition}
+%   Simultaneous substitutions.
+%
+% XXX
+% \end{definition}
+%
+%
+% \begin{lemma}[Substitution]
+%
+% XXX
+% \begin{proof}
+%   XXX
+% \end{proof}
+% \end{lemma}
+%
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+% \section{Semantics}
+%
+%
+%
+% \begin{definition}
+%   Introspective Kripke models.
+%
+% XXX
+% \end{definition}
+%
+%
+% \begin{definition}
+%   Values.
+%   \begin{align*}
+%     & \binop{\ee} \: \W \r \T \r \Set\\[0.5\baselineskip]
+%     &
+%   \end{align*}
+% \end{definition}
+%
+%
+% \begin{definition}
+%   Environments.  XXX.
+%   \begin{align*}
+%     & \binop{\dees} \: \W \r \C \r \Set\\
+%     & w \dees \Xi = \All\,(w \preop{\dee})\,\Xi
+%   \end{align*}
+%   Justified environments.  XXX.
+%   \begin{align*}
+%     & \binop{\mdees} \: \W \r \C \r \Set\\
+%     & w \mdees \Xi = \All\,(w \preop{\mdee})\,\Xi
+%   \end{align*}
+% \end{definition}
+%
+%
+% \begin{lemma}
+%   Projections.  XXX.
+%   \begin{align*}
+%     & \tyrule{\syn}{w \mdees \Xi}
+%                    {\mpeek w \; \O \es \Xi}
+%       \qquad
+%       \tyrule{\sem}{w \mdees \Xi}
+%                    {w \dees \Xi}
+%   \end{align*}
+% \end{lemma}
+%
+%
+% \begin{definition}
+%   Semantic entailment.  XXX.
+%   \begin{align*}
+%     & \binop{\eeq} \: \CZ \r \T \r \Set\\
+%     & \eqrule{\Delta \; \Gamma \eeq A}{w \mdees \Delta}{w \dees \Gamma}
+%                                       {w \dee A}
+%   \end{align*}
+% \end{definition}
+%
+%
+% \begin{lemma}
+%   Accessibility.  XXX.
+%   \begin{align*}
+%     & \tyrule{\acc}{w' \ge w}{w \ee A}
+%                    {w' \ee A}
+%       \qquad
+%       \tyrule{\dacc}{w' \ge w}{w \dee A}
+%                     {w' \dee A}
+%   \end{align*}\vspace{-1.5\baselineskip}
+%   \begin{align*}
+%     & \tyrule{\mdacc}{w' \ge w}{w \mdee A'}
+%                      {w' \mdee A}
+%   \end{align*}
+%   \begin{proofalign*}
+%     & \acc = \dots\\[0.5\baselineskip]
+%     & \dacc = \dots\\[0.5\baselineskip]
+%     & \mdacc = \dots
+%   \end{proofalign*}
+% \end{lemma}
+%
+%
+% \begin{theorem}[Soundness]
+%   XXX.
+%   \begin{align*}
+%     & \tyrule{\reflect{-}}{\Delta \; \Gamma \e A}
+%                           {\Delta \; \Gamma \eeq A}
+%   \end{align*}
+%   \begin{proofalignat*}{2}
+%     & \reflect{\mvar i}      &\,\menv \env = \dots\\
+%     & \reflect{\var i}       &\,\menv \env = \dots\\
+%     & \reflect{\lam M}       &\,\menv \env = \dots\\
+%     & \reflect{M \app N}     &\,\menv \env = \dots\\
+%     & \reflect{\quo{M}}      &\,\menv \env = \dots\\
+%     & \reflect{\unquo{M}{N}} &\,\menv \env = \dots
+%   \end{proofalignat*}
+% \end{theorem}
+%
+%
+% %.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+%
+%
+% \subsection*{Canonical model}
+%
+%
+% \begin{definition}
+%   Canonical model.  XXX.
+%   \begin{align*}
+%     & \canon \widecolon \mathfrak{M}\\
+%     & \canon =
+%       \begin{cases}
+%         \mathcal{W}    &\mkern-15mu = \CZ\\
+%         \mathcal{G}    &\mkern-15mu = \postop{\enf \ast}\\
+%         \binop{\ge}    &\mkern-15mu = \binop{\geqZ}\\
+%         \ida           &\mkern-15mu = \idrZ\\
+%         \binop{\compa} &\mkern-15mu = \binop{\comprZ}\\
+%         \accG          &\mkern-15mu = \rennfZ\\
+%         \peekZ         &\mkern-15mu = \id\\
+%         \peekaZ        &\mkern-15mu = \id
+%       \end{cases}
+%   \end{align*}
+% \end{definition}
+%
+%
+% \begin{lemma}
+%   Canonical reification and reflection.  XXX.
+%   \begin{align*}
+%     & \tyrule{\reifyc}{\Delta \; \Gamma \dee A}
+%                       {\Delta \; \Gamma \enf A}
+%       \qquad
+%       \tyrule{\reflectc{-}}{\Delta \; \Gamma \ene A}
+%                            {\Delta \; \Gamma \dee A}
+%   \end{align*}
+%   \begin{proof}
+%     XXX.
+%     \begin{alignat*}{4}
+%       & \reifyc      &&\,\{\ast\}   &&\,\kappa &&= \kappa \idrZ\,(\lambda\,\eta\,M \r M)\\
+%       & \reifyc      &&\,\{A \R B\} &&\,\kappa &&= \kappa \idrZ\,(\lambda\,\eta\,f \r \lam\,(\reifyc\,(f\,(\wkrZ \idrZ)\,\reflectc{\var \zero}))\\
+%   %    & \reifyc      &&\,\{A \wedge B\}  &&\,\kappa &&= \kappa \idrZ\,(\lambda\,\eta\,p \r \reifyc\,(\projI\,p) \comma \reifyc\,(\projZ\, p))\\
+%       & \reifyc      &&\,\{\sq A\}  &&\,\kappa &&= \kappa \idrZ\,(\lambda\,\eta\,f \r \quo{\projI\,(f \idrZ)})
+%     \end{alignat*}
+%     XXX.
+%     \begin{alignat*}{3}
+%       & \reflectc{M} &&\,\{\ast\}   && = \return\,(\ne M)\\
+%       & \reflectc{M} &&\,\{A \R B\} && = \return\,(\lambda\,\eta\,\kappa \r \reflectc{\renneZ \eta\,M \app \reifyc \kappa})\\
+%       & \reflectc{M} &&\,\{\sq A\}  && = \lambda\,\eta\,f \r \ne\,(\unquo{\renneZ \eta\,M}\,(f\,(\mwkrZ \idrZ)\,(\lambda\,\eta' \r\\
+%       &              &&             && \qquad \mvar\,(\mlookuprZ \eta' \zero) \comma \reflectc{\mvar\,(\mlookuprZ \eta' \zero)})))
+%     \end{alignat*}
+%     \vspace{-4.25\baselineskip}\[\]%
+%   \end{proof}
+% \end{lemma}
+%
+%
+% \begin{lemma}
+%   Justified environment of reflected modal variables.  Environment of reflected variables.  XXX.
+%   \begin{align*}
+%     & \mide \: \Delta \; \Gamma \mdees \Delta
+%       \qquad
+%       \ide \: \Delta \; \Gamma \dees \Gamma
+%   \end{align*}
+% \end{lemma}
+%
+% \begin{theorem}[Completeness]
+%   XXX.
+%   \begin{align*}
+%     & \tyrule{\reify}{\Delta \; \Gamma \eeq A}
+%                      {\Delta \; \Gamma \enf A}
+%   \end{align*}
+%   \begin{proofalign*}
+%     & \reify \mathfrak{a} = \reifyc\,(\mathfrak{a} \mide \ide)
+%   \end{proofalign*}
+% \end{theorem}
+%
+%
+% \begin{corollary}[Normalisation]
+%   We obtain a normalisation program as composition of the soundness and completeness proofs.
+%   \begin{align*}
+%     & \tyrule{\nf}{\Delta \; \Gamma \e A}
+%                   {\Delta \; \Gamma \enf A}
+%   \end{align*}
+%   \begin{proofalign*}
+%     & \nf = \reify \comp \reflect{-}
+%   \end{proofalign*}
+% \end{corollary}
+%
+%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+% \section{Conclusion}
+%
+% I presented a class of introspective Kripke models, and gave a fully formalised proof of soundness and completeness of the syntax of the $\lambdabox$-calculus with respect to these models.
+%
+% As far as I know, this work contains the first published constructive proof of completeness for a $\lambda$-calculus that corresponds to the modal logic S4.  The proofs given by Ono \cite{Ono77}, Bo\v{z}i\'{c} and Do\v{s}en \cite{BozicD84}, Fischer Servi \cite{FischerServi84}, Ewald \cite{Ewald86}, Plotkin and Stirling \cite{PlotkinS86}, Wijesekera \cite{Wijesekera90}, Simpson \cite{Simpson94}, and Alechina \emph{et al.} \cite{AlechinaMPR01} all proceed by contradiction.
+%
+% Additionally, I think that the normalisation-by-evaluation program presented in this work is the first published direct proof of weak normalisation for the $\lambdabox$-calculus.  A proof of strong normalisation for \textbf{CMTT}, which is an extension of the $\lambdabox$-calculus, has been given by Nanevski, Pfenning, and Pientka \cite{NanevskiPP08}.
+%
+% The syntax of \textbf{CMTT} is also sound and complete with respect to introspective Kripke models, given an appropriately amended definition of values.  Showing this remains future work.
+%
+%
+% %.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
+%
+%
+% \subsection*{Self-interpretation}
+%
+% Self-interpretation for a total functional programming language, almost universally believed to be impossible, has been demonstrated for System $\textbf{F}_{\omega}$ by Brown and Palsberg \cite{BrownP16}, but not without controversy.  Bauer \cite{Bauer16} gives a precise definition of a Brown-Palsberg self-intepreter, which we adapt here.
+%
+% We write $\mathfrak{G}(M)$ for the G\"{o}del code of a program $M$, which is a suitable encoding of $M$ by a natural number, and $\underline{n}$ for the numeral that represents $n \in \mathbb{N}$.
+%
+% \begin{definition}\label{normality}
+%   A quotation operator, \tyrule{\quo{-}}{\O \e A}{\Delta \; \Gamma \e \sq A}, is \emph{normal} when $\quo{M}$ is $\beta$-normal for all $M \: \O \e A$, and \emph{acceptable} when there is a G\"{o}del-coding function, $\code \: \Delta \; \Gamma \e \sq A \R \underline{\mathbb{N}}$, such that $\code \app \quo{M} = \underline{\smash{\mathfrak{G}(M)}}$ for all $M \: \O \e A$.
+% \end{definition}
+%
+% \begin{definition}
+%   A \emph{self-interpreter} is an evaluation function, $\eval \: \Delta \; \Gamma \e \sq A \R A$, such that $\eval \app \quo{M} \bconv M$ for all $M \: \O \e A$.
+% \end{definition}
+%
+% \begin{theorem}
+%   The $\lambdabox$-calculus has a self-interpreter.
+%   \begin{proofalign*}
+%     & \eval \widecolon \Delta \; \Gamma \e \sq A \R A\\
+%     & \eval = \lam (\unquo{\vO}{\mvO})
+%   \end{proofalign*}
+% \end{theorem}
+%
+% It should come as no surprise that the $\lambdabox$-calculus has a self-interpreter, since $\Taxiom = \sq A \R A$ is an axiom of S4.  Moreover, a similar self-interpreter is necessarily present in every $\lambda$-calculus that corresponds to a modal logic in which $\Taxiom$ holds, such as \textbf{CMTT} \cite{NanevskiPP08}, or the intensional $\lambda$-calculus of Art\"{e}mov and Bonelli \cite{ArtemovB07}.
+%
+% Bauer's statement of normality is a formal expression of the slogan \emph{`code is data',} while acceptability is representative of intensional code analysis: the ability of meta-programs to inspect and deconstruct quoted programs.  In the \textsc{Lisp} programming language, due to McCarthy \emph{et al.} \cite{McCarthyAEHL62}, the \texttt{quote} special form is both normal and acceptable.  In the $\lambdabox$-calculus, the quotation introduction rule, $\quo{-}$, is normal, but is not acceptable: the definition of $\lambdabox$-convertibility does forbid normalisation under $\quo{-}$, but there is no method by which quoted programs could be inspected, deconstructed, or tested for equality.
+%
+% The Kripke axiom, $\Kaxiom = \sq (A \R B) \R \sq A \R \sq B$, also known as the distributivity axiom, is sometimes referred to as `normality', since it holds in every normal modal logic.  To avoid confusion, we will only refer to the Kripke axiom as $\Kaxiom$.
+%
+% Bauer considers amending the definition of a self-interpreter to require a distribution function, $\dist \: \Delta \; \Gamma \e \Kaxiom$, such that $\dist \app \quo{M} \app \quo{N} \bconv \quo{M \app N}$ for all $M \: \Delta \; \Gamma \e A \R B$, $N \: \Delta \; \Gamma \e A$.  Since $\Kaxiom$ is an axiom of S4, the $\lambdabox$-calculus has $\dist = \lam (\lam (\unquo{\vI}{(\unquo{\vO}{\quo{\mvI \app \mvO}})}))$, and continues to enjoy self-interpretation under the amended definition.
+%
+% Intensional code analysis, identified by Sheard \cite{Sheard01} as a research challenge in meta-programming, has been investigated in a nominal setting by Nanevski \cite{Nanevski02,Nanevski04}, and as part of a dependently typed $\lambda$-calculus for the logical framework by Pientka and Abel \cite{PientkaA15}.  I think that further investigation of \textbf{LP} \cite{Artemov01} will offer additional insight into this challenge.
+
+
+%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.%.
 
 
 \subsection*{Acknowledgements}
 
-The author is deeply grateful to Andreas Abel, Guillaume Allais, Ahmad Salim Al-Sibahi, Roy Dyckhoff, Michael Gabbay, Paolo G. Giarrusso, Tom Jack, Roman Kireev, Jerzy Marcinkowski, Darryl McAdams, Conor McBride, Dominic Orchard, Maciej Pir\'{o}g, Ida Szubert, Tarmo Uustalu, Andrea Vezzosi, and Tomasz Wierzbicki, for many fruitful discussions over the years.
+The author is deeply grateful to Andreas Abel, Guillaume Allais, Ahmad Salim Al-Sibahi, Roy Dyckhoff, Michael Gabbay, Paolo Giarrusso, Tom Jack, Roman Kireev, Jerzy Marcinkowski, Darryl McAdams, Conor McBride, Dominic Orchard, Maciej Pir\'{o}g, Ida Szubert, Tarmo Uustalu, Andrea Vezzosi, and Tomasz Wierzbicki, for many fruitful discussions over the years.
 
-Furthermore, the author thanks Sergei Art\"emov, Andrej Bauer, Jacques Carette, Danko Ili\'{c}, Alex Kavvos, and the anonymous reviewers, for comments that helped improve this work.
+Furthermore, the author thanks Sergei Artemov, Andrej Bauer, Jacques Carette, Danko Ilik, Alex Kavvos, the anonymous reviewers, and the participants of IMLA'17, for comments that helped improve this work.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% TODO: Remove this!
+\subsection*{Citations}
+
+Abel 2013 \cite{Abel2013}.
+Alechina \emph{et~al.} 2001 \cite{AlechinaMPR2001}.
+Altenkirch 1993 \cite{Altenkirch1993}.
+Altenkirch, Hofmann, and Streicher 1995 \cite{AltenkirchHS1995}.
+Altenkirch and Reus 1999 \cite{AltenkirchR1999}.
+Artemov 2001 \cite{Artemov2001}.
+Artemov and Bonelli 2007 \cite{ArtemovB2007}.
+Bauer 2016 \cite{Bauer2016}.
+Berger and Schwichtenberg 1991 \cite{BergerS1991}.
+Bierman and de~Paiva 2000 \cite{BiermanP2000}.
+Boolos 1994 \cite{Boolos1994}.
+Bo\v{z}i\'{c} and Do\v{s}en 1984 \cite{BozicD1984}.
+Brown and Palsberg 2016 \cite{BrownP2016}.
+Chapman 2009 \cite{Chapman2009}.
+C.~Coquand 1993 \cite{Coquand1993}.
+C.~Coquand 2002 \cite{Coquand2002}.
+T.~Coquand and Dybjer 1997 \cite{CoquandD1997}.
+Danvy 1996 \cite{Danvy1996}.
+Danvy, Keller, and Puech 2014 \cite{DanvyKP2014}.
+Davies and Pfenning 2001 \cite{DaviesP2001}.
+de~Bruijn 1972 \cite{DeBruijn1972}.
+Dybjer and Filinski 2002 \cite{DybjerF2002}.
+Dyckhoff 2016 \cite{Dyckhoff2016}.
+Ewald 1986 \cite{Ewald1986}.
+Fischer Servi 1984 \cite{FischerServi1984}.
+Gabbay and Nanevski 2013 \cite{GabbayN2013}.
+Girard \emph{et~al.} \cite{GirardTL1989}.
+G\"{o}del 1933 \cite{Goedel1933}.
+Iemhoff 2001 \cite{Iemhoff2001}.
+Ilik 2010 \cite{Ilik2010}.
+Ilik 2013 \cite{Ilik2013}.
+Joachimski and Matthes 2003 \cite{JoachimskiM2003}.
+Kovacs 2017 \cite{Kovacs2017}.
+Kripke 1965 \cite{Kripke1965}.
+Lindley 2005 \cite{Lindley2005}.
+Martin-L\"{o}f 1975 \cite{MartinLoef1975}.
+McBride 2005 \cite{McBride2005}.
+McCarthy \emph{et~al.} 1962 \cite{McCarthyAEHL1962}.
+McKinsey and Tarski 1948 \cite{McKinseyT1948}.
+Nanevski 2002 \cite{Nanevski2002}.
+Nanevski 2004 \cite{Nanevski2004}.
+Nanevski, Pfenning, and Pientka 2008 \cite{NanevskiPP2008}.
+Norell 2007 \cite{Norell2007}.
+Ono 1977 \cite{Ono1977}.
+Pfenning and Davies 2001 \cite{PfenningD2001}.
+Pientka and Abel 2015 \cite{PientkaA2015}.
+Plotkin and Stirling 1986 \cite{PlotkinS1986}.
+Sheard 2001 \cite{Sheard2001}.
+Simpson 1994 \cite{Simpson1994}.
+Stump 2016 \cite{Stump2016}.
+Meyer and Wand 1985 \cite{MeyerW1985}.
+Turner 2004 \cite{Turner2004}.
+Wadler 2015 \cite{Wadler2015}.
+Wickline, Lee, and Pfenning 1998 \cite{WicklineLP1998}.
+Wijesekera 1990 \cite{Wijesekera1990}.
 
 
 \bibliographystyle{entcs}
@@ -423,6 +804,3 @@ Furthermore, the author thanks Sergei Art\"emov, Andrej Bauer, Jacques Carette, 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-% Some say that in \textsc{Lisp}, code is data.  Instead, we say that code may be $\quot$ed to become data, and data may be $\eval$uated to become code.

@@ -1,2 +1,7 @@
 *.agdai
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
 html
