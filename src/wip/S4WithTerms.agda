@@ -1118,9 +1118,9 @@ test∼exp□ : test∼ {∅} {∅ , ("'a" , □ "A")}
 test∼exp□ = refl
 
 
--- comm□$ : ∀ {Δ Γ x A B} → (K : Δ ⁏ Γ ⊢ □ (A ⊃ B)) {{_ : fresh x Δ}}
+-- comm□$ : ∀ {Δ Γ x A B} → (Q : Δ ⁏ Γ ⊢ □ (A ⊃ B)) {{_ : fresh x Δ}}
 --                           (M : Δ , (x , A ⊃ B) ⁏ Γ ⊢ A ⊃ B) (N : Δ ⁏ Γ ⊢ A)
---                        → (⌞ K ⌟ x ∙ M) $ N ∼ ⌞ K ⌟ x ∙ (M $ (mren (wkᵣ idᵣ) N))
+--                        → (⌞ Q ⌟ x ∙ M) $ N ∼ ⌞ Q ⌟ x ∙ (M $ (mren (wkᵣ idᵣ) N))
 
 -- TODO: Stop forgetting variable names
 test∼comm□$ : test∼ {∅} {∅ , ("'f" , □ ("A" ⊃ "B")) , ("a" , "A")}
@@ -1129,9 +1129,9 @@ test∼comm□$ : test∼ {∅} {∅ , ("'f" , □ ("A" ⊃ "B")) , ("a" , "A")}
 test∼comm□$ = refl
 
 
--- comm□⌞⌟ : ∀ {Δ Γ x₁ x₂ A C} → (K : Δ ⁏ Γ ⊢ □ □ A) {{_ : fresh x₁ Δ}} {{_ : fresh x₂ Δ}}
+-- comm□⌞⌟ : ∀ {Δ Γ x₁ x₂ A C} → (Q : Δ ⁏ Γ ⊢ □ □ A) {{_ : fresh x₁ Δ}} {{_ : fresh x₂ Δ}}
 --                                (M : Δ , (x₁ , □ A) ⁏ Γ ⊢ □ A) (N : Δ , (x₂ , A) ⁏ Γ ⊢ C)
---                             → ⌞ (⌞ K ⌟ x₁ ∙ M) ⌟ x₂ ∙ N ∼ ⌞ K ⌟ x₁ ∙ (⌞ M ⌟ x₂ ∙ (mren (wkᵣ idᵣ) N))
+--                             → ⌞ (⌞ Q ⌟ x₁ ∙ M) ⌟ x₂ ∙ N ∼ ⌞ Q ⌟ x₁ ∙ (⌞ M ⌟ x₂ ∙ (mren (wkᵣ idᵣ) N))
 
 -- TODO: Generate sensible variable names
 test∼comm□⌞⌟ : test∼ {∅} {∅ , ("''a" , □ □ "A")}
@@ -1140,9 +1140,9 @@ test∼comm□⌞⌟ : test∼ {∅} {∅ , ("''a" , □ □ "A")}
 test∼comm□⌞⌟ = refl
 
 
--- comm□π₁ : ∀ {Δ Γ x A B} → (K : Δ ⁏ Γ ⊢ □ (A ∧ B)) {{_ : fresh x Δ}}
+-- comm□π₁ : ∀ {Δ Γ x A B} → (Q : Δ ⁏ Γ ⊢ □ (A ∧ B)) {{_ : fresh x Δ}}
 --                            (M : Δ , (x , A ∧ B) ⁏ Γ ⊢ A ∧ B)
---                         → π₁ (⌞ K ⌟ x ∙ M) ∼ ⌞ K ⌟ x ∙ (π₁ M)
+--                         → π₁ (⌞ Q ⌟ x ∙ M) ∼ ⌞ Q ⌟ x ∙ (π₁ M)
 
 -- TODO: Stop forgetting variable names
 test∼comm□π₁ : test∼ {∅} {∅ , ("'x" , □ ("A" ∧ "B"))}
@@ -1151,9 +1151,9 @@ test∼comm□π₁ : test∼ {∅} {∅ , ("'x" , □ ("A" ∧ "B"))}
 test∼comm□π₁ = refl
 
 
--- comm□π₂ : ∀ {Δ Γ x A B} → (K : Δ ⁏ Γ ⊢ □ (A ∧ B)) {{_ : fresh x Δ}}
+-- comm□π₂ : ∀ {Δ Γ x A B} → (Q : Δ ⁏ Γ ⊢ □ (A ∧ B)) {{_ : fresh x Δ}}
 --                            (M : Δ , (x , A ∧ B) ⁏ Γ ⊢ A ∧ B)
---                         → π₂ (⌞ K ⌟ x ∙ M) ∼ ⌞ K ⌟ x ∙ (π₂ M)
+--                         → π₂ (⌞ Q ⌟ x ∙ M) ∼ ⌞ Q ⌟ x ∙ (π₂ M)
 
 -- TODO: Stop forgetting variable names
 test∼comm□π₂ : test∼ {∅} {∅ , ("'x" , □ ("A" ∧ "B"))}
