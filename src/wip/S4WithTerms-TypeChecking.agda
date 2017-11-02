@@ -12,7 +12,7 @@ open import S4WithTerms public
 -- NOTE: Almost the same as normal and neutral forms
 mutual
   infix 3 _⊢_⇐_
-  data _⊢_⇐_ : 𝒞 → Term → 𝒯 → Set
+  data _⊢_⇐_ : Cx → Tm → Tp → Set
     where
       ƛ_∙_   : ∀ {A B M Δ Γ} → (x : RVar) (𝒟 : Δ ⁏ Γ , (x , A) ⊢ M ⇐ B)
                              → Δ ⁏ Γ ⊢ ƛ x ∙ M ⇐ A ⊃ B
@@ -35,7 +35,7 @@ mutual
                            → Δ ⁏ Γ ⊢ M ⇐ A
 
   infix 3 _⊢_⇒_
-  data _⊢_⇒_ : 𝒞 → Term → 𝒯 → Set
+  data _⊢_⇒_ : Cx → Tm → Tp → Set
     where
       ᵐᵛ_#_ : ∀ {A Δ Γ} → (x : MVar) (i : Δ ∋ (x , A))
                         → Δ ⁏ Γ ⊢ ᵐᵛ x ⇒ A
@@ -53,12 +53,12 @@ mutual
                             → Δ ⁏ Γ ⊢ π₂ M ⇒ B
 
       -- NOTE: We can represent non-normal forms with the annotation rule
-      _⦂_   : ∀ {A M Δ Γ} → (𝒟 : Δ ⁏ Γ ⊢ M ⇐ A) (A′ : 𝒯) {{_ : A ≡ A′}}
+      _⦂_   : ∀ {A M Δ Γ} → (𝒟 : Δ ⁏ Γ ⊢ M ⇐ A) (A′ : Tp) {{_ : A ≡ A′}}
                           → Δ ⁏ Γ ⊢ M ⦂ A ⇒ A
 
 
 -- NOTE: We could have a separate type for terms without annotations
-embₜₘ : Term → Term
+embₜₘ : Tm → Tm
 embₜₘ (ᵐᵛ x)        = ᵐᵛ x
 embₜₘ (ʳᵛ x)        = ʳᵛ x
 embₜₘ (ƛ x ∙ M)     = ƛ x ∙ embₜₘ M
@@ -94,7 +94,7 @@ mutual
 -- Bidirectional type checking
 
 
-mfind : (Δ : List (MVar × 𝒯)) (x : MVar) → String ⊎ Σ 𝒯 (λ A → Δ ∋ (x , A))
+mfind : (Δ : List (MVar × Tp)) (x : MVar) → String ⊎ Σ Tp (λ A → Δ ∋ (x , A))
 mfind ∅              x = inj₁ "mfind|∅"
 mfind (Δ , (x′ , A)) x with x ≟ₘᵥ x′
 …                     | yes refl = inj₂ (A , zero)
@@ -102,7 +102,7 @@ mfind (Δ , (x′ , A)) x with x ≟ₘᵥ x′
                                       (_⧺ " mfind|,")
                                       (mapΣ id suc)
 
-rfind : (Γ : List (RVar × 𝒯)) (x : RVar) → String ⊎ Σ 𝒯 (λ A → Γ ∋ (x , A))
+rfind : (Γ : List (RVar × Tp)) (x : RVar) → String ⊎ Σ Tp (λ A → Γ ∋ (x , A))
 rfind ∅              x = inj₁ "rfind|∅"
 rfind (Γ , (x′ , A)) x with x ≟ᵣᵥ x′
 …                     | yes refl = inj₂ (A , zero)
@@ -181,7 +181,7 @@ mutual
                     })
 
 
-  infer : ∀ {Δ Γ} M → String ⊎ Σ 𝒯 (λ A → Δ ⁏ Γ ⊢ M ⇒ A)
+  infer : ∀ {Δ Γ} M → String ⊎ Σ Tp (λ A → Δ ⁏ Γ ⊢ M ⇒ A)
 
   infer {Δ = Δ} (ᵐᵛ x) = for⊎ (mfind Δ x)
                            ("infer|ᵐᵛ " ⧺_)
@@ -236,13 +236,15 @@ mutual
 
 
 -- Normalisation on terms
-nmₜₘ : ∀ {Δ Γ} → Term → String ⊎ Term
+nmₜₘ : ∀ {Δ Γ} → Tm → String ⊎ Tm
 nmₜₘ {Δ} {Γ} M = elim⊎ (infer {Δ} {Γ} M)
                    (λ s         → inj₁ s)
                    (λ { (A , 𝒟) → case nm (emb⇒ 𝒟) of
                                      (λ { (M′ , 𝒟′) → inj₂ M′
                                         })
                       })
+
+{-# COMPILE GHC nmₜₘ as agdaNmTm #-}
 
 
 --------------------------------------------------------------------------------
@@ -329,7 +331,7 @@ test⇐ax4 = refl
 -- Type inference tests
 
 
-test⇒ : ∀ {Δ Γ} M → (A : 𝒯) → Δ ⁏ Γ ⊢ M ⇒ A → Set
+test⇒ : ∀ {Δ Γ} M → (A : Tp) → Δ ⁏ Γ ⊢ M ⇒ A → Set
 test⇒ M A 𝒟 = elim⊎ (infer M)
                  (λ s  → ⊥)
                  (λ A𝒟 → A , 𝒟 ≡ A𝒟)
@@ -347,7 +349,7 @@ test⇒axI = refl
 -- Conversion tests
 
 
-test∼ₜₘ : ∀ {Δ Γ} → Term → Term → Set
+test∼ₜₘ : ∀ {Δ Γ} → Tm → Tm → Set
 test∼ₜₘ {Δ} {Γ} M₁ M₂ = elim⊎ (nmₜₘ {Δ} {Γ} M₁)
                           (λ s   → ⊥)
                           (λ M₁′ → M₁′ ≡ M₂)

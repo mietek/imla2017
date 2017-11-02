@@ -14,6 +14,8 @@ open import Prelude public
 data TVar : Set where
   tvar : String → TVar
 
+{-# COMPILE GHC TVar = data TVar (TVar) #-}
+
 injtvar : ∀ {s₁ s₂} → tvar s₁ ≡ tvar s₂ → s₁ ≡ s₂
 injtvar refl = refl
 
@@ -32,15 +34,17 @@ instance
 -- Types
 infixl 9 _∧_
 infixr 7 _⊃_
-data 𝒯 : Set where
-  ᵗᵛ  : (x : TVar) → 𝒯
-  _⊃_ : (A B : 𝒯) → 𝒯
-  _∧_ : (A B : 𝒯) → 𝒯
-  𝕋   : 𝒯
-  □_  : (A : 𝒯) → 𝒯
+data Tp : Set where
+  ᵗᵛ  : (x : TVar) → Tp
+  _⊃_ : (A B : Tp) → Tp
+  _∧_ : (A B : Tp) → Tp
+  𝕋   : Tp
+  □_  : (A : Tp) → Tp
+
+{-# COMPILE GHC Tp = data Tp (TV | (:=>) | (:&&) | Top | Box) #-}
 
 instance
-  typeIsString : IsString 𝒯
+  typeIsString : IsString Tp
   typeIsString =
     record
       { Constraint = λ s → ⊤
@@ -67,7 +71,7 @@ inj□ : ∀ {A₁ A₂} → □ A₁ ≡ □ A₂ → A₁ ≡ A₂
 inj□ refl = refl
 
 
-_≟ₜₚ_ : (A₁ A₂ : 𝒯) → Dec (A₁ ≡ A₂)
+_≟ₜₚ_ : (A₁ A₂ : Tp) → Dec (A₁ ≡ A₂)
 
 ᵗᵛ x₁ ≟ₜₚ ᵗᵛ x₂     with x₁ ≟ₜᵥ x₂
 ...                 | yes refl = yes refl
@@ -114,6 +118,8 @@ _≟ₜₚ_ : (A₁ A₂ : 𝒯) → Dec (A₁ ≡ A₂)
 data MVar : Set where
   mvar : String → MVar
 
+{-# COMPILE GHC MVar = data MVar (MVar) #-}
+
 injmvar : ∀ {s₁ s₂} → mvar s₁ ≡ mvar s₂ → s₁ ≡ s₂
 injmvar refl = refl
 
@@ -133,6 +139,8 @@ instance
 data RVar : Set where
   rvar : String → RVar
 
+{-# COMPILE GHC RVar = data RVar (RVar) #-}
+
 injrvar : ∀ {s₁ s₂} → rvar s₁ ≡ rvar s₂ → s₁ ≡ s₂
 injrvar refl = refl
 
@@ -150,19 +158,20 @@ instance
 
 -- Terms
 infixl 10 _⦂_
-data Term : Set where
-  ᵐᵛ     : (x : MVar) → Term
-  ʳᵛ     : (x : RVar) → Term
-  ƛ_∙_   : (x : RVar) (M : Term) → Term
-  _$_    : (M N : Term) → Term
-  _,_    : (M N : Term) → Term
-  π₁     : (M : Term) → Term
-  π₂     : (M : Term) → Term
-  tt     : Term
-  ⌜_⌝    : (M : Term) → Term
-  ⌞_⌟_∙_ : (M : Term) (x : MVar) (N : Term) → Term
-  _⦂_    : (M : Term) (A : 𝒯) → Term
+data Tm : Set where
+  ᵐᵛ     : (x : MVar) → Tm
+  ʳᵛ     : (x : RVar) → Tm
+  ƛ_∙_   : (x : RVar) (M : Tm) → Tm
+  _$_    : (M N : Tm) → Tm
+  _,_    : (M N : Tm) → Tm
+  π₁     : (M : Tm) → Tm
+  π₂     : (M : Tm) → Tm
+  tt     : Tm
+  ⌜_⌝    : (M : Tm) → Tm
+  ⌞_⌟_∙_ : (M : Tm) (x : MVar) (N : Tm) → Tm
+  _⦂_    : (M : Tm) (A : Tp) → Tm
 
+{-# COMPILE GHC Tm = data Tm (MV | RV | Lam | (:$) | (:,) | Pi1 | Pi2 | TT | Quo | Unq | (:::)) #-}
 
 injᵐᵛ : ∀ {x₁ x₂} → ᵐᵛ x₁ ≡ ᵐᵛ x₂ → x₁ ≡ x₂
 injᵐᵛ refl = refl
@@ -182,10 +191,10 @@ inj$₁ refl = refl
 inj$₂ : ∀ {M₁ M₂ N₁ N₂} → M₁ $ N₁ ≡ M₂ $ N₂ → N₁ ≡ N₂
 inj$₂ refl = refl
 
-inj,₁ : ∀ {M₁ M₂ N₁ N₂} → M₁ Term., N₁ ≡ M₂ , N₂ → M₁ ≡ M₂
+inj,₁ : ∀ {M₁ M₂ N₁ N₂} → M₁ Tm., N₁ ≡ M₂ , N₂ → M₁ ≡ M₂
 inj,₁ refl = refl
 
-inj,₂ : ∀ {M₁ M₂ N₁ N₂} → M₁ Term., N₁ ≡ M₂ , N₂ → N₁ ≡ N₂
+inj,₂ : ∀ {M₁ M₂ N₁ N₂} → M₁ Tm., N₁ ≡ M₂ , N₂ → N₁ ≡ N₂
 inj,₂ refl = refl
 
 injπ₁ : ∀ {M₁ M₂} → π₁ M₁ ≡ π₁ M₂ → M₁ ≡ M₂
@@ -213,7 +222,7 @@ inj⦂₂ : ∀ {M₁ M₂ A₁ A₂} → M₁ ⦂ A₁ ≡ M₂ ⦂ A₂ → A�
 inj⦂₂ refl = refl
 
 
-_≟ₜₘ_ : (M₁ M₂ : Term) → Dec (M₁ ≡ M₂)
+_≟ₜₘ_ : (M₁ M₂ : Tm) → Dec (M₁ ≡ M₂)
 
 (ᵐᵛ x₁) ≟ₜₘ (ᵐᵛ x₂)          with x₁ ≟ₘᵥ x₂
 ...                          | yes refl = yes refl
@@ -375,13 +384,13 @@ tt ≟ₜₘ (M₂ ⦂ A₂)        = no (λ ())
 
 
 -- Contexts
-𝒞 : Set
-𝒞 = List (MVar × 𝒯) × List (RVar × 𝒯)
+Cx : Set
+Cx = List (MVar × Tp) × List (RVar × Tp)
 
 
 -- Syntactic entailment
 infix 3 _⊢_∷_
-data _⊢_∷_ : 𝒞 → Term → 𝒯 → Set
+data _⊢_∷_ : Cx → Tm → Tp → Set
   where
     ᵐᵛ_#_  : ∀ {A Δ Γ} → (x : MVar) (i : Δ ∋ (x , A))
                        → Δ ⁏ Γ ⊢ ᵐᵛ x ∷ A
@@ -412,7 +421,7 @@ data _⊢_∷_ : 𝒞 → Term → 𝒯 → Set
     ⌞_⌟_∙_ : ∀ {A C M N Δ Γ} → (𝒟 : Δ ⁏ Γ ⊢ M ∷ □ A) (x : MVar) (ℰ : Δ , (x , A) ⁏ Γ ⊢ N ∷ C)
                              → Δ ⁏ Γ ⊢ ⌞ M ⌟ x ∙ N ∷ C
 
-    _⦂_    : ∀ {A M Δ Γ} → (𝒟 : Δ ⁏ Γ ⊢ M ∷ A) (A′ : 𝒯) {{_ : A ≡ A′}}
+    _⦂_    : ∀ {A M Δ Γ} → (𝒟 : Δ ⁏ Γ ⊢ M ∷ A) (A′ : Tp) {{_ : A ≡ A′}}
                          → Δ ⁏ Γ ⊢ M ⦂ A ∷ A
 
 
@@ -420,7 +429,7 @@ data _⊢_∷_ : 𝒞 → Term → 𝒯 → Set
 -- NOTE: Almost the same as bidirectional syntactic entailment
 mutual
   infix 3 _⊢ₙₘ_∷_
-  data _⊢ₙₘ_∷_ : 𝒞 → Term → 𝒯 → Set
+  data _⊢ₙₘ_∷_ : Cx → Tm → Tp → Set
     where
       ƛ_∙_   : ∀ {A B M Δ Γ} → (x : RVar) (𝒟 : Δ ⁏ Γ , (x , A) ⊢ₙₘ M ∷ B)
                              → Δ ⁏ Γ ⊢ₙₘ ƛ x ∙ M ∷ A ⊃ B
@@ -444,7 +453,7 @@ mutual
                            → Δ ⁏ Γ ⊢ₙₘ M ∷ ᵗᵛ x
 
   infix 3 _⊢ₙₜ_∷_
-  data _⊢ₙₜ_∷_ : 𝒞 → Term → 𝒯 → Set
+  data _⊢ₙₜ_∷_ : Cx → Tm → Tp → Set
     where
       ᵐᵛ_#_ : ∀ {A Δ Γ} → (x : MVar) (i : Δ ∋ (x , A))
                         → Δ ⁏ Γ ⊢ₙₜ ᵐᵛ x ∷ A
@@ -567,8 +576,8 @@ renₙₜ η 𝒟 = (mrenₙₜ (proj₁ η) ∘ rrenₙₜ (proj₂ η)) 𝒟
 
 -- Simultaneous substitutions
 infix 3 _⊢⋆_
-_⊢⋆_ : 𝒞 → List 𝒯 → Set
-Δ ⁏ Γ ⊢⋆ Ξ = All (λ A → Σ Term (λ M → Δ ⁏ Γ ⊢ M ∷ A)) Ξ
+_⊢⋆_ : Cx → List Tp → Set
+Δ ⁏ Γ ⊢⋆ Ξ = All (λ A → Σ Tm (λ M → Δ ⁏ Γ ⊢ M ∷ A)) Ξ
 
 
 mren⋆ : ∀ {Δ Δ′ Γ Ξ} → Δ′ ⊇ Δ → Δ ⁏ Γ ⊢⋆ Ξ
@@ -608,7 +617,7 @@ ridₛ {Γ , A} = rliftₛ ridₛ
 
 
 lookupₛ : ∀ {Δ Γ Ξ A} → Δ ⁏ Γ ⊢⋆ Ξ → Ξ ∋ A
-                      → Σ Term (λ M → Δ ⁏ Γ ⊢ M ∷ A)
+                      → Σ Tm (λ M → Δ ⁏ Γ ⊢ M ∷ A)
 lookupₛ σ i = lookupAll σ i
 
 
@@ -616,7 +625,7 @@ lookupₛ σ i = lookupAll σ i
 
 msubₜₘ : ∀ {Δ Γ Ξ M A} → {ξ : List MVar} {{p : length ξ ≡ length Ξ}}
                        → Δ ⁏ ∅ ⊢⋆ Ξ → zip ξ Ξ ⁏ Γ ⊢ M ∷ A
-                       → Term
+                       → Tm
 msubₜₘ σ (ᵐᵛ x # i)          = proj₁ (lookupₛ σ (proj∋₂ i))
 msubₜₘ σ (ʳᵛ x # i)          = ʳᵛ x
 msubₜₘ σ (ƛ x ∙ 𝒟)           = ƛ x ∙ msubₜₘ σ 𝒟
@@ -668,7 +677,7 @@ record 𝔎 : Set₁ where
     accᵥ : ∀ {x w w′} → w′ ≥ w → 𝒱 w x
                       → 𝒱 w′ x
 
-    ⌊_⌋  : 𝒲 → 𝒞
+    ⌊_⌋  : 𝒲 → Cx
 
     ⌊_⌋ₐ : ∀ {w w′} → w′ ≥ w
                     → ⌊ w′ ⌋ ⊇² ⌊ w ⌋
@@ -676,10 +685,10 @@ record 𝔎 : Set₁ where
 open 𝔎 {{…}} public
 
 
-ᵐ⌊_⌋ : ∀ {{𝔐 : 𝔎}} → 𝒲 → List (MVar × 𝒯)
+ᵐ⌊_⌋ : ∀ {{𝔐 : 𝔎}} → 𝒲 → List (MVar × Tp)
 ᵐ⌊ w ⌋ = proj₁ ⌊ w ⌋
 
-ʳ⌊_⌋ : ∀ {{𝔐 : 𝔎}} → 𝒲 → List (RVar × 𝒯)
+ʳ⌊_⌋ : ∀ {{𝔐 : 𝔎}} → 𝒲 → List (RVar × Tp)
 ʳ⌊ w ⌋ = proj₂ ⌊ w ⌋
 
 ᵐ⌊_⌋ₐ : ∀ {{𝔐 : 𝔎}} {w w′} → w′ ≥ w
@@ -694,7 +703,7 @@ open 𝔎 {{…}} public
 -- Values
 mutual
   infix 3 _⊩_
-  _⊩_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → 𝒯 → Set
+  _⊩_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → Tp → Set
 
   w ⊩ ᵗᵛ x  = 𝒱 w x
 
@@ -709,18 +718,18 @@ mutual
                       → w′ ᵐᵏ⊩ A
 
   infix 3 _ᵏ⊩_
-  _ᵏ⊩_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → 𝒯 → Set
+  _ᵏ⊩_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → Tp → Set
   w ᵏ⊩ A = ∀ {w′ C} → (η : w′ ≥ w) (f : ∀ {w″} → w″ ≥ w′ → w″ ⊩ A
-                                                 → Σ Term (λ M″ → ⌊ w″ ⌋ ⊢ₙₘ M″ ∷ C))
-                     → Σ Term (λ M′ → ⌊ w′ ⌋ ⊢ₙₘ M′ ∷ C)
+                                                 → Σ Tm (λ M″ → ⌊ w″ ⌋ ⊢ₙₘ M″ ∷ C))
+                     → Σ Tm (λ M′ → ⌊ w′ ⌋ ⊢ₙₘ M′ ∷ C)
 
   infix 3 _ᵐᵏ⊩_
-  _ᵐᵏ⊩_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → 𝒯 → Set
-  w ᵐᵏ⊩ A = Σ Term (λ M → ᵐ⌊ w ⌋ ⁏ ∅ ⊢ M ∷ A) × w ᵏ⊩ A
+  _ᵐᵏ⊩_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → Tp → Set
+  w ᵐᵏ⊩ A = Σ Tm (λ M → ᵐ⌊ w ⌋ ⁏ ∅ ⊢ M ∷ A) × w ᵏ⊩ A
 
 
 syn : ∀ {{𝔐 : 𝔎}} {w A} → w ᵐᵏ⊩ A
-                        → Σ Term (λ M → ᵐ⌊ w ⌋ ⁏ ∅ ⊢ M ∷ A)
+                        → Σ Tm (λ M → ᵐ⌊ w ⌋ ⁏ ∅ ⊢ M ∷ A)
 syn M𝒟k = proj₁ M𝒟k
 
 sem : ∀ {{𝔐 : 𝔎}} {w A} → w ᵐᵏ⊩ A
@@ -730,11 +739,11 @@ sem M𝒟k = proj₂ M𝒟k
 
 -- Environments
 infix 3 _ᵏ⊩⋆_
-_ᵏ⊩⋆_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → List 𝒯 → Set
+_ᵏ⊩⋆_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → List Tp → Set
 w ᵏ⊩⋆ Ξ = All (w ᵏ⊩_) Ξ
 
 infix 3 _ᵐᵏ⊩⋆_
-_ᵐᵏ⊩⋆_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → List 𝒯 → Set
+_ᵐᵏ⊩⋆_ : ∀ {{𝔐 : 𝔎}} → 𝒲 → List Tp → Set
 w ᵐᵏ⊩⋆ Ξ = All (w ᵐᵏ⊩_) Ξ
 
 
@@ -749,7 +758,7 @@ sem⋆ mρ = mapAll sem mρ
 
 -- Semantic entailment
 infix 3 _⊨_
-_⊨_ : 𝒞 → 𝒯 → Set₁
+_⊨_ : Cx → Tp → Set₁
 Δ ⁏ Γ ⊨ A = ∀ {{𝔐 : 𝔎}} {w} → w ᵐᵏ⊩⋆ map proj₂ Δ → w ᵏ⊩⋆ map proj₂ Γ
                              → w ᵏ⊩ A
 
@@ -889,69 +898,69 @@ k⌞⌟ {A} {C} k f = bind {□ A} {C} k (λ η f′ → f η (f′ idₐ))
 -- Completeness
 
 
--- Canonical model
+-- Universal model
 instance
-  𝔐ᶜ : 𝔎
-  𝔐ᶜ = record
-         { 𝒲    = 𝒞
-         ; 𝒱    = λ { (Δ ⁏ Γ) x → Σ Term (λ M → Δ ⁏ Γ ⊢ₙₘ M ∷ ᵗᵛ x ) }
+  𝔐ᵤ : 𝔎
+  𝔐ᵤ = record
+         { 𝒲    = Cx
+         ; 𝒱    = λ { (Δ ⁏ Γ) x → Σ Tm (λ M → Δ ⁏ Γ ⊢ₙₘ M ∷ ᵗᵛ x ) }
          ; _≥_  = _⊇²_
-         ; idₐ  = idᵣᵣ
-         ; _∘ₐ_ = _∘ᵣᵣ_
+         ; idₐ  = idᵣ²
+         ; _∘ₐ_ = _∘ᵣ²_
          ; accᵥ = λ { η (M , 𝒟) → M , renₙₘ η 𝒟 }
          ; ⌊_⌋  = id
          ; ⌊_⌋ₐ = id
          }
 
 
--- Canonical soundness and completeness
+-- Soundness and completeness with respect to the universal model
 
 -- TODO: Generate fresh names!
 mutual
-  ↑ᶜ : ∀ {A Δ Γ} → Δ ⁏ Γ ᵏ⊩ A
-                 → Σ Term (λ M → Δ ⁏ Γ ⊢ₙₘ M ∷ A)
-  ↑ᶜ {ᵗᵛ x}  k = k idᵣᵣ (λ η M𝒟 → M𝒟)
-  ↑ᶜ {A ⊃ B} k = k idᵣᵣ (λ η f → let M , 𝒟 = ↑ᶜ (f (rwkᵣᵣ idᵣᵣ) (↓ᶜ (ʳᵛ "RFRESH" # zero))) in
+  ↑ᵤ : ∀ {A Δ Γ} → Δ ⁏ Γ ᵏ⊩ A
+                 → Σ Tm (λ M → Δ ⁏ Γ ⊢ₙₘ M ∷ A)
+  ↑ᵤ {ᵗᵛ x}  k = k idᵣ² (λ η M𝒟 → M𝒟)
+  ↑ᵤ {A ⊃ B} k = k idᵣ² (λ η f → let M , 𝒟 = ↑ᵤ (f (rwkᵣ idᵣ²) (↓ᵤ (ʳᵛ "RFRESH" # zero))) in
                                   ƛ "RFRESH" ∙ M , ƛ "RFRESH" ∙ 𝒟)
-  ↑ᶜ {A ∧ B} k = k idᵣᵣ (λ η p → let M , 𝒟 = ↑ᶜ (proj₁ p) in
-                                  let N , ℰ = ↑ᶜ (proj₂ p) in
+  ↑ᵤ {A ∧ B} k = k idᵣ² (λ η p → let M , 𝒟 = ↑ᵤ (proj₁ p) in
+                                  let N , ℰ = ↑ᵤ (proj₂ p) in
                                   (M , N) , (𝒟 , ℰ))
-  ↑ᶜ {𝕋}     k = k idᵣᵣ (λ η t → tt , tt)
-  ↑ᶜ {□ A}   k = k idᵣᵣ (λ η f → let M , 𝒟 = syn (f idᵣᵣ) in
+  ↑ᵤ {𝕋}     k = k idᵣ² (λ η t → tt , tt)
+  ↑ᵤ {□ A}   k = k idᵣ² (λ η f → let M , 𝒟 = syn (f idᵣ²) in
                                   ⌜ M ⌝ , ⌜ 𝒟 ⌝)
 
-  ↓ᶜ : ∀ {A M Δ Γ} → Δ ⁏ Γ ⊢ₙₜ M ∷ A
+  ↓ᵤ : ∀ {A M Δ Γ} → Δ ⁏ Γ ⊢ₙₜ M ∷ A
                    → Δ ⁏ Γ ᵏ⊩ A
-  ↓ᶜ {ᵗᵛ x}  {M} 𝒟 = return {ᵗᵛ x} (M , ⁿᵗ 𝒟)
-  ↓ᶜ {A ⊃ B} {M} 𝒟 = return {A ⊃ B} (λ η k → ↓ᶜ (renₙₜ η 𝒟 $ proj₂ (↑ᶜ k)))
-  ↓ᶜ {A ∧ B} {M} 𝒟 = return {A ∧ B} (↓ᶜ (π₁ 𝒟) , ↓ᶜ (π₂ 𝒟))
-  ↓ᶜ {𝕋 }    {M} 𝒟 = return {𝕋} tt
-  ↓ᶜ {□ A}   {M} 𝒟 = λ η f →
-                       let N , ℰ = f (mwkᵣᵣ idᵣᵣ) λ η′ →
+  ↓ᵤ {ᵗᵛ x}  {M} 𝒟 = return {ᵗᵛ x} (M , ⁿᵗ 𝒟)
+  ↓ᵤ {A ⊃ B} {M} 𝒟 = return {A ⊃ B} (λ η k → ↓ᵤ (renₙₜ η 𝒟 $ proj₂ (↑ᵤ k)))
+  ↓ᵤ {A ∧ B} {M} 𝒟 = return {A ∧ B} (↓ᵤ (π₁ 𝒟) , ↓ᵤ (π₂ 𝒟))
+  ↓ᵤ {𝕋 }    {M} 𝒟 = return {𝕋} tt
+  ↓ᵤ {□ A}   {M} 𝒟 = λ η f →
+                       let N , ℰ = f (mwkᵣ idᵣ²) (λ η′ →
                                      ᵐᵛ "MFRESH"
-                                   , (ᵐᵛ "MFRESH" # mlookupᵣᵣ η′ zero)
-                                   , ↓ᶜ (ᵐᵛ "MFRESH" # mlookupᵣᵣ η′ zero) in
+                                   , (ᵐᵛ "MFRESH" # mlookupᵣ η′ zero)
+                                   , ↓ᵤ (ᵐᵛ "MFRESH" # mlookupᵣ η′ zero)) in
                        ⌞ M ⌟ "MFRESH" ∙ N , ⌞ renₙₜ η 𝒟 ⌟ "MFRESH" ∙ ℰ
 
 
 mkidₑ : ∀ {Δ Γ} → Δ ⁏ Γ ᵐᵏ⊩⋆ map proj₂ Δ
 mkidₑ {∅}           = ∅
-mkidₑ {Δ , (x , A)} = mkacc⋆ (mwkᵣᵣ idᵣᵣ) mkidₑ , (ᵐᵛ x , (ᵐᵛ x # zero) , ↓ᶜ (ᵐᵛ x # zero))
+mkidₑ {Δ , (x , A)} = mkacc⋆ (mwkᵣ idᵣ²) mkidₑ , (ᵐᵛ x , (ᵐᵛ x # zero) , ↓ᵤ (ᵐᵛ x # zero))
 
 kidₑ : ∀ {Γ Δ} → Δ ⁏ Γ ᵏ⊩⋆ map proj₂ Γ
 kidₑ {∅}           = ∅
-kidₑ {Γ , (x , A)} = kacc⋆ (rwkᵣᵣ idᵣᵣ) kidₑ , ↓ᶜ (ʳᵛ x # zero)
+kidₑ {Γ , (x , A)} = kacc⋆ (rwkᵣ idᵣ²) kidₑ , ↓ᵤ (ʳᵛ x # zero)
 
 
 -- Completeness
 ↑ : ∀ {Δ Γ A} → Δ ⁏ Γ ⊨ A
-              → Σ Term (λ M → Δ ⁏ Γ ⊢ₙₘ M ∷ A)
-↑ 𝔞 = ↑ᶜ (𝔞 mkidₑ kidₑ)
+              → Σ Tm (λ M → Δ ⁏ Γ ⊢ₙₘ M ∷ A)
+↑ f = ↑ᵤ (f mkidₑ kidₑ)
 
 
 -- Normalisation
 nm : ∀ {Δ Γ M A} → Δ ⁏ Γ ⊢ M ∷ A
-                 → Σ Term (λ M′ → Δ ⁏ Γ ⊢ₙₘ M′ ∷ A)
+                 → Σ Tm (λ M′ → Δ ⁏ Γ ⊢ₙₘ M′ ∷ A)
 nm = ↑ ∘ ↓
 
 
@@ -980,26 +989,26 @@ nm = ↑ ∘ ↓
 ʳᵛ2 x = ʳᵛ x # suc (suc zero)
 
 
-axIₜₘ : Term
+axIₜₘ : Tm
 axIₜₘ = ƛ "x" ∙ ʳᵛ "x"
 
-axKₜₘ : Term
+axKₜₘ : Tm
 axKₜₘ = ƛ "x" ∙ (ƛ "y" ∙ ʳᵛ "x")
 
-axSₜₘ : Term
+axSₜₘ : Tm
 axSₜₘ = ƛ "f" ∙ (ƛ "g" ∙ (ƛ "x" ∙
           ((ʳᵛ "f" $ ʳᵛ "x") $ (ʳᵛ "g" $ ʳᵛ "x"))))
 
 
-axDₜₘ : Term
+axDₜₘ : Tm
 axDₜₘ = ƛ "'f" ∙ (ƛ "'x" ∙
           (⌞ ʳᵛ "'f" ⌟ "f" ∙ (⌞ ʳᵛ "'x" ⌟ "x" ∙
             (⌜ ᵐᵛ "f" $ ᵐᵛ "x" ⌝))))
 
-axTₜₘ : Term
+axTₜₘ : Tm
 axTₜₘ = ƛ "'x" ∙ (⌞ ʳᵛ "'x" ⌟ "x" ∙ (ᵐᵛ "x"))
 
-ax4ₜₘ : Term
+ax4ₜₘ : Tm
 ax4ₜₘ = ƛ "'x" ∙ (⌞ ʳᵛ "'x" ⌟ "x" ∙ (⌜ ⌜ ᵐᵛ "x" ⌝ ⌝))
 
 

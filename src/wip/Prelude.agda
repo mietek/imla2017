@@ -301,11 +301,12 @@ instance
 -- Lists
 
 
--- Lists
 data List {ℓ} (X : Set ℓ) : Set ℓ
   where
     ∅   : List X
     _,_ : (Γ : List X) (A : X) → List X
+
+{-# COMPILE GHC List = data List ([] | (:)) #-}
 
 
 length : ∀ {ℓ} → {X : Set ℓ}
@@ -528,36 +529,36 @@ _⊇²_ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} → List² X Y →
 Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ = Δ′ ⊇ Δ × Γ′ ⊇ Γ
 
 
-mwkᵣᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : X}
-                 → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ
-                 → Δ′ , A ⁏ Γ′ ⊇² Δ ⁏ Γ
-mwkᵣᵣ η = wkᵣ (proj₁ η) , proj₂ η
+mwkᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : X}
+                → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ
+                → Δ′ , A ⁏ Γ′ ⊇² Δ ⁏ Γ
+mwkᵣ η = wkᵣ (proj₁ η) , proj₂ η
 
-rwkᵣᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : Y}
-                 → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ
-                 → Δ′ ⁏ Γ′ , A ⊇² Δ ⁏ Γ
-rwkᵣᵣ η = proj₁ η , wkᵣ (proj₂ η)
+rwkᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : Y}
+                → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ
+                → Δ′ ⁏ Γ′ , A ⊇² Δ ⁏ Γ
+rwkᵣ η = proj₁ η , wkᵣ (proj₂ η)
 
 
-idᵣᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ : List X} {Γ : List Y}
+idᵣ² : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ : List X} {Γ : List Y}
                 → Δ ⁏ Γ ⊇² Δ ⁏ Γ
-idᵣᵣ = idᵣ , idᵣ
+idᵣ² = idᵣ , idᵣ
 
-_∘ᵣᵣ_ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ Δ″ : List X} {Γ Γ′ Γ″ : List Y}
+_∘ᵣ²_ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ Δ″ : List X} {Γ Γ′ Γ″ : List Y}
                  → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Δ″ ⁏ Γ″ ⊇² Δ′ ⁏ Γ′
                  → Δ″ ⁏ Γ″ ⊇² Δ ⁏ Γ
-η ∘ᵣᵣ η′ = (proj₁ η ∘ᵣ proj₁ η′) , (proj₂ η ∘ᵣ proj₂ η′)
+η ∘ᵣ² η′ = (proj₁ η ∘ᵣ proj₁ η′) , (proj₂ η ∘ᵣ proj₂ η′)
 
 
-mlookupᵣᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : X}
-                     → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Δ ∋ A
-                     → Δ′ ∋ A
-mlookupᵣᵣ η i = lookupᵣ (proj₁ η) i
+mlookupᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : X}
+                    → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Δ ∋ A
+                    → Δ′ ∋ A
+mlookupᵣ η i = lookupᵣ (proj₁ η) i
 
-rlookupᵣᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : Y}
-                     → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Γ ∋ A
-                     → Γ′ ∋ A
-rlookupᵣᵣ η i = lookupᵣ (proj₂ η) i
+rlookupᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : Y}
+                    → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Γ ∋ A
+                    → Γ′ ∋ A
+rlookupᵣ η i = lookupᵣ (proj₂ η) i
 
 
 --------------------------------------------------------------------------------
