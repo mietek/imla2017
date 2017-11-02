@@ -1,0 +1,703 @@
+\documentclass[submission,copyright,creativecommons,sharealike,backref=page]{eptcs}
+% \documentclass[adraft,copyright,creativecommons,sharealike]{eptcs}
+
+\usepackage{underscore}
+
+% \usepackage[utf8]{inputenc}
+
+\usepackage{amsmath,amsthm}
+\usepackage{stmaryrd}
+
+\usepackage[all]{xy}
+
+\usepackage{float}
+% \floatstyle{boxed}
+% \restylefloat{figure}
+
+\usepackage[font=normal,
+            labelfont=bf,
+            labelsep=period]{caption}
+
+% \usepackage[square,sort,comma,numbers]{natbib}
+
+% \usepackage[scaled=.85]{helvet}
+
+% Use MTPro2 math fonts
+\let\jmath\undefined
+\let\hbar\undefined
+\usepackage[mtpccal,
+            mtpscr,
+            mtpfrak,
+            mtphrb,
+            nofontinfo,
+            slantedGreek,
+            subscriptcorrection]{mtpro2}
+
+% Use color hyperlinks
+\usepackage{xcolor}
+\definecolor{hyperblue}{rgb}{0,0.2,0.8}
+\hypersetup{bookmarksnumbered=false,
+            bookmarksopen=false,
+            breaklinks=true,
+            colorlinks=true,
+            allcolors=hyperblue,
+            pdfborder={0 0 0},
+            pdfborderstyle={/S/U/W 1}}
+
+\urlstyle{rm}
+
+\usepackage[final,
+            tracking=true,
+            kerning=true,
+            spacing=true]{microtype}
+\microtypecontext{spacing=nonfrench}
+\SetTracking{encoding={*},
+             shape=sc}{10}
+\hyphenpenalty=9999
+\emergencystretch=10pt
+
+\usepackage{scalerel}
+
+\newcommand{\lambdabox}{\lambda^{\mkern-3mu\Box\mkern-3mu}}
+\newcommand{\uplambdabox}{\uplambda^{\mkern-3mu\Box\mkern-3mu}}
+
+\newcommand{\sigmas}{\rlap{$\sigma$}\hphantom{\delta}}
+\newcommand{\Xis}{\rlap{$\Xi$}\hphantom{A}}
+\newcommand{\sA}{\mkern-2muA}
+
+\renewcommand{\leq}{\mathrel{\subseteq}}
+\newcommand{\leqII}{\mathrel{\subseteq^{\scriptscriptstyle{2}}}}
+
+\newcommand{\R}{\mathrel{\rlap{$\mkern.75mu\textsf{R}$}\hphantom{\subseteq}}}
+\newcommand{\Rs}{\mathrel{\textsf{R}}}
+
+\renewcommand{\:}{\mathop{\mkern3mu:\mkern3mu}}
+\renewcommand{\.}{\mathop{\mkern3mu.\mkern3mu}}
+\renewcommand{\;}{\mathop{;}}
+\renewcommand{\,}{\mathop{,}}
+
+\newcommand{\unit}{\varnothing}
+\newcommand{\conj}{\mathrel{\wedge}}
+\renewcommand{\o}{\mathop{\mkern3mu\circ\mkern3mu}}
+\newcommand{\id}{\operatorname{\textsf{id}}}
+
+\newcommand{\e}{\mathrel{\mkern2mu\vdash\mkern1mu}}
+\newcommand{\enf}{\mathrel{\mkern2mu\vdash_{\mkern-9mu\scriptscriptstyle{\textsf{nf}}}}}
+\newcommand{\ene}{\mathrel{\mkern2mu\vdash_{\mkern-9mu\rlap{$\scriptscriptstyle{\textsf{ne}}$}\hphantom{\scriptscriptstyle{\textsf{nf}}}}}}
+\newcommand{\es}{\mathrel{\mkern2mu\vdash_{\mkern-9mu\scriptscriptstyle{\star}}}}
+\newcommand{\ee}{\mathrel{\mkern2mu\Vdash\mkern1mu}}
+\newcommand{\ees}{\mathrel{\mkern2mu\Vdash_{\mkern-9mu\scriptscriptstyle{\star}}}}
+\newcommand{\eee}{\mathrel{\mkern2mu\Vvdash\mkern1mu}}
+\newcommand{\ef}{\mathrel{\mkern2mu\vDash\mkern1mu}}
+
+\renewcommand{\r}{\mathrel{\rightarrow\mkern-1mu}}
+\newcommand{\rf}{\mathop{\Rightarrow\mkern-1mu}}
+
+\newcommand{\reflect}{\operatorname{\textsf{reflect}}}
+\newcommand{\reify}{\operatorname{\textsf{reify}}}
+\newcommand{\reflectc}{\operatorname{\textsf{reflect}_{\scriptscriptstyle{\textsf{c}}}}}
+\newcommand{\reifyc}{\operatorname{\textsf{reify}_{\scriptscriptstyle{\textsf{c}}}}}
+\newcommand{\nbe}{\operatorname{\textsf{nbe}}}
+
+\newcommand{\monoin}{\operatorname{\textsf{mono}_{\in}}}
+
+\newcommand{\monoe}{\operatorname{\textsf{mono}_{\e}}}
+\newcommand{\monoes}{\operatorname{\textsf{mono}_{\es}}}
+\newcommand{\monoenf}{\operatorname{\textsf{mono}_{\enf}}}
+\newcommand{\monoene}{\operatorname{\textsf{mono}_{\ene}}}
+\newcommand{\monoee}{\operatorname{\textsf{mono}_{\ee}}}
+\newcommand{\monoees}{\operatorname{\textsf{mono}_{\ees}}}
+\newcommand{\monoeee}{\operatorname{\textsf{mono}_{\eee}}}
+
+\newcommand{\peek}{\operatorname{\textsf{peek}}}
+% \newcommand{\peekii}{\operatorname{\textsf{peek}_{\scriptscriptstyle{2}}}}
+
+\newcommand{\infleq}{\operatorname{\textsf{inf}_{\leq}}}
+\newcommand{\weakleq}{\operatorname{\textsf{weak}_{\leq}}}
+
+\newcommand{\pii}{\operatorname{\uppi_{\scriptscriptstyle{1}}}}
+\newcommand{\piii}{\operatorname{\uppi_{\scriptscriptstyle{2}}}}
+
+\newcommand{\reflle}{\operatorname{\textsf{refl}_{\le}}}
+\newcommand{\reflleq}{\operatorname{\textsf{refl}_{\leq}}}
+\newcommand{\reflleqII}{\operatorname{\textsf{refl}_{\leqII}}}
+\newcommand{\reflR}{\operatorname{\textsf{refl}_{\Rs}}}
+\newcommand{\refles}{\operatorname{\textsf{refl}_{\es}}}
+\newcommand{\mrefles}{\operatorname{\textsf{mrefl}_{\es}}}
+\newcommand{\reflees}{\operatorname{\textsf{refl}_{\ees}}}
+\newcommand{\mreflees}{\operatorname{\textsf{mrefl}_{\ees}}}
+
+\newcommand{\transle}{\operatorname{\textsf{trans}_{\le}}}
+\newcommand{\transleq}{\operatorname{\textsf{trans}_{\leq}}}
+\newcommand{\transleqII}{\operatorname{\textsf{trans}_{\leqII}}}
+\newcommand{\transR}{\operatorname{\textsf{trans}_{\Rs}}}
+
+\newcommand{\s}{\fatsemi}
+\newcommand{\Rsle}{\mathrel{\R\mkern-4mu\s\mkern-4mu\le}}
+\newcommand{\lesR}{\mathrel{\le\mkern-4mu\s\mkern-4mu\R}}
+
+\newcommand{\lerR}{\operatorname{\le\mkern-1mu\r\mkern-1mu\R}}
+\newcommand{\RslerR}{\operatorname{\Rsle\mkern-1mu\r\mkern-1mu\R}}
+\newcommand{\lesRrR}{\operatorname{\lesR\mkern-1mu\r\mkern-1mu\R}}
+
+\newcommand{\Stack}{\operatorname{\textsf{Stack}}}
+\newcommand{\StackII}{\operatorname{\textsf{Stack}^{\scriptscriptstyle{2}}}}
+\newcommand{\Type}{\operatorname{\textsf{Type}}}
+\newcommand{\Context}{\operatorname{\textsf{Context}}}
+\newcommand{\World}{\operatorname{\textsf{World}}}
+\newcommand{\G}{\operatorname{\textsf{G}}}
+\newcommand{\monoG}{\operatorname{\textsf{mono}_{\G}}}
+
+\newcommand{\var}{\operatorname{\textsf{\textbf{var}}}}
+\newcommand{\mvar}{\operatorname{\textsf{\textbf{mvar}}}}
+\newcommand{\lam}{\operatorname{\textsf{\textbf{lam}}}}
+\newcommand{\app}{\operatorname{\textsf{\textbf{app}}}}
+\newcommand{\quot}{\operatorname{\textsf{\textbf{quot}}}}
+\newcommand{\eval}{\operatorname{\textsf{\textbf{eval}}}}
+
+\newcommand{\lamnf}{\operatorname{\textsf{\textbf{lam}}_{\scriptscriptstyle{\textsf{nf}}}}}
+\newcommand{\quotnf}{\operatorname{\textsf{\textbf{quot}}_{\scriptscriptstyle{\textsf{nf}}}}}
+\newcommand{\nenf}{\operatorname{\textsf{\textbf{ne}}_{\scriptscriptstyle{\textsf{nf}}}}}
+\newcommand{\varne}{\operatorname{\textsf{\textbf{var}}_{\scriptscriptstyle{\textsf{ne}}}}}
+\newcommand{\mvarne}{\operatorname{\textsf{\textbf{mvar}}_{\scriptscriptstyle{\textsf{ne}}}}}
+\newcommand{\appne}{\operatorname{\textsf{\textbf{app}}_{\scriptscriptstyle{\textsf{ne}}}}}
+\newcommand{\evalne}{\operatorname{\textsf{\textbf{eval}}_{\scriptscriptstyle{\textsf{ne}}}}}
+
+\newcommand{\base}{\mathop{\bullet}}
+\renewcommand{\O}{\varnothing}
+
+\newcommand{\donel}{\operatorname{\textsf{\textbf{done}}}}
+\newcommand{\keepl}{\operatorname{\textsf{\textbf{keep}}}}
+\newcommand{\skipl}{\operatorname{\textsf{\textbf{skip}}}}
+
+\newcommand{\tops}{\operatorname{\textsf{\textbf{top}}}}
+\newcommand{\pops}{\operatorname{\textsf{\textbf{pop}}}}
+
+\newcommand{\cut}{\operatorname{\textsf{cut}}}
+\newcommand{\return}{\operatorname{\textsf{return}}}
+\newcommand{\bind}{\operatorname{\textsf{bind}}}
+\newcommand{\lookup}{\operatorname{\textsf{lookup}}}
+\newcommand{\graftin}{\operatorname{\textsf{graft}_{\in}}}
+\newcommand{\grafte}{\operatorname{\textsf{graft}_{\e}}}
+
+\newcommand{\dotted}[1]{\mkern2mu\cdot\mkern2mu\mathop{#1}\mkern2mu\cdot\mkern2mu}
+
+\newtheoremstyle{mystyle}
+    {\topsep}  % Space above
+    {\topsep}  % Space below
+    {} % Body font
+    {}         % Indent amount
+    {\bfseries} % Theorem head font
+    {.}        % Punctuation after theorem head
+    {.5em}     % Space after theorem head
+    {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}  % Theorem head spec (can be left empty, meaning `normal')
+\theoremstyle{mystyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+
+
+\usepackage{prftree}
+\prflinepadbefore=1pt
+\prflinepadafter=3pt
+\prfinterspace=1em
+
+
+\title{Introspective Kripke models and\\
+       normalisation by evaluation for the $\uplambdabox$-calculus}
+\def\titlerunning{Introspective Kripke models and normalisation by evaluation for the $\lambdabox$-calculus}
+
+\author{Mi{\"e}tek Bak
+\email{\textrm{\normalsize{\href{mailto:mietek@bak.io}{mietek@bak.io}}}}}
+\def\authorrunning{M. Bak}
+
+\providecommand{\event}{IMLA 2017}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a class of Kripke-style models that is sound and complete for the necessity-only fragment of the intensional modal logic S4.  Our soundness and completeness proofs are constructive, and their composition yields a normalisation by evaluation procedure for the Pfenning-Davies system of natural deduction, known as the $\uplambdabox$-calculus.
+
+The entire development is formalised in \textsc{Agda}, a dependently typed functional programming language, and available online at \href{http://github.com/mietek/imla2017}{http://github.com/mietek/imla2017}.
+\end{abstract}
+
+
+\section*{Introduction}
+
+We seek a \emph{total functional programming} language, as defined by Turner\cite{Turner04}, which would approach the expressivity of McCarthy's\cite{McCarthyAEHL62} \textsc{Lisp} in the domain of meta-programming.  We view the present work as a stepping stone towards meeting Sheard's\cite{Sheard01} challenge of \emph{intensional analysis of syntax} in a total setting.  To this end, we revisit the $\uplambdabox$-calculus of Pfenning and Davies\cite{PfenningD01}, choosing to interpret the necessity connective, $\Box$, as a \emph{quotation modality}.
+
+It is important to note that the Pfenning-Davies calculus is subtly different from the system given by Bierman and de~Paiva\cite{BiermanP00}, even though both correspond to the intuitionistic modal logic S4.  The convertibility relation supplied with the $\uplambdabox$-calculus is not congruent under the $\Box$-introduction rule:
+\begin{align*}
+  & \prftree
+     {\O \; \Delta \e \sA}
+     {\Gamma \; \Delta \e \Box A}
+\end{align*}
+In other words, wrapping a $\uplambda$-term with the above rule inhibits the evaluation of the wrapped term.  Since suspending evaluation is also the precise purpose of the \textsc{Lisp} special form, \textsf{quote}, this justifies our interpretation of $\Box$ as a quotation modality.  Therefore, we denote the $\Box$-introduction rule $\quot$.\footnote{Unfortunately, $\textsf{quote}$ is a reserved identifier in \textsc{Agda}.}
+
+\emph{Normalisation by evaluation} (NbE) is a technique for computing the normal form of $\uplambda$-terms, introduced by Martin-L{\"o}f\cite{MartinLof75}, rediscovered by Berger and Schwichtenberg\cite{BergerS91}, and identified as the computational content of the composition of soundness and completeness proofs by C.~Coquand\cite{Coquand93}.  Assuming a suitable semantics, NbE can be understood as evaluating a given $\uplambda$-term, or \emph{reflecting} the term into the model, followed by \emph{reifying} the resulting value back as a term in normal form.  Abel\cite{Abel13} provides an in-depth discussion.
+
+Under the principle of \emph{propositions as types,} recently surveyed by Wadler\cite{Wadler15}, a constructive proof of soundness corresponds to an \emph{evaluation function,} $\reflect$.  Similarly, a constructive completeness proof corresponds to an \emph{inverse of the evaluation function,} $\reify$.
+
+To the best of our knowledge, no published class of models for an S4-style modal logic supports a constructive proof of completeness.  The proofs given by Ono\cite{Ono77}, Bo\v{z}i\'{c} and Do\v{s}en\cite{BozicD84}, Fischer Servi\cite{FischerServi84}, Ewald\cite{Ewald86}, Plotkin and Stirling\cite{PlotkinS86}, Wijesekera\cite{Wijesekera90}, Simpson\cite{Simpson94}, and Alechina \emph{et al.}\cite{AlechinaMPR01} all proceed by contradiction.  Without a constructive completeness proof, or a $\reify$ function, a NbE procedure cannot be defined.
+
+One of the problems with supplying a complete semantics for the $\uplambdabox$-calculus follows from the difficult character of the $\Box$-elimination rule, which we denote $\eval$:
+\begin{align*}
+  & \prftree
+     {\Gamma \; \Delta \e \Box A}{\Gamma \; \Delta, A \e C}
+     {\Gamma \; \Delta \e C}
+\end{align*}
+According to Dyckhoff\cite{Dyckhoff16}, the above rule belongs to a class of \emph{general elimination} (GE) rules, together with the usual elimination rules for disjunction, absurdity, and existential quantification.  GE rules are distinguished by the presence of a proposition $C$ with no structural link to the proposition being eliminated.  GE rules are also described by Girard \emph{et al.}\cite{GirardTL89} as \textsl{`catastrophic', `atrocities',} and \textsl{`very~bad'.}
+
+Nevertheless, a complete semantics for all connectives of propositional logic, whether well-behaved or not, has been found by Ilik\cite{Ilik13}.  Ilik's solution, which we apply in our work, is a \emph{continuation-passing style} transformation of the model, based on Danvy's\cite{Danvy96} \emph{type-directed partial evaluation.}
+
+\begin{figure}[t]
+\disablesubscriptcorrection
+\def\objectstyle{\scriptstyle}
+\def\labelstype{\scriptscriptstyle}
+
+\begin{minipage}[t]{.475\textwidth}
+\hrule
+\vspace{.5\baselineskip}
+\emph{Persistence.}
+\vspace{-.5\baselineskip}
+$$\xymatrix{
+  \cdots \ar@{.}[r]|\R  & w' \ar@{}[dr]|\r &                  & w'\\
+  w      \ar@{.}[u]|\le &                  & w \ar@{.}[ur]|\R & }$$
+$$w \lesR w' ~\r~ w \R w'$$
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{.475\textwidth}
+\hrule
+\vspace{.5\baselineskip}
+\emph{Minor persistence.}
+\vspace{-.5\baselineskip}
+$$\xymatrix{
+  \cdots \ar@{.}[r]|\R  & w' \ar@{}[dr]|\r &                 & w'\\
+  w      \ar@{.}[u]|\le &                  & w \ar@{.}[r]|\R & \cdots \ar@{.}[u]|\le }$$
+$$w \lesR w' ~\r~ w \Rsle w'$$
+\end{minipage}%
+\vspace{\baselineskip}
+
+\begin{minipage}[t]{.475\textwidth}
+\hrule
+\vspace{.5\baselineskip}
+\emph{Brilliance.}
+\vspace{-.5\baselineskip}
+$$\xymatrix{
+                  & w'     \ar@{}[dr]|\r  &                  & w'\\
+  w \ar@{.}[r]|\R & \cdots \ar@{.}[u]|\le & w \ar@{.}[ur]|\R & }$$
+$$w \Rsle w' ~\r~ w \R w'$$
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{.475\textwidth}
+\hrule
+\vspace{.5\baselineskip}
+\emph{Minor brilliance.}
+\vspace{-.5\baselineskip}
+$$\xymatrix{
+                  & w'     \ar@{}[dr]|\r  & \cdots \ar@{.}[r]|\R  & w'\\
+  w \ar@{.}[r]|\R & \cdots \ar@{.}[u]|\le & w      \ar@{.}[u]|\le & }$$
+$$w \Rsle w' ~\r~ w \lesR w'$$
+\end{minipage}%
+\vspace{\baselineskip}
+
+\hrule
+\vspace{.5\baselineskip}
+\caption{Conditions in Kripke-style models.}\label{Interactions}
+\enablesubscriptcorrection
+\end{figure}
+
+
+Our semantics builds on the standard \emph{possible worlds model} for intuitionistic logic, introduced by Kripke\cite{Kripke65}, which includes an \emph{intuitionistic accessibility relation} between worlds, $w \le w'\mkern-3mu$.  As usual for modal logics, we also include a \emph{modal accessibility relation,} $w \R w'\mkern-3mu$.
+
+Most models for S4-like modal logics, as surveyed by Iemhoff\cite{Iemhoff01}, specify at least one condition that explains the interaction between the two relations.  Some of these conditions are summarised in Figure~\ref{Interactions}.  We require that intuitionistic accessibility implies modal accessibility, and denote this condition \emph{vindication,} since it follows directly from both \emph{brilliance,} $w \Rsle w' \r w \R w'\mkern-3mu$, and \emph{persistence,} $w \lesR w' \r w \Rsle w'\mkern-3mu$.
+
+The main contribution of the present work is a novel \emph{introspection condition,} which allows us to embed closed, non-normal form derivations in the semantics, and thereby explain the meaning of the $\Box$ modality.  This condition also suffices to avoid having to extend our models with \emph{exploding worlds}, in contrast with Ilik's work.
+
+
+\subsection*{Related work}
+
+Our embedding of syntax into the model is superficially similar to the \emph{glueing construction} of T.~Coquand and Dybjer\cite{CoquandD97}, who offer a syntactic model for combinatory logic.
+
+There is a stronger connection with M.~J.~Gabbay's and Nanevski's\cite{GabbayN13} semantics for contextual modal type theory, although our interpretation of the $\Box$ modality is different from theirs.
+
+The strongest connection of all is found through Artemov's\cite{Artemov01} work on the \emph{logic of proofs} (LP), which provides an answer to G{\"o}del's\cite{Godel33} question about the intended semantics for S4.
+
+Originally, G{\"o}del meant $\Box$ to be interpreted as a provability predicate, with $\Box A$ read as \textsl{``there exists a proof of~$A$''.}  Artemov argues that the failure of G{\"o}del's interpretation is due to the non-constructive character of the existential quantifier.  We support this point of view, and observe that it is precisely the availability of a strong notion of existence in our constructive meta-language which allows us to justify a new reading of the $\Box$ modality.
+
+If the standard intuitionistic Kripke semantics corresponds to the McKinsey-Tarski\cite{McKinseyT48} embedding of intuitionistic logic in S4, our semantics corresponds to the Artemov embedding of S4 in LP.
+
+
+\subsection*{Notation}
+
+In this paper, we adopt a constructive meta-language: an informal dialect of the \textsc{Agda} dependently typed functional programming language, originally due to Norell\cite{Norell07}.  Inessential technical details, such as those relating to universe polymorphism, are omitted.  We make no such concessions in our full formal development.
+
+All meta-variables are implicitly universally quantified.  Any omitted proof can be recovered by means of a routine inductive argument, unless otherwise noted.  
+
+The function space, or meta-level implication, is written as $X \r Y$, introduced through $\uplambda$-expressions, $f = \uplambda~x \. y$, and eliminated through juxtaposition, $f~x$.  We refer to the identity function as $\id$.  Function composition is written as $f \o g$.
+
+By convention, the letters $A, B, C$ refer to propositions, and $\Gamma, \Delta, \Xi$ refer to collections of propositions.  Proof trees, or derivations, are referred to as $M, N\mkern-3mu$, and continuations as $\kappa$.
+
+
+\subsection*{Outline}
+
+Our argument is structured as follows:
+
+\textbf{(\ref{Syntax})} We begin by formalising a calculus of proof trees as an indexed type family, or a \emph{syntactic entailment relation,} $\Gamma \; \Delta \e \sA$, where each proof tree represents a term-in-context.  Normal forms are defined in a similar manner.
+
+\textbf{(\ref{Semantics})} We give a class of \emph{introspective Kripke models}, which include intuitionistic accessibility, $w \le w'\mkern-3mu$, modal accessibility, $w \R w'\mkern-3mu$, vindication, $w \le w' \r w \R w'\mkern-3mu$, and introspection, $w \r \Gamma \; \Delta$.  We define a \emph{forcing relation}, $w \ee \sA$, in order to explain the meaning of a given proposition being true in a particular world.
+
+\textbf{(\ref{Soundness})} We define a \emph{semantic entailment relation,} $\Gamma \; \Delta \ef \sA$, as forcing in all worlds of all models.  Soundness of the semantics with respect to the calculus is shown by defining an \emph{evaluation function,} $\reflect$, which maps proof trees to semantic objects.
+
+\textbf{(\ref{Completeness})} We give a \emph{canonical model} that identifies worlds with contexts.  Defining an \emph{inverse of the evaluation function,} $\reify$, shows completeness of the semantics with respect to the calculus.  Finally, we obtain a \emph{normalisation function,} $\nbe$.
+
+
+\section{Syntax}\label{Syntax}
+
+\subsection{Types}
+Let us consider a set of types, $\Type$, that corresponds to the connectives of propositional modal logic S4, and includes a base type, $\base$, a function type, $A \rf B$, and a type of quotations, $\Box A$.
+\begin{align*}
+  \prftree
+    {}
+    {\base \: \Type}
+  \quad
+  \prftree
+    {A \: \Type}{B \: \Type}
+    {A \rf B \: \Type}
+  \quad
+  \prftree
+    {A \: \Type}
+    {\Box A \: \Type}
+\end{align*}
+The constructions described in the present work can be easily generalised to product and sum types, Girard's disdain notwithstanding.  This extension, omitted here for lack of space, is included in our full formal development.
+
+
+\subsection{Contexts}
+We define a context, $\Context = \StackII \Type \Type$, as a pair of \emph{type stacks,} also referred to as a \emph{type stack pair.}  In other words, the first element of a given context is a stack of types representing the non-modal assumptions, and the second element is a stack of types representing the modal assumptions.
+
+A stack is another name for a list, written in reverse order.  An empty stack is constructed as $\O$.  We overload the same symbol to mean the constructor of the unit type, $\top\mkern-3mu$.  Pushing an element on top of a stack is written as $\Gamma, A$.
+\begin{align*}
+  \prftree
+    {}
+    {\O \: \Stack X}
+  \quad
+  \prftree
+    {\Gamma \: \Stack X}{A \: X}
+    {\Gamma, A \: \Stack X}
+\end{align*}
+Stack pairs are constructed as $\Gamma \; \Delta$, as opposed to regular pairs, which are constructed as $x, y$.  We allow the first and second element of any pair to be accessed with the first and second projection function, $\pii~Z$ and $\piii~Z$, respectively.
+
+Instead of explicit variable names, our formalisation of the $\uplambdabox$-calculus uses de~Bruijn indices, formalised as an inductive stack membership relation, $A \in \Gamma\mkern-3mu$.  The letters $i, j$ refer to indices.
+\begin{align*}
+  \prftree
+    {}
+    {\tops \: A \in \Gamma, A}
+  \quad
+  \prftree
+    {i \: A \in \Gamma}
+    {\pops~i \: A \in \Gamma, B}
+\end{align*}
+Following Chapman\cite{Chapman09}, we define an inclusion relation on stacks, $\Gamma \leq \Gamma'\mkern-3mu$, as an inductive type of \emph{order-preserving embeddings}.  Stack inclusions are referred to as the letters $\eta, \mu$.
+\begin{align*}
+  \prftree
+    {}
+    {\donel \: \O \leq \O \phantom{'}}
+  \quad
+  \prftree
+    {\eta \: \Gamma \leq \Gamma'}
+    {\skipl~\eta \: \Gamma \leq \Gamma'\mkern-3mu, A}
+  \quad
+  \prftree
+    {\eta \: \Gamma \leq \Gamma'}
+    {\keepl~\eta \: \Gamma, A \leq \Gamma'\mkern-3mu, A}
+\end{align*}
+Inclusion on stacks is reflexive, transitive, and has an infimum:
+\begin{alignat*}{2}
+  & \reflleq    && ~\:~ \Gamma \leq \Gamma\\
+  & \transleq   && ~\:~ \Gamma \leq \Gamma' ~\r~ \Gamma' \leq \Gamma'' ~\r~ \Gamma \leq \Gamma''\\
+  & \infleq     && ~\:~ \O \leq \Gamma
+\end{alignat*}
+Stack membership is monotonic with respect to inclusion, $\monoin$.  This property allows us to express \emph{weakening an argument} --- that is, rewriting a derivation under additional assumptions.
+\begin{alignat*}{2}
+  & \monoin     && ~\:~ \Gamma \leq \Gamma' \r A \in \Gamma \r A \in \Gamma'\\
+  & \weakleq    && ~\:~ \Gamma \leq \Gamma, A
+\end{alignat*}
+We define inclusion on stack pairs as a conjunction of inclusions, $\Gamma \; \Delta \leqII \Gamma' \; \Delta'' ~=~ \Gamma \leq \Gamma' \conj \Delta \leq \Delta'\mkern-3mu$.  It follows directly that inclusion on stack pairs is reflexive and transitive:
+\begin{alignat*}{2}
+  & \reflleqII  && ~\:~ \Gamma \; \Delta \leqII \Gamma \; \Delta\\
+  & \transleqII && ~\:~ \Gamma \; \Delta \leqII \Gamma' \; \Delta' ~\r~ \Gamma' \; \Delta' \leqII \Gamma'' \; \Delta'' ~\r~ \Gamma \; \Delta \leqII \Gamma'' \; \Delta''
+\end{alignat*}
+The letter $\psi$ refers to stack pair inclusions.
+
+
+\subsection{Syntactic entailment}
+
+Proof trees, or derivations in the $\uplambdabox$-calculus, are formalised as an indexed type family, $\Gamma \; \Delta \e \sA$, after Altenkirch and Reus\cite{AltenkirchR99}.  This ensures that only well-typed terms are representable.
+\begin{align*}
+  & \prftree
+     {i \: A \in \Gamma}
+     {\var~i \: \Gamma \; \Delta \e \sA}\quad
+  & \prftree
+     {i \: A \in \Delta}
+     {\mvar~i \: \Gamma \; \Delta \e \sA}\\[.5\baselineskip]
+  & \prftree
+     {M \: \Gamma \, A \; \Delta \e B}
+     {\lam~M \: \Gamma \; \Delta \e \sA \rf B}\quad
+  & \prftree
+     {M \: \O \; \Delta \e \sA}
+     {\quot~M \: \Gamma \; \Delta \e \Box A}\\[.5\baselineskip]
+  & \prftree
+     {M \: \Gamma \; \Delta \e \sA \rf B}{N \: \Gamma \; \Delta \e \sA}
+     {\app~M~N \: \Gamma \; \Delta \e B}\quad
+  & \prftree
+     {M \: \Gamma \; \Delta \e \Box A}{N \: \Gamma \; \Delta, A \e C}
+     {\eval~M~N \: \Gamma \; \Delta \e C}
+\end{align*}
+Multiple terms in a single context can be represented as a pointwise lifting of syntactic entailment to stacks of types, $\Gamma \; \Delta \es \Xis$, constituting a \emph{syntactic environment}.  The letters $\gamma, \delta, \xi$ refer to syntactic environments.
+
+Note that the $\quot$ form wraps a closed derivation, $\O \; \Delta \e \sA$, or a proof tree in which only modal assumptions are made.  We view the collection of modal assumptions, $\Delta$, as a typed specification of modal holes left in a given derivation.  These holes must be plugged in order for a derivation to fully evaluate.  Our evaluation function requires us to supply a syntactic environment of \emph{modal evidence,} containing a closed derivation for each modal assumption.
+
+Syntactic environments are both non-modally and modally reflexive:
+\begin{alignat*}{2}
+  & \refles  && ~\:~ \Gamma \; \Delta \es \Gamma\\
+  & \mrefles && ~\:~ \Gamma \; \Delta \es \Delta
+\end{alignat*}
+Furthermore, syntactic entailment is monotonic with respect to stack pair inclusion, $\monoe$.  The proof proceeds by induction, using monotonicity of stack membership, $\monoin$, in the $\var$ and $\mvar$ case.
+\begin{alignat*}{2}
+  & \monoe   && ~\:~ \Gamma \; \Delta \leqII \Gamma' \; \Delta' ~\r~ \Gamma \; \Delta \e \sA ~\r~ \Gamma' \; \Delta' \e \sA\\
+  & \monoes  && ~\:~ \Gamma \; \Delta \leqII \Gamma' \; \Delta' ~\r~ \Gamma \; \Delta \es \mkern-2mu\Xis ~\r~ \Gamma' \; \Delta' \es \mkern-2mu\Xis
+\end{alignat*}
+Our soundness proof requires the ability to \emph{graft proof trees,} which we view as a form of simultaneous substitution, or a variant of the $\cut$ rule.  Grafting is the method by which we plug holes left in a given derivation, effectively performing \emph{call by name} evaluation.
+\begin{alignat*}{3}
+  & \graftin ~\:~ \rlap{$\Gamma \; \Delta \es \Xi ~\r~ A \in \Xi ~\r~ \Gamma \; \Delta \e \sA$}\\
+  & \graftin~(\xi ~\,~ M)~\tops              && ~=~ M\\
+  & \graftin~(\xi ~\,~ N)~\mkern4mu(\pops~i) && ~=~ \graftin~\xi~i\\[.5\baselineskip]
+  & \grafte ~\:~ \rlap{$\Gamma \; \Delta \es \Gamma' ~\r~ \O \; \Delta \es \Delta' ~\r~ \Gamma' \; \Delta' \e C ~\r~ \Gamma \; \Delta \e C$}\\
+  & \grafte~\gamma~\delta~(\var~i)    && ~=~ \graftin~\gamma~i\\
+  & \grafte~\gamma~\delta~(\mvar~i)   && ~=~ \monoe~\rlap{$(\infleq \, \reflleq)~(\graftin~\delta~i)$}\\
+  & \grafte~\gamma~\delta~(\lam~M)    && ~=~ \lam~\rlap{$(\grafte~(\monoes~(\weakleq \, \reflleq)~\gamma ~\,~ (\var~\tops))~\delta~M)$}\\
+  & \grafte~\gamma~\delta~(\app~M~N)  && ~=~ \app~\rlap{$(\grafte~\gamma~\delta~M)~(\grafte~\gamma~\delta~N)$}\\
+  & \grafte~\gamma~\delta~(\quot~M)   && ~=~ \quot~(\grafte~\O~\delta~M)\\
+  & \grafte~\gamma~\delta~(\eval~M~N) && ~=~ \eval~(\grafte~\gamma~\delta~M)\\
+  &                                   && \phantom{~=~ \eval~} (\grafte~ (\monoes~(\reflleq \, \weakleq)~\gamma)\\
+  &                                   && \phantom{~=~ \eval~(\grafte~}  (\monoes~(\reflleq \, \weakleq)~\delta ~\,~ (\mvar~\tops))~N)
+\end{alignat*}
+
+
+\subsection{Normal forms}
+
+We define proof trees in normal form, $\Gamma \; \Delta \enf \sA$, mutually with proof trees in \emph{neutral form,} $\Gamma \; \Delta \ene \sA$.  Neutral forms correspond to terms that are blocked from evaluation by the presence of an assumption, as described by Altenkirch\cite{Altenkirch93}.
+\begin{align*}
+  & \prftree
+     {M \: \Gamma \, A \; \Delta \enf B}
+     {\lamnf~M \: \Gamma \; \Delta \enf \sA \rf B}\quad
+  & \prftree
+     {i \: A \in \Gamma}
+     {\varne~i \: \Gamma \; \Delta \ene \sA}\\[.5\baselineskip]
+  & \prftree
+     {M \: \O \; \Delta \e \sA}
+     {\quotnf~M \: \Gamma \; \Delta \enf \Box A}\quad
+  & \prftree
+     {i \: A \in \Delta}
+     {\mvarne~i \: \Gamma \; \Delta \ene \sA}\\[.5\baselineskip]
+  & &\prftree
+     {M \: \Gamma \; \Delta \ene \sA \rf B}{N \: \Gamma \; \Delta \enf \sA}
+     {\appne~M~N \: \Gamma \; \Delta \ene B}\\[.5\baselineskip]
+  & \prftree
+     {M \: \Gamma \; \Delta \ene \sA}
+     {\nenf~M \: \Gamma \; \Delta \enf \sA}\quad
+  & \prftree
+     {M \: \Gamma \; \Delta \ene \Box A}{N \: \Gamma \; \Delta, A \enf C}
+     {\evalne~M~N \: \Gamma \; \Delta \ene C}
+\end{align*}
+Syntactic entailment in normal and neutral form is monotonic with respect to stack pair inclusion:
+\begin{alignat*}{2}
+  & \monoenf && ~\:~ \Gamma \; \Delta \leqII \Gamma' \; \Delta' ~\r~ \Gamma \; \Delta \enf \sA ~\r~ \Gamma' \; \Delta' \enf \sA\\
+  & \monoene && ~\:~ \Gamma \; \Delta \leqII \Gamma' \; \Delta' ~\r~ \Gamma \; \Delta \ene \sA ~\r~ \Gamma' \; \Delta' \ene \sA
+\end{alignat*}
+It is important to note that the $\quotnf$ normal form wraps a closed, non-normal form derivation, $\O \; \Delta \e \sA$, because we do not wish to evaluate under $\quot$.  This matches the definition of convertibility for the $\uplambdabox$-calculus given by Pfenning and Davies, which is not congruent under the $\Box$-introduction rule.
+
+Some say that in \textsc{Lisp}, code is data.  We prefer to say that code may be $\quot$ed to become data, and such data may be $\eval$uated to become code.
+
+
+\section{Semantics}\label{Semantics}
+
+\subsection{Model}
+
+An \emph{introspective Kripke model} is a tuple containing a \emph{set of possible worlds,} $\World$, a monotonic \emph{family of ground sets,} $\G w$, a reflexive and transitive \emph{intuitionistic accessibility relation}, $w \le w'\mkern-3mu$, a reflexive and transitive \emph{modal accessibility relation}, $w \R w'\mkern-3mu$, and two novel conditions, described below.
+\begin{alignat*}{2}
+  & \monoG   && ~\:~ w \le w' ~\r~ \G w ~\r~ \G w'\\
+  & \reflle  && ~\:~ w \le w\\
+  & \transle && ~\:~ w \le w' ~\r~ w' \le w'' ~\r~ w \le w''\\
+  & \reflR   && ~\:~ w \R w\\
+  & \transR  && ~\:~ w \R w' ~\r~ w' \R w'' ~\r~ w \R w''\\
+  & \lerR    && ~\:~ w \le w' ~\r~ w \R w'\\
+  & \peek    && ~\:~ \rlap{$\World$}\hphantom{w \le w'} ~\r~ \Context
+\end{alignat*}
+The family of ground sets is intended to provide an interpretation for the base type, $\base$.  As usual in an intuitionistic Kripke model, we require this family to be monotonic with respect to intuitionistic accessibility, $\monoG$.
+
+Our models include a \emph{vindication condition}, $\lerR$, which states that intuitionistic accessibility must imply modal accessibility.  This property follows directly from \emph{persistence,} $w \lesR w' \r w \Rsle w'\mkern-3mu$, included in Ono's\cite{Ono77} I-models of type 0, among others.  Vindication is the only method by which the two relations interact in our models.
+
+Additionally, we introduce an \emph{introspection condition,} $\peek$.  This unusual condition allows us to intensionally inspect a given world, obtaining the assumptions that have been made in that world.
+
+Since a context is defined as a pair of type stacks, $\piii~(\peek~w)$ yields a stack of modal assumptions, $\Delta$.  The ability to obtain only the modal assumptions made at a given world is precisely what enables us to embed a closed derivation, $\O \; \Delta \e \sA$, in the semantics.
+
+
+\subsection{Forcing}
+
+We define a \emph{strong forcing relation}, $w \ee \sA$, which explains what it means for the proposition $A$ to be true in the world $w$.  This relation is defined mutually with \emph{non-strong forcing,} $w \eee \sA$, in a continuation-passing style similar to Ilik's.  The difference is that we do not require \emph{exploding worlds} in our models for this definition, thanks to our introspection condition.
+
+A \emph{value environment}, $w \ees \Xis$, is obtained by a pointwise lifting of strong forcing to stacks of types.  The letters $\rho, \sigma$ refer to value environments.
+\begin{alignat*}{2}
+  & w \ee \sA        && ~=~ w \le w' ~\r~ (w' \le w'' \r w'' \eee \sA \r \peek~w'' \enf C) ~\r~ \peek~w' \enf C\\[.5\baselineskip]
+  & w \eee \base     && ~=~ \G w\\
+  & w \eee \sA \rf B && ~=~ w \le w' ~\r~ w' \ee \sA ~\r~ w' \ee B\\
+  & w \eee \Box A    && ~=~ w \R w' ~\r~ \O \; \piii~(\peek~w') \e \sA~\conj~w' \ee \sA
+\end{alignat*}
+We are now justified in saying that $\Box A$ is true in the model if-and-only-if there strongly exists a term that corresponds to a closed, non-normal form derivation of $A$, and $A$ is true in the model.  In other words, we can say that $\Box A$ is true as long as we have \emph{syntactic evidence} for the fact that $A$ is true.
+
+
+\section{Soundness}\label{Soundness}
+
+\subsection{Semantic entailment}
+
+We define a \emph{semantic entailment relation}, $\Gamma \; \Delta \ef \sA$, as strong forcing in all worlds of all models, in a three-part environment described below.
+\begin{alignat*}{2}
+  & \Gamma \; \Delta \ef \sA ~=~ && (\rho \: w \ees \Gamma) ~\r\\
+  &                              && (\delta \: w \R w' \r \O \; \piii~(\peek w') \es \Delta) ~\r\\
+  &                              && (\sigmas \: w \R w' \r w' \ees \Delta) ~\r\\
+  &                              && w \ee \sA
+\end{alignat*}
+The three-part environment consists of:
+\begin{enumerate}
+  \item $\rho$, a non-modal value environment, with a value for each non-modal assumption,
+  \item $\delta$, a syntactic environment of \emph{modal evidence,} with a closed, non-normal form derivation for each modal assumption, and
+  \item $\sigma\mkern-2mu$, a modal value environment, with a value for each modal assumption.
+\end{enumerate}
+Modal evidence and modal values are ready to be transported between modally accessible worlds.
+
+
+\subsection{Reflection}
+
+We demonstrate the soundness of our models with respect to the $\uplambdabox$-calculus by defining an \emph{evaluation function,} $\reflect$, which maps derivations to semantic objects.
+
+The proof of soundness is written in a continuation-passing style, after Ilik, with the continuation monad defined as follows:
+\begin{alignat*}{3}
+  & \return ~\:~ \rlap{$w \eee \sA ~\r~ w \ee \sA$}\\
+  & \return~a      ~=~ && \uplambda~\psi~\kappa \.\\
+  &                    && \quad \kappa~\reflle~(\monoeee~\psi~a)\\[.5\baselineskip]
+  & \bind ~\:~ \rlap{$w \ee \sA ~\r~ (w \le w' \r w' \eee \sA \r w' \ee B) ~\r~ w \ee B$}\\
+  & \bind~a~\kappa ~=~ && \uplambda~\psi~\kappa' \.\\
+  &                    && \quad a~\psi~(\uplambda~\psi'~a' \.\\
+  &                    && \quad\quad \kappa~(\transle~\psi~\psi')~a'~\reflle~(\uplambda~\psi''~a'' \.\\
+  &                    && \quad\quad\quad \kappa'~(\transle~\psi'~\psi'')~a''))
+\end{alignat*}
+The ability to look up values in value environments, $\lookup$, is required in the $\var$ and $\mvar$ case of the soundness proof.
+\begin{alignat*}{3}
+  & \lookup ~\:~ \rlap{$A \in \Xi ~\r~ w \ees \Xi ~\r~ w \ee \sA$}\\
+  & \lookup~\tops     && ~(\xi~\,~s) && ~=~ s\\
+  & \lookup~(\pops~i) && ~(\xi~\,~t) && ~=~ \lookup~i~\xi
+\end{alignat*}
+The proof of soundness makes use of the vindication condition, $\lerR$, for the purpose of transporting modal evidence, $\delta$, and modal values, $\sigma\mkern-2mu$, between worlds.
+\begin{alignat*}{5}
+  & \reflect ~\:~ \rlap{$\Gamma \; \Delta \e \sA ~\r~ \Gamma \; \Delta \ef \sA$}\\
+  & \reflect~(\var~i)    && ~\rho~\delta~\sigma ~=~ && \lookup~\rlap{$i~\rho$}\\
+  & \reflect~(\mvar~i)   && ~\rho~\delta~\sigma ~=~ && \lookup~\rlap{$i~(\sigma~\reflR)$}\\
+  & \reflect~(\lam~M)    && ~\rho~\delta~\sigma ~=~ && \return~\rlap{$(\uplambda~\psi~a \.$}\\
+  &                      &&                         && \quad \reflect~M~ &&(\monoees~\psi~\rho~\,~a)\\
+  &                      &&                         &&                   &&(\uplambda~\mu \. \delta~(\transR~(\lerR~\psi)~\mu))\\
+  &                      &&                         &&                   &&(\uplambda~\mu \. \sigmas~(\transR~(\lerR~\psi)~\mu)))\\
+  & \reflect~(\app~M~N)  && ~\rho~\delta~\sigma ~=~ && \bind~\rlap{$(\reflect~M~\rho~\delta~\sigma)~(\uplambda~\psi~f \.$}\\
+  &                      &&                          && \quad f~\rlap{$\reflle~(\monoee~\psi~(\reflect~N~\rho~\delta~\sigma)))$}\\
+  & \reflect~(\quot~M)   && ~\rho~\delta~\sigma ~=~ && \return~\rlap{$(\uplambda~\mu \.$}\\
+  &                      &&                         && \quad \grafte~\rlap{$\unit~(\delta~\mu)~M~\,$}\\
+  &                      &&                         && \quad \reflect~M~ &&\unit\\                                
+  &                      &&                         &&                   &&(\uplambda~\mu' \. \delta~(\transR~\mu~\mu'))\\
+  &                      &&                         &&                   &&(\uplambda~\mu' \. \sigmas~(\transR~\mu~\mu')))\\
+  & \reflect~(\eval~M~N) && ~\rho~\delta~\sigma ~=~ && \bind~\rlap{$(\reflect~M~\rho~\delta~\sigma)~(\uplambda~\psi~f \.$}\\
+  &                      &&                         && \quad \reflect~M~ &&(\monoees~\psi~\rho)\\
+  &                      &&                         &&                   &&(\uplambda~\mu \. \delta~(\transR~(\lerR~\psi)~\mu)~\,~\pii~(f~\mu))\\
+  &                      &&                         &&                   &&(\uplambda~\mu \. \sigmas~(\transR~(\lerR~\psi)~\mu)~\,~\piii~(f~\mu)))
+\end{alignat*}
+In the $\quot$ case, let us recall the definition of forcing for $\Box A$.  The value to be returned is a pair, containing a closed, non-normal form derivation of $A$, and a value of type $A$.  The first element is the result of grafting all necessary modal evidence from the syntactic environment, $\delta$, on top of the derivation, $M\mkern-3mu$, or plugging modal holes left in $M\mkern-3mu$.  The second element is a value that corresponds to the first element. 
+
+
+\section{Completeness}\label{Completeness}
+
+\subsection{Canonical model}
+
+A \emph{canonical model} allows each value to be reified as a term in normal form.  We begin the construction of a canonical introspective Kripke model by identifying worlds with contexts.  It immediately follows that the introspection condition has been the identity function all along:
+$$
+\peek ~=~ \id
+$$
+The family of ground sets can be defined as the set of derivations in neutral form that correspond to terms of the base type, $\G w = w \ene \base$.  This preserves the monotonicity condition, $\monoG = \monoene$.
+
+Since a context is defined as a pair of type stacks, intuitionistic accessibility becomes stack pair inclusion, $w \le w' = w \leqII w'\mkern-3mu$, and modal accessibility becomes inclusion on the second element of each context, $w \R w' = \piii~w \leq \piii~w'\mkern-3mu$.  The reflexivity and transitivity conditions are preserved.
+
+Inclusion on stack pairs is defined as a pair of inclusions.  Therefore, the vindication condition, $\lerR$, can be identified with the second projection function, $\piii$.
+
+\noindent
+We are now ready to define a function that maps proof trees to values within the canonical model, $\reflectc$, mutually with an inverse mapping, $\reifyc$, which reads back the resulting values as derivations in normal form.  Both definitions proceed by induction on the type of the derivation.
+\begin{alignat*}{5}
+  & \reflectc ~\:~ \rlap{$\Gamma \; \Delta \ene \sA ~\r~ \Gamma \; \Delta \ee \sA$}\\
+  & \reflectc~\lbrace \base \rbrace~   && M      && ~=~ && \return~M\\
+  & \reflectc~\lbrace A \rf B \rbrace~ && M      && ~=~ && \return~(\uplambda~\psi~a \.\\
+  &                                    &&        &&     && \quad \reflectc~(\appne~(\monoene~\psi~M)~(\reifyc~a)))\\
+  & \reflectc~\lbrace \Box A \rbrace~  && M      && ~=~ && \uplambda~\psi~\kappa \.\\
+  &                                    &&        &&     && \quad \nenf~(\evalne~(\monoene~\psi~M)~(\kappa~(\reflleq \, \weakleq)~(\uplambda~\mu' \.\\
+  &                                    &&        &&     && \quad\quad \monoe~(\donel \, \mu')~(\mvar~\tops) \,\\
+  &                                    &&        &&     && \quad\quad \reflectc~(\monoene~(\infleq \, \mu')~(\mvarne~\tops)))))\\[.5\baselineskip]
+  & \reifyc ~\:~ \rlap{$\Gamma \; \Delta \ee \sA ~\r~ \Gamma \; \Delta \enf \sA$}\\
+  & \reifyc~\lbrace \base \rbrace~   && \kappa && ~=~ && \kappa~\reflleqII~(\uplambda~\psi~o \.\\
+  &                                  &&        &&     && \quad \nenf~o)\\
+  & \reifyc~\lbrace A \rf B \rbrace~ && \kappa && ~=~ && \kappa~\reflleqII~(\uplambda~\psi~f \.\\
+  &                                  &&        &&     && \quad \lamnf~(\reifyc~(f~(\weakleq \, \reflleq)~(\reflectc~(\varne~\tops)))))\\
+  & \reifyc~\lbrace \Box A \rbrace~  && \kappa && ~=~ && \kappa~\reflleqII~(\uplambda~\psi~f \.\\
+  &                                  &&        &&     && \quad \quotnf~(\pii~(f~\reflleq)))
+\end{alignat*}
+By reflecting assumptions into the canonical model, we obtain that value environments are both non-modally and modally reflexive:
+\begin{alignat*}{2}
+  & \reflees  && ~\:~ \Gamma \; \Delta \ees \Gamma\\
+  & \mreflees && ~\:~ \Gamma \; \Delta \ees \Delta
+\end{alignat*}
+
+
+\subsection{Reification}
+
+Defining an \emph{inverse of the evaluation function,} $\reify$, demonstrates the completeness of our models with respect to the $\uplambdabox$-calculus.  The proof proceeds by reading back values from the canonical model, in a three-part environment of reflected assumptions.
+\begin{alignat*}{2}
+  & \reify ~\:~ \rlap{$\Gamma \; \Delta \ef \sA ~\r~ \Gamma \; \Delta \enf \sA$}\\
+  & \reify~o ~=~ \reifyc~(o~ && \reflees\\
+  &                          && (\uplambda~\mu \. \monoes~(\reflleq \, \mu)~\mrefles)\\
+  &                          && (\uplambda~\mu \. \monoees~(\reflleq \, \mu)~\mreflees)
+\end{alignat*}
+
+
+\subsection{Normalisation}
+
+Finally, we obtain a normalisation procedure, $\nbe$, as composition of the soundness and completeness proofs:
+\begin{align*}
+  & \nbe ~\:~ \Gamma \; \Delta \e \sA ~\r~ \Gamma \; \Delta \enf \sA\\
+  & \nbe ~=~ \reify \o \reflect
+\end{align*}
+
+
+\section*{Conclusion}
+
+We have presented a class of introspective Kripke models that is sound and complete with respect to the $\uplambdabox$-calculus of Pfenning and Davies\cite{PfenningD01}.  As far as we know, our work supplies the first constructive proof of completeness for an S4-style modal logic.  Our next steps will involve verifying the correctness of the NbE procedure against a suitable convertibility relation.
+
+We hope that the present work clears a path towards a computational interpretation of Artemov's\cite{Artemov01} logic of proofs (LP).  Some of our results may also be applicable to the contextual modal type theory of Nanevski \emph{et al.}\cite{NanevskiPP08}.
+
+
+\subsection*{Acknowledgements}
+
+The author is deeply grateful to Andreas~Abel, Guillaume~Allais, Ahmad~Salim~Al-Sibahi, Roy~Dyckhoff, Michael~Gabbay, Paolo~G.~Giarrusso, Tom~Jack, Roman~Kireev, Darryl~McAdams, Conor~McBride, Dominic~Orchard, Ida~Szubert, Andrea~Vezzosi, and Tomasz~Wierzbicki, for many fruitful discussions over the years.
+
+\nocite{*}
+% \bibliographystyle{plainnat}
+\bibliographystyle{eptcs}
+\bibliography{imla2017}
+
+\end{document}
