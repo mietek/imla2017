@@ -479,40 +479,40 @@ unproj∋₂ {Γ = Γ , (A , B)} (suc i) = mapΣ id suc (unproj∋₂ i)
 infix 4 _⊇_
 data _⊇_ {ℓ} {X : Set ℓ} : List X → List X → Set ℓ
   where
-    doneᵣ : ∅ ⊇ ∅
+    done : ∅ ⊇ ∅
 
-    wkᵣ   : ∀ {Γ Γ′ A} → (η : Γ′ ⊇ Γ)
-                       → Γ′ , A ⊇ Γ
+    wk   : ∀ {Γ Γ′ A} → (η : Γ′ ⊇ Γ)
+                      → Γ′ , A ⊇ Γ
 
-    liftᵣ : ∀ {Γ Γ′ A} → (η : Γ′ ⊇ Γ)
-                       → Γ′ , A ⊇ Γ , A
+    lift : ∀ {Γ Γ′ A} → (η : Γ′ ⊇ Γ)
+                      → Γ′ , A ⊇ Γ , A
 
 
-infᵣ : ∀ {ℓ} → {X : Set ℓ} {Γ : List X}
+infₑ : ∀ {ℓ} → {X : Set ℓ} {Γ : List X}
              → Γ ⊇ ∅
-infᵣ {Γ = ∅}     = doneᵣ
-infᵣ {Γ = Γ , A} = wkᵣ infᵣ
+infₑ {Γ = ∅}     = done
+infₑ {Γ = Γ , A} = wk infₑ
 
-idᵣ : ∀ {ℓ} → {X : Set ℓ} {Γ : List X}
+idₑ : ∀ {ℓ} → {X : Set ℓ} {Γ : List X}
             → Γ ⊇ Γ
-idᵣ {Γ = ∅}     = doneᵣ
-idᵣ {Γ = Γ , A} = liftᵣ idᵣ
+idₑ {Γ = ∅}     = done
+idₑ {Γ = Γ , A} = lift idₑ
 
-_∘ᵣ_ : ∀ {ℓ} → {X : Set ℓ} {Γ Γ′ Γ″ : List X}
+_∘ₑ_ : ∀ {ℓ} → {X : Set ℓ} {Γ Γ′ Γ″ : List X}
              → Γ′ ⊇ Γ → Γ″ ⊇ Γ′
              → Γ″ ⊇ Γ
-η       ∘ᵣ doneᵣ    = η
-η       ∘ᵣ wkᵣ η′   = wkᵣ (η ∘ᵣ η′)
-wkᵣ η   ∘ᵣ liftᵣ η′ = wkᵣ (η ∘ᵣ η′)
-liftᵣ η ∘ᵣ liftᵣ η′ = liftᵣ (η ∘ᵣ η′)
+η      ∘ₑ done    = η
+η      ∘ₑ wk η′   = wk (η ∘ₑ η′)
+wk η   ∘ₑ lift η′ = wk (η ∘ₑ η′)
+lift η ∘ₑ lift η′ = lift (η ∘ₑ η′)
 
-lookupᵣ : ∀ {ℓ} → {X : Set ℓ} {Γ Γ′ : List X} {A : X}
+lookupₑ : ∀ {ℓ} → {X : Set ℓ} {Γ Γ′ : List X} {A : X}
                 → Γ′ ⊇ Γ → Γ ∋ A
                 → Γ′ ∋ A
-lookupᵣ doneᵣ     i       = i
-lookupᵣ (wkᵣ η)   i       = suc (lookupᵣ η i)
-lookupᵣ (liftᵣ η) zero    = zero
-lookupᵣ (liftᵣ η) (suc i) = suc (lookupᵣ η i)
+lookupₑ done     i       = i
+lookupₑ (wk η)   i       = suc (lookupₑ η i)
+lookupₑ (lift η) zero    = zero
+lookupₑ (lift η) (suc i) = suc (lookupₑ η i)
 
 
 --------------------------------------------------------------------------------
@@ -529,36 +529,36 @@ _⊇²_ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} → List² X Y →
 Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ = Δ′ ⊇ Δ × Γ′ ⊇ Γ
 
 
-mwkᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : X}
-                → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ
-                → Δ′ , A ⁏ Γ′ ⊇² Δ ⁏ Γ
-mwkᵣ η = wkᵣ (proj₁ η) , proj₂ η
+ᵐwk² : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : X}
+               → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ
+               → Δ′ , A ⁏ Γ′ ⊇² Δ ⁏ Γ
+ᵐwk² η = wk (proj₁ η) , proj₂ η
 
-rwkᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : Y}
-                → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ
-                → Δ′ ⁏ Γ′ , A ⊇² Δ ⁏ Γ
-rwkᵣ η = proj₁ η , wkᵣ (proj₂ η)
+wk² : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : Y}
+              → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ
+              → Δ′ ⁏ Γ′ , A ⊇² Δ ⁏ Γ
+wk² η = proj₁ η , wk (proj₂ η)
 
 
-idᵣ² : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ : List X} {Γ : List Y}
+idₑ² : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ : List X} {Γ : List Y}
                 → Δ ⁏ Γ ⊇² Δ ⁏ Γ
-idᵣ² = idᵣ , idᵣ
+idₑ² = idₑ , idₑ
 
-_∘ᵣ²_ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ Δ″ : List X} {Γ Γ′ Γ″ : List Y}
+_∘ₑ²_ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ Δ″ : List X} {Γ Γ′ Γ″ : List Y}
                  → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Δ″ ⁏ Γ″ ⊇² Δ′ ⁏ Γ′
                  → Δ″ ⁏ Γ″ ⊇² Δ ⁏ Γ
-η ∘ᵣ² η′ = (proj₁ η ∘ᵣ proj₁ η′) , (proj₂ η ∘ᵣ proj₂ η′)
+η ∘ₑ² η′ = (proj₁ η ∘ₑ proj₁ η′) , (proj₂ η ∘ₑ proj₂ η′)
 
 
-mlookupᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : X}
+ᵐlookupₑ² : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : X}
                     → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Δ ∋ A
                     → Δ′ ∋ A
-mlookupᵣ η i = lookupᵣ (proj₁ η) i
+ᵐlookupₑ² η i = lookupₑ (proj₁ η) i
 
-rlookupᵣ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : Y}
-                    → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Γ ∋ A
-                    → Γ′ ∋ A
-rlookupᵣ η i = lookupᵣ (proj₂ η) i
+lookupₑ² : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : List X} {Γ Γ′ : List Y} {A : Y}
+                   → Δ′ ⁏ Γ′ ⊇² Δ ⁏ Γ → Γ ∋ A
+                   → Γ′ ∋ A
+lookupₑ² η i = lookupₑ (proj₂ η) i
 
 
 --------------------------------------------------------------------------------
