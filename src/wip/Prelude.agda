@@ -309,44 +309,44 @@ data List {ℓ} (X : Set ℓ) : Set ℓ
 {-# COMPILE GHC List = data List ([] | (:)) #-}
 
 
-length : ∀ {ℓ} → {X : Set ℓ}
-               → List X
-               → Nat
-length ∅       = zero
-length (Γ , A) = suc (length Γ)
+lenₗ : ∀ {ℓ} → {X : Set ℓ}
+             → List X
+             → Nat
+lenₗ ∅       = zero
+lenₗ (Γ , A) = suc (lenₗ Γ)
 
-map : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′}
-               → (X → Y) → List X
-               → List Y
-map f ∅       = ∅
-map f (Γ , A) = map f Γ , f A
+mapₗ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′}
+                → (X → Y) → List X
+                → List Y
+mapₗ f ∅       = ∅
+mapₗ f (Γ , A) = mapₗ f Γ , f A
 
-reduce : ∀ {ℓ ℓ′} → {X : Set ℓ} {Z : Set ℓ′}
-                  → (Z → X → Z) → Z → List X
-                  → Z
-reduce f z ∅       = z
-reduce f z (Γ , A) = f (reduce f z Γ) A
+reduceₗ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Z : Set ℓ′}
+                   → (Z → X → Z) → Z → List X
+                   → Z
+reduceₗ f z ∅       = z
+reduceₗ f z (Γ , A) = f (reduceₗ f z Γ) A
 
-lookup : ∀ {ℓ} → {X : Set ℓ}
-               → (Γ : List X) (i : Nat) {{_ : True (length Γ ⩼ i)}}
-               → X
-lookup ∅       i       {{()}}
-lookup (Γ , A) zero    {{yes}} = A
-lookup (Γ , B) (suc i) {{p}}   = lookup Γ i
+lookupₗ : ∀ {ℓ} → {X : Set ℓ}
+                → (Γ : List X) (i : Nat) {{_ : True (lenₗ Γ ⩼ i)}}
+                → X
+lookupₗ ∅       i       {{()}}
+lookupₗ (Γ , A) zero    {{yes}} = A
+lookupₗ (Γ , B) (suc i) {{p}}   = lookupₗ Γ i
 
-zip : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′}
-               → (Γ₁ : List X) (Γ₂ : List Y) {{_ : length Γ₁ ≡ length Γ₂}}
-               → List (X × Y)
-zip ∅         ∅         {{refl}} = ∅
-zip ∅         (Γ₂ , A₂) {{()}}
-zip (Γ₁ , A₁) ∅         {{()}}
-zip (Γ₁ , A₁) (Γ₂ , A₂) {{x}}    = zip Γ₁ Γ₂ {{injsuc x}} , (A₁ , A₂)
+zipₗ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′}
+                → (Γ₁ : List X) (Γ₂ : List Y) {{_ : lenₗ Γ₁ ≡ lenₗ Γ₂}}
+                → List (X × Y)
+zipₗ ∅         ∅         {{refl}} = ∅
+zipₗ ∅         (Γ₂ , A₂) {{()}}
+zipₗ (Γ₁ , A₁) ∅         {{()}}
+zipₗ (Γ₁ , A₁) (Γ₂ , A₂) {{x}}    = zipₗ Γ₁ Γ₂ {{injsuc x}} , (A₁ , A₂)
 
 
 -- TODO: Rename this
 lem₁ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′}
-                → (Γ₁ : List X) (Γ₂ : List Y) {{p : length Γ₁ ≡ length Γ₂}}
-                → map proj₁ (zip Γ₁ Γ₂) ≡ Γ₁
+                → (Γ₁ : List X) (Γ₂ : List Y) {{p : lenₗ Γ₁ ≡ lenₗ Γ₂}}
+                → mapₗ proj₁ (zipₗ Γ₁ Γ₂) ≡ Γ₁
 lem₁ ∅        ∅        {{refl}} = refl
 lem₁ ∅        (Γ₂ , B) {{()}}
 lem₁ (Γ₁ , A) ∅        {{()}}
@@ -354,8 +354,8 @@ lem₁ (Γ₁ , A) (Γ₂ , B) {{p}}    = (_, A) & lem₁ Γ₁ Γ₂ {{injsuc p
 
 -- TODO: Rename this
 lem₂ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′}
-                → (Γ₁ : List X) (Γ₂ : List Y) {{p : length Γ₁ ≡ length Γ₂}}
-                → map proj₂ (zip Γ₁ Γ₂) ≡ Γ₂
+                → (Γ₁ : List X) (Γ₂ : List Y) {{p : lenₗ Γ₁ ≡ lenₗ Γ₂}}
+                → mapₗ proj₂ (zipₗ Γ₁ Γ₂) ≡ Γ₂
 lem₂ ∅        ∅        {{refl}} = refl
 lem₂ ∅        (Γ₂ , B) {{()}}
 lem₂ (Γ₁ , A) ∅        {{()}}
@@ -365,7 +365,7 @@ lem₂ (Γ₁ , A) (Γ₂ , B) {{p}}    = (_, B) & lem₂ Γ₁ Γ₂ {{injsuc p
 -- TODO: Rename this
 lem₃ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′}
                 → (Γ : List (X × Y))
-                → length (map proj₁ Γ) ≡ length (map proj₂ Γ)
+                → lenₗ (mapₗ proj₁ Γ) ≡ lenₗ (mapₗ proj₂ Γ)
 lem₃ ∅        = refl
 lem₃ (Γ , AB) = suc & lem₃ Γ
 {-# REWRITE lem₃ #-}
@@ -373,7 +373,7 @@ lem₃ (Γ , AB) = suc & lem₃ Γ
 -- TODO: Rename this
 lem₄ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′}
                 → (Γ : List (X × Y))
-                → zip (map proj₁ Γ) (map proj₂ Γ) ≡ Γ
+                → zipₗ (mapₗ proj₁ Γ) (mapₗ proj₂ Γ) ≡ Γ
 lem₄ ∅        = refl
 lem₄ (Γ , AB) = (_, AB) & lem₄ Γ
 
@@ -393,8 +393,8 @@ data _∋_ {ℓ} {X : Set ℓ} : List X → X → Set ℓ
 
 
 Nat→∋ : ∀ {ℓ} → {X : Set ℓ} {Γ : List X}
-               → (i : Nat) {{_ : True (length Γ ⩼ i)}}
-               → Γ ∋ lookup Γ i
+               → (i : Nat) {{_ : True (lenₗ Γ ⩼ i)}}
+               → Γ ∋ lookupₗ Γ i
 Nat→∋ {Γ = ∅}     i       {{()}}
 Nat→∋ {Γ = Γ , A} zero    {{yes}} = zero
 Nat→∋ {Γ = Γ , B} (suc i) {{p}}   = suc (Nat→∋ i)
@@ -404,8 +404,8 @@ instance
                     → Number (Γ ∋ A)
   ∋IsNumber {Γ = Γ} {A} =
     record
-      { Constraint = λ i → Σ (True (length Γ ⩼ i))
-                              (λ p → lookup Γ i {{p}} ≡ A)
+      { Constraint = λ i → Σ (True (lenₗ Γ ⩼ i))
+                              (λ p → lookupₗ Γ i {{p}} ≡ A)
       ; fromNat    = λ { i {{p , refl}} → Nat→∋ i }
       }
 
@@ -417,54 +417,55 @@ data All {ℓ ℓ′} {X : Set ℓ} (P : X → Set ℓ′) : List X → Set (ℓ
                   → All P (Γ , A)
 
 
-mapAll : ∀ {ℓ ℓ′ ℓ″} → {X : Set ℓ} {P : X → Set ℓ′} {Q : X → Set ℓ″} {Γ : List X}
-                     → (∀ {x} → P x → Q x) → All P Γ
-                     → All Q Γ
-mapAll f ∅       = ∅
-mapAll f (ψ , p) = mapAll f ψ , f p
+mapₐ : ∀ {ℓ ℓ′ ℓ″} → {X : Set ℓ} {P : X → Set ℓ′} {Q : X → Set ℓ″} {Γ : List X}
+                   → (∀ {x} → P x → Q x) → All P Γ
+                   → All Q Γ
+mapₐ f ∅       = ∅
+mapₐ f (ψ , p) = mapₐ f ψ , f p
 
-mmapAll : ∀ {ℓ ℓ′ ℓ″ ℓ‴} → {X : Set ℓ} {Y : Set ℓ′} {P : X → Set ℓ″} {Q : Y → Set ℓ‴} {Γ : List X}
-                         → (f : X → Y) → (∀ {x} → P x → Q (f x)) → All P Γ
-                         → All Q (map f Γ)
-mmapAll f g ∅       = ∅
-mmapAll f g (ψ , p) = mmapAll f g ψ , g p
+-- TODO: Rename or remove this
+mmapₐ : ∀ {ℓ ℓ′ ℓ″ ℓ‴} → {X : Set ℓ} {Y : Set ℓ′} {P : X → Set ℓ″} {Q : Y → Set ℓ‴} {Γ : List X}
+                       → (f : X → Y) → (∀ {x} → P x → Q (f x)) → All P Γ
+                       → All Q (mapₗ f Γ)
+mmapₐ f g ∅       = ∅
+mmapₐ f g (ψ , p) = mmapₐ f g ψ , g p
 
 
-reduceAll : ∀ {ℓ ℓ′ ℓ″} → {X : Set ℓ} {P : X → Set ℓ′} {Z : Set ℓ″} {Γ : List X}
-                        → (∀ {x} → Z → P x → Z) → Z → All P Γ
-                        → Z
-reduceAll f z ∅       = z
-reduceAll f z (ψ , p) = f (reduceAll f z ψ) p
+reduceₐ : ∀ {ℓ ℓ′ ℓ″} → {X : Set ℓ} {P : X → Set ℓ′} {Z : Set ℓ″} {Γ : List X}
+                      → (∀ {x} → Z → P x → Z) → Z → All P Γ
+                      → Z
+reduceₐ f z ∅       = z
+reduceₐ f z (ψ , p) = f (reduceₐ f z ψ) p
 
-lookupAll : ∀ {ℓ ℓ′} → {X : Set ℓ} {P : X → Set ℓ′} {Γ : List X} {A : X}
-                     → All P Γ → Γ ∋ A
-                     → P A
-lookupAll (ψ , p) zero    = p
-lookupAll (ψ , q) (suc i) = lookupAll ψ i
+lookupₐ : ∀ {ℓ ℓ′} → {X : Set ℓ} {P : X → Set ℓ′} {Γ : List X} {A : X}
+                   → All P Γ → Γ ∋ A
+                   → P A
+lookupₐ (ψ , p) zero    = p
+lookupₐ (ψ , q) (suc i) = lookupₐ ψ i
 
 
 proj∋₁ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Γ : List (X × Y)} {A : X} {B : Y}
                   → Γ ∋ (A , B)
-                  → map proj₁ Γ ∋ A
+                  → mapₗ proj₁ Γ ∋ A
 proj∋₁ zero    = zero
 proj∋₁ (suc i) = suc (proj∋₁ i)
 
 proj∋₂ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Γ : List (X × Y)} {A : X} {B : Y}
                   → Γ ∋ (A , B)
-                  → map proj₂ Γ ∋ B
+                  → mapₗ proj₂ Γ ∋ B
 proj∋₂ zero    = zero
 proj∋₂ (suc i) = suc (proj∋₂ i)
 
 
 unproj∋₁ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Γ : List (X × Y)} {A : X}
-                    → map proj₁ Γ ∋ A
+                    → mapₗ proj₁ Γ ∋ A
                     → Σ Y (λ B → Γ ∋ (A , B))
 unproj∋₁ {Γ = ∅}           ()
 unproj∋₁ {Γ = Γ , (A , B)} zero    = B , zero
 unproj∋₁ {Γ = Γ , (A , B)} (suc i) = mapΣ id suc (unproj∋₁ i)
 
 unproj∋₂ : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Γ : List (X × Y)} {B : Y}
-                    → map proj₂ Γ ∋ B
+                    → mapₗ proj₂ Γ ∋ B
                     → Σ X (λ A → Γ ∋ (A , B))
 unproj∋₂ {Γ = ∅}           ()
 unproj∋₂ {Γ = Γ , (A , B)} zero    = A , zero
@@ -561,4 +562,4 @@ lookupᵣ² : ∀ {ℓ ℓ′} → {X : Set ℓ} {Y : Set ℓ′} {Δ Δ′ : Li
 lookupᵣ² η i = lookupᵣ (proj₂ η) i
 
 
---------------------------------------------------------------------------------
+--------------------------------------------------------------------------------ₗ
