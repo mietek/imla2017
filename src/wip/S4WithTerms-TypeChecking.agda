@@ -20,7 +20,7 @@ mutual
       _,_    : ∀ {A B M N Δ Γ} → (𝒟 : Δ ⁏ Γ ⊢ M ⇐ A) (ℰ : Δ ⁏ Γ ⊢ N ⇐ B)
                                → Δ ⁏ Γ ⊢ M , N ⇐ A ∧ B
 
-      tt     : ∀ {Δ Γ} → Δ ⁏ Γ ⊢ tt ⇐ 𝒯
+      tt     : ∀ {Δ Γ} → Δ ⁏ Γ ⊢ tt ⇐ 𝔗
 
       -- NOTE: We can already represent non-normal forms,
       -- so there's nothing special to do here
@@ -124,7 +124,7 @@ mutual
                                               ("check|ƛ|⊃ " ⧺_)
                                               (ƛ x ∙_)
   check (ƛ _ ∙ _)                 (_ ∧ _) = inj₁ "check|ƛ|∧"
-  check (ƛ _ ∙ _)                 𝒯       = inj₁ "check|ƛ|𝒯"
+  check (ƛ _ ∙ _)                 𝔗       = inj₁ "check|ƛ|𝔗"
   check (ƛ _ ∙ _)                 (□ _)   = inj₁ "check|ƛ|□"
 
   check M@(_ $ _)                 A       = switch M A
@@ -136,7 +136,7 @@ mutual
                                               (λ 𝒟 → for⊎ (check N B)
                                                         ("check|,|∧|2 " ⧺_)
                                                         (𝒟 ,_))
-  check (_ , _)                   𝒯       = inj₁ "check|,|𝒯"
+  check (_ , _)                   𝔗       = inj₁ "check|,|𝔗"
   check (_ , _)                   (□ _)   = inj₁ "check|,|□"
 
   check M@(π₁ _)                  A       = switch M A
@@ -146,13 +146,13 @@ mutual
   check tt                        (ᵗᵛ _)  = inj₁ "check|tt|ᵗᵛ"
   check tt                        (_ ⊃ _) = inj₁ "check|tt|⊃"
   check tt                        (_ ∧ _) = inj₁ "check|tt|∧"
-  check tt                        𝒯       = inj₂ tt
+  check tt                        𝔗       = inj₂ tt
   check tt                        (□ _)   = inj₁ "check|tt|□"
 
   check ⌜ _ ⌝                     (ᵗᵛ _)  = inj₁ "check|⌜⌝|ᵗᵛ"
   check ⌜ _ ⌝                     (_ ⊃ _) = inj₁ "check|⌜⌝|⊃"
   check ⌜ _ ⌝                     (_ ∧ _) = inj₁ "check|⌜⌝|∧"
-  check ⌜ _ ⌝                     𝒯       = inj₁ "check|⌜⌝|𝒯"
+  check ⌜ _ ⌝                     𝔗       = inj₁ "check|⌜⌝|𝔗"
   check ⌜ M ⌝                     (□ A)   = for⊎ (check {Γ = ∅} M A)
                                               ("check|⌜⌝|□ " ⧺_)
                                               ⌜_⌝
@@ -162,7 +162,7 @@ mutual
                                               (λ { (ᵗᵛ x  , 𝒟) → inj₁ "check|⌞⌟|ᵗᵛ"
                                                  ; (A ⊃ B , 𝒟) → inj₁ "check|⌞⌟|⊃"
                                                  ; (A ∧ B , 𝒟) → inj₁ "check|⌞⌟|∧"
-                                                 ; (𝒯     , 𝒟) → inj₁ "check|⌞⌟|𝒯"
+                                                 ; (𝔗     , 𝒟) → inj₁ "check|⌞⌟|𝔗"
                                                  ; (□ A   , 𝒟) → for⊎ (check {Δ = Δ , (x , A)} N C)
                                                                     ("check|⌞⌟|2 " ⧺_)
                                                                     (⌞ 𝒟 ⌟ x ∙_)
@@ -200,7 +200,7 @@ mutual
                                                  ("infer|$|⊃ " ⧺_)
                                                  (λ ℰ → B , 𝒟 $ ℰ)
                               ; (_ ∧ _ , 𝒟) → inj₁ "infer|$|∧"
-                              ; (𝒯     , 𝒟) → inj₁ "infer|$|𝒯"
+                              ; (𝔗     , 𝒟) → inj₁ "infer|$|𝔗"
                               ; (□ _   , 𝒟) → inj₁ "infer|$|□"
                               })
 
@@ -211,7 +211,7 @@ mutual
                            (λ { (ᵗᵛ _  , 𝒟) → inj₁ "infer|π₁|ᵗᵛ"
                               ; (_ ⊃ _ , 𝒟) → inj₁ "infer|π₁|⊃"
                               ; (A ∧ B , 𝒟) → inj₂ (A , π₁ 𝒟)
-                              ; (𝒯     , 𝒟) → inj₁ "infer|π₁|𝒯"
+                              ; (𝔗     , 𝒟) → inj₁ "infer|π₁|𝔗"
                               ; (□ _   , 𝒟) → inj₁ "infer|π₁|□"
                               })
 
@@ -220,7 +220,7 @@ mutual
                            (λ { (ᵗᵛ _  , 𝒟) → inj₁ "infer|π₁|ᵗᵛ"
                               ; (_ ⊃ _ , 𝒟) → inj₁ "infer|π₁|⊃"
                               ; (A ∧ B , 𝒟) → inj₂ (B , π₂ 𝒟)
-                              ; (𝒯     , 𝒟) → inj₁ "infer|π₁|𝒯"
+                              ; (𝔗     , 𝒟) → inj₁ "infer|π₁|𝔗"
                               ; (□ _   , 𝒟) → inj₁ "infer|π₁|□"
                               })
 
@@ -394,10 +394,10 @@ test∼exp∧ₜₘ = refl
 
 
 -- TODO: Generate type annotations
-test∼exp𝒯ₜₘ : test∼ₜₘ {∅} {∅ , ("t" , 𝒯)}
+test∼exp𝔗ₜₘ : test∼ₜₘ {∅} {∅ , ("t" , 𝔗)}
                       (ᵛ "t")
                       tt
-test∼exp𝒯ₜₘ = refl
+test∼exp𝔗ₜₘ = refl
 
 
 -- TODO: Generate type annotations
