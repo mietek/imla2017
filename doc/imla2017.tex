@@ -229,7 +229,7 @@
 \newcommand{\V}{\mathrel{\mathcal{V}}}
 \newcommand{\ida}{\operatorname{\tsf{id}_{\stsf{a}}}}
 \newcommand{\compa}{\mathrel{\circ_{\stsf{a}}}}
-\newcommand{\movv}{\operatorname{\tsf{mov}_{\stsf{v}}}}
+\newcommand{\relv}{\operatorname{\tsf{rel}_{\stsf{v}}}}
 \newcommand{\peek}[1]{\mathopen{\lfloor}{#1}\mathclose{\rfloor}}
 \newcommand{\peeka}[1]{\mathopen{\lfloor}{#1}\mathclose{\rfloor_{\mkern-2mu\stsf{a}}}}
 
@@ -252,11 +252,11 @@
 
 \newcommand{\eeq}{\mathrel{\vDash}}
 
-\newcommand{\mov}{\operatorname{\tsf{mov}}}
-\newcommand{\kmov}{\operatorname{^{\stsf{k}\mkern-2mu}\tsf{mov}}}
-\newcommand{\mkmov}{\operatorname{^{\stsf{mk}\mkern-2mu}\tsf{mov}}}
-\newcommand{\kmovs}{\operatorname{^{\stsf{k}\mkern-2mu}\tsf{mov}\star}}
-\newcommand{\mkmovs}{\operatorname{^{\stsf{mk}\mkern-2mu}\tsf{mov}\star}}
+\newcommand{\rel}{\operatorname{\tsf{rel}}}
+\newcommand{\krel}{\operatorname{^{\stsf{k}\mkern-2mu}\tsf{rel}}}
+\newcommand{\mkrel}{\operatorname{^{\stsf{mk}\mkern-2mu}\tsf{rel}}}
+\newcommand{\krels}{\operatorname{^{\stsf{k}\mkern-2mu}\tsf{rel}\star}}
+\newcommand{\mkrels}{\operatorname{^{\stsf{mk}\mkern-2mu}\tsf{rel}\star}}
 
 \newcommand{\unit}{\operatorname{\tsf{unit}}}
 \newcommand{\bind}{\operatorname{\tsf{bind}}}
@@ -346,7 +346,7 @@ It's also well-known how to prove STLC sound and complete with respect to intuit
   & \Delta; \Gamma \mee A    \,&&=\, \Delta; \0 \e A \times \Delta; \Gamma \ee A
 \end{alignat*}
 This puts the syntax in the semantics --- peeks beneath the veil sooner than expected.  We can still keep the abstraction of a Kripke semantics, as long as we can discard it when we need to.
-  \[\M \,=\, \langle\,\W,\,\binop{\V},\,\binop{\ge},\,\ida,\,\binop{\compa},\,\movv,\,\peek{-},\,\peeka{-}\,\rangle\]
+  \[\M \,=\, \langle\,\W,\,\binop{\V},\,\binop{\ge},\,\ida,\,\binop{\compa},\,\relv,\,\peek{-},\,\peeka{-}\,\rangle\]
 Now, we can try to write the interpretation of $\sq A$ using the model.
 \begin{alignat*}{2}
   & \M\,|\,w \ee \sq A \,&&=\, \forall w' \ge w.\ \M\,|\,w' \mee A\\[0.5\baselineskip]
@@ -443,36 +443,33 @@ We first prove soundness and completeness with respect to this canonical model, 
 
 \begin{definition}
   \textbf{(Introspective Kripke models)\ }
-  An \emph{introspective Kripke model} is a tuple that consists of a set of \emph{worlds} $\W$, a \emph{valuation relation} on worlds and type variables $\binop{\V}$, an \emph{accessibility relation} on worlds $\binop{\ge}$, and a capability for \emph{introspection}.
-  Accessibility is reflexive and transitive, as witnessed by $\id$ and $\binop{\compa}$, and valuation is monotonic with respect to accessibility, as witnessed by $\movv$.
-  Introspection $\peek{-}$ maps worlds to contexts, and $\peeka{-}$ maps elements of the accessibility relation to order-preserving embeddings on contexts.
+  An \emph{introspective Kripke model} is a tuple that consists of a set of \emph{worlds} $\W$, a \emph{valuation relation} on worlds and type variables $\binop{\V}$, an \emph{accessibility relation} on worlds $\binop{\ge}$, a \emph{world introspection function}, and an \emph{accessibility introspection function}.
+  Accessibility is reflexive and transitive, as witnessed by $\ida$ and $\binop{\compa}$, and valuation is monotonic with respect to accessibility, as witnessed by $\relv$.
+  World introspection $\peek{-}$ maps worlds to contexts, and accessibility introspection $\peeka{-}$ maps elements of the accessibility relation to order-preserving embeddings on contexts.
   \begin{gather*}
-    \M \,=\, \langle\, \W,\, \binop{\V},\, \binop{\ge},\, \ida,\, \binop{\compa},\, \movv,\, \peek{-},\, \peeka{-}\, \rangle
+    \M \,=\, \langle\, \W,\, \binop{\V},\, \binop{\ge},\, \ida,\, \binop{\compa},\, \relv,\, \peek{-},\, \peeka{-}\, \rangle
   \end{gather*}
 \end{definition}
 
 \noindent
 We write $w \V x$ to mean the valuation for $x$ at $w$, and $w' \ge w$ to say that $w'$ is accessible from $w$.
-We say that a \emph{gate} from $w$ to $w'$ is an element of the accessibility relation such that $w' \ge w$.
-We use the word \emph{moving} to mean applying the monotonicity property for valuations.
-For example, given a gate $\eta$ from $w$ to $w'$, we say that a valuation $v$ is \emph{moved} via $\eta$, meaning $\movv \eta\, v$.
+We use the word \emph{relocating} to mean applying the monotonicity property for valuations.
+For example, if $\eta$ witnesses that $w'$ is accessible from $w$, we read $\relv \eta\, v$ as relocating $v$ via $\eta$.
 
 As shorthand, we use \emph{modal introspection} $\mpeek{-}$ to map directly to the modal projection of a context, and $\mpeeka{-}$ to map directly to the modal projection of an order-preserving embedding on contexts.
 
 \begin{definition}
   \textbf{(Values and value continuations)\ }
   \label{ee/kee/mkee}
-  A \emph{value} for $A$ at $w$ of $\M$, written $\M\,|\,w \ee A$, is defined by mutual induction on the type.
+  A \emph{value} for $A$ at $w$ of $\M$, written $\M\,|\,w \ee A$, is defined by induction on the type, mutually with value continuations and justified value continuations.
   
-  \eqref{ee.tvar} For type variables $\tvar x$, the value at $w$ is given by the valuation for $x$ at $w$.
+  For type variables $\tvar x$ \eqref{ee.tvar}, the value at $w$ is given by the valuation for $x$ at $w$.
+  For function types $A \imp B$ \eqref{ee.imp}, the value at $w$ is a function that, for every $w'$ accessible from $w$, takes a value continuation for $A$ at $w'$ and returns a value continuation for $B$ at $w'$.
+  For quotation types $\sq A$ \eqref{ee.sq}, the value at $w$ is a justified value continuation for $A$ at $w$.
   
-  \eqref{ee.imp} For function types $A \imp B$, the value at $w$ is a function that, for every $w'$ accessible from $w$, takes a value continuation for $A$ at $w'$ and returns a value continuation for $B$ at $w'$.
+  A \emph{value continuation} for $A$ at $w$ of $\M$, written $\M\,|\,w \kee A$ \eqref{kee}, is a function that, for every type $C$ and $w'$ accessible from $w$, takes a continuation that, for every $w''$ accessible from $w'$, consumes a value for $A$ at $w''$ and produces a normal derivation for $C$ under $\peek{w''}$.  The result is a normal derivation for $C$ under $\peek{w'}$.
   
-  \eqref{ee.sq} For quotation types $\sq A$, the value at $w$ is a justified value continuation for $A$ at $w$.
-  
-  \eqref{kee} A \emph{value continuation} for $A$ at $w$ of $\M$, written $\M\,|\,w \kee A$, is a function that, for every type $C$ and $w'$ accessible from $w$, takes a continuation that, for every $w''$ accessible from $w'$, consumes a value for $A$ at $w''$ and produces a normal derivation for $C$ under $\peek{w''}$.  The result of this function is a normal derivation for $C$ under $\peek{w'}$.
-  
-  \eqref{mkee} A \emph{justified value continuation} for $A$ at $w$ of $\M$, written $\M\,|\,w \mkee A$, is a simple product of a derivation for $A$ under $\mpeek{w}; \0$ and a value continuation for $A$ at $w$.
+   A \emph{justified value continuation} for $A$ at $w$ of $\M$, written $\M\,|\,w \mkee A$ \eqref{mkee}, is a simple product of a derivation for $A$ under $\mpeek{w}; \0$ and a value continuation for $A$ at $w$.
   \begin{alignat}{3}
     \label{ee.tvar} & \rlap{$\M\,|\,w \ee \tvar x$}  &&\,&&=\, w \V x\\
     \label{ee.imp}  & \rlap{$\M\,|\,w \ee A \imp B$} &&\,&&=\, \forall w' \ge w.\ \raisebox{-8pt}{\prftree{\M\,|\,w' \kee A} {\M\,|\,w' \kee B}}\\
@@ -497,29 +494,29 @@ As shorthand, we use \emph{modal introspection} $\mpeek{-}$ to map directly to t
 \begin{lemma}
   \normalshape
   \textbf{(Monotonicity of values and value continuations with respect to accessibility)\ }
-  \label{mov/kmov/mkmov}
+  \label{rel/krel/mkrel}
   For every $w'$ accessible from $w$ of $\M$, given a value (value continuation; justified value continuation) for $A$ at $w$, there exists a value (value continuation; justified value continuation) for $A$ at $w'$.
   \begin{gather*}
-    \tyrule{\mov}{w' \ge w}{\M\,|\, w \ee A}{w' \ee A}\\[0.5\baselineskip]
-    \tyrule{\kmov}{w' \ge w}{\M\,|\, w \kee A}{w' \kee A}\qquad
-    \tyrule{\mkmov}{w' \ge w}{\M\,|\, w \mkee A}{w' \mkee A}
+    \tyrule{\rel}{w' \ge w}{\M\,|\, w \ee A}{w' \ee A}\\[0.5\baselineskip]
+    \tyrule{\krel}{w' \ge w}{\M\,|\, w \kee A}{w' \kee A}\qquad
+    \tyrule{\mkrel}{w' \ge w}{\M\,|\, w \mkee A}{w' \mkee A}
   \end{gather*}
   \itshape
   \begin{proof}
     \normalshape
     By mutual induction on the type, and lemmas \ref{mren} and \ref{syn/sem}.
     \begin{alignat*}{3}
-      & \rlap{$\mov\, \{\tvar x\}$}   &\,\eta\, &\,v \,&&=\, \movv \eta\, v\\
-      & \rlap{$\mov\, \{A \imp B\}$}  &\,\eta\, &\,f \,&&=\, \eta' \mapsto f\, (\eta \compa \eta')\\
-      & \rlap{$\mov\, \{\sq A\}$}     &\,\eta\, &\,p \,&&=\, \mkmov \eta\, p\\[0.5\baselineskip]
-      && \qquad\quad \kmov             \,\eta\, &\,k \,&&=\, \eta'\, f \mapsto k\, (\eta \compa \eta')\, f\\[0.5\baselineskip]
-      && \qquad\quad \mkmov            \,\eta\, &\,p \,&&=\, \mren\, \mpeeka{\eta}\, (\syn p),\, \kmov \eta\, (\sem p)
+      & \rlap{$\rel\, \{\tvar x\}$}   &\,\eta\, &\,v \,&&=\, \relv \eta\, v\\
+      & \rlap{$\rel\, \{A \imp B\}$}  &\,\eta\, &\,f \,&&=\, \eta' \mapsto f\, (\eta \compa \eta')\\
+      & \rlap{$\rel\, \{\sq A\}$}     &\,\eta\, &\,p \,&&=\, \mkrel \eta\, p\\[0.5\baselineskip]
+      && \qquad\quad \krel             \,\eta\, &\,k \,&&=\, \eta'\, f \mapsto k\, (\eta \compa \eta')\, f\\[0.5\baselineskip]
+      && \qquad\quad \mkrel            \,\eta\, &\,p \,&&=\, \mren\, \mpeeka{\eta}\, (\syn p),\, \krel \eta\, (\sem p)
     \end{alignat*}
   \end{proof}
 \end{lemma}
 
 \noindent
-We extend the use of the word \emph{moving} to mean applying the monotonicity property for values (value continuations; justified value continuations).
+We extend the use of the word \emph{relocating} to mean applying the monotonicity property for values (value continuations; justified value continuations).
 
 \begin{lemma}
   \normalshape
@@ -533,9 +530,9 @@ We extend the use of the word \emph{moving} to mean applying the monotonicity pr
   \itshape
   \begin{proof}
     \normalshape
-    By lemma \ref{mov/kmov/mkmov}.
+    By lemma \ref{rel/krel/mkrel}.
     \begin{alignat*}{3}
-      & \unit\,a      \,&&=\, &&\,\eta\, f \mapsto f \ida\, (\mov \eta\, a)\\[0.5\baselineskip]
+      & \unit\,a      \,&&=\, &&\,\eta\, f \mapsto f \ida\, (\rel \eta\, a)\\[0.5\baselineskip]
       & \bind\, k\, f \,&&=\, &&\,\eta\, f' \mapsto k\, \eta\, (\eta'\, a \mapsto\\
       &                 &&    &&\quad f\, (\eta \compa \eta')\, a \ida\, (\eta''\, b \mapsto\\
       &                 &&    &&\quad\quad f'\, (\eta' \compa \eta'')\, b))
@@ -572,13 +569,13 @@ We skip the word \emph{ordinary} when possible.  We also abuse the word \emph{en
 \begin{lemma}
   \normalshape
   \textbf{(Monotonicity of environments with respect to accessibility)\ }
-  \label{kmovs/mkmovs}
+  \label{krels/mkrels}
   For every $w'$ accessible from $w$, given an environment (justified environment) for $\Xi$ at $w$ of $\M$, there exists an environment (justified environment) for $\Xi$ at $w'$ of $\M$.
   \begin{gather*}
-    \tyrule{\kmovs}{w' \ge w}{\M\,|\, w \kees \Xi}{w' \kees \Xi}\qquad
-    \tyrule{\mkmovs}{w' \ge w}{\M\,|\, w \mkees \Xi}{w' \mkees \Xi}
+    \tyrule{\krels}{w' \ge w}{\M\,|\, w \kees \Xi}{w' \kees \Xi}\qquad
+    \tyrule{\mkrels}{w' \ge w}{\M\,|\, w \mkees \Xi}{w' \mkees \Xi}
   \end{gather*}
-  Proved by induction on the environment (justified environment) and lemma \ref{mov/kmov/mkmov}.
+  Proved by induction on the environment (justified environment) and lemma \ref{rel/krel/mkrel}.
 \end{lemma}
 
 \begin{lemma}
@@ -612,17 +609,17 @@ We skip the word \emph{ordinary} when possible.  We also abuse the word \emph{en
   \itshape
   \begin{proof}
     \normalshape
-    By induction on the derivation and lemmas \ref{lookup}, \ref{syns/sems}, \ref{unit/bind}, and \ref{kmovs/mkmovs}.
+    By induction on the derivation and lemmas \ref{lookup}, \ref{syns/sems}, \ref{unit/bind}, and \ref{krels/mkrels}.
     \begin{alignat}{3}
       \label{reflect.mvar} & \reflect\, (\mvar i)    \,&&=\, &&\,\delta\, \gamma \mapsto \lookup\, (\sems \delta)\, i\\
       \label{reflect.var}  & \reflect\, (\var i)     \,&&=\, &&\,\delta\, \gamma \mapsto \lookup \gamma\, i\\
       \label{reflect.lam}  & \reflect\, (\lam \D)    \,&&=\, &&\,\delta\, \gamma \mapsto \unit\, (\eta\,k \mapsto\\
-      \nonumber            & && && \quad \reflect \D\, (\mkmovs \eta\, \delta)\, (\kmovs \eta\, \gamma,\, k))\\
+      \nonumber            & && && \quad \reflect \D\, (\mkrels \eta\, \delta)\, (\krels \eta\, \gamma,\, k))\\
       \label{reflect.app}  & \reflect\, (\D \app \E) \,&&=\, &&\,\delta\, \gamma \mapsto \bind\, (\reflect \D\, \delta\, \gamma)\, (\eta\,f \mapsto\\
-      \nonumber            & && && \quad f \ida\, (\reflect \E\, (\mkmovs \eta\, \delta)\, (\kmovs \eta\, \gamma)))\\
+      \nonumber            & && && \quad f \ida\, (\reflect \E\, (\mkrels \eta\, \delta)\, (\krels \eta\, \gamma)))\\
       \label{reflect.quo}  & \reflect\, (\quo{\D})   \,&&=\, &&\,\delta\, \gamma \mapsto \unit\, (\msub\, (\syns \delta)\, \D,\, \reflect \D\, \delta\, \0)\\
       \label{reflect.unq}  & \reflect\, (\unq{\D}\E) \,&&=\, &&\,\delta\, \gamma \mapsto \bind\, (\reflect \D\, \delta\, \gamma)\, (\eta\,p \mapsto\\
-      \nonumber            & && && \quad \reflect \E\, (\mkmovs \eta\, \delta,\, p)\, (\kmovs \eta\, \gamma))
+      \nonumber            & && && \quad \reflect \E\, (\mkrels \eta\, \delta,\, p)\, (\krels \eta\, \gamma))
     \end{alignat}
   \end{proof}
 \end{theorem}
@@ -631,9 +628,9 @@ $\reflect$, pronounced `reflect', is The proof of soundness is a monadic evaluat
 
 Modal variables \eqref{reflect.mvar} and variables \eqref{reflect.var} are looked up in the semantic projection of $\delta$ and in $\gamma$, respectively.
 
-In the case of function abstraction \eqref{reflect.lam}, we first suppose that we can access via $\eta$ some world in which the value continuation $k$ is the function argument.  Then, we evaluate the function body $\D$ in an environment obtained by moving the current environment via $\eta$ and extending it with $k$.
+In the case of function abstraction \eqref{reflect.lam}, we first suppose that we can access via $\eta$ some world in which the value continuation $k$ is the function argument.  Then, we evaluate the function body $\D$ in an environment obtained by relocating the current environment via $\eta$ and extending it with $k$.
 
-To perform function application \eqref{reflect.app}, we start by evaluating the function $\D$ in the current environment, obtaining a value $f$ at some world accessible via $\eta$.  By definition, the value of a function of type $A \imp B$ is a meta-level function that, given a value continuation of $A$ at some accessible world, returns a value continuation of $B$ at the same world.  Evaluating the function argument $\E$ in the current environment moved via $\eta$ gives us a value continuation, which we use to call $f$.
+To perform function application \eqref{reflect.app}, we start by evaluating the function $\D$ in the current environment, obtaining a value $f$ at some world accessible via $\eta$.  By definition, the value of a function of type $A \imp B$ is a meta-level function that, given a value continuation of $A$ at some accessible world, returns a value continuation of $B$ at the same world.  Evaluating the function argument $\E$ in the current environment relocated via $\eta$ gives us a value continuation, which we use to call $f$.
 
 Normalisation-by-evaluation is also known as \emph{reduction-free normalisation} \cite{AltenkirchHS1995,Danvy2005}, because performing substitution at the meta level frees us from having to implement it at the object level.  However, in the case of quotation \eqref{reflect.quo}, object-level modal substitution \eqref{msub} is required.
 
