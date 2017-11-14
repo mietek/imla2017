@@ -148,8 +148,9 @@
 
 \newcommand{\Tp}{\operatorname{\tsf{Tp}}}
 
-\newcommand{\tvar}{\operatorname{^{\stsf{tv}\mkern-4mu}}}
+% \newcommand{\tvar}{\operatorname{^{\stsf{tv}\mkern-4mu}}}
 % \newcommand{\R}{\Rightarrow}
+\newcommand{\base}{\flat}
 \newcommand{\imp}{\mathbin{\supset}}
 \renewcommand{\and}{\mathbin{\wedge}}
 \newcommand{\sq}{\Box}
@@ -237,26 +238,26 @@
 \newcommand{\mpeeka}[1]{\mathopen{^{\stsf{m}\mkern-3mu}\lfloor}{#1}\mathclose{\rfloor_{\mkern-2mu\stsf{a}}}}
 
 \newcommand{\ee}{\mathrel{\Vdash}}
-\newcommand{\kee}{\mathrel{^{\stsf{k}\mkern-6mu}\Vdash}}
+\newcommand{\eek}{\mathrel{\Vdash_{\stsf{k}}}}
 \newcommand{\mee}{\mathrel{^{\stsf{m}\mkern-6mu}\Vdash}}
-\newcommand{\mkee}{\mathrel{^{\stsf{mk}\mkern-6mu}\Vdash}}
+\newcommand{\meek}{\mathrel{^{\stsf{m}\mkern-6mu}\Vdash_{\stsf{k}}}}
 \newcommand{\syn}{\operatorname{\tsf{syn}}}
 \newcommand{\sem}{\operatorname{\tsf{sem}}}
 
 \newcommand{\ees}{\mathrel{\Vdash\mkern-5mu\star}}
-\newcommand{\kees}{\mathrel{^{\stsf{k}\mkern-6mu}\Vdash\mkern-5mu\star}}
+\newcommand{\eeks}{\mathrel{\Vdash_{\stsf{k}}\mkern-5mu\star}}
 \newcommand{\mees}{\mathrel{^{\stsf{m}\mkern-6mu}\Vdash\mkern-5mu\star}}
-\newcommand{\mkees}{\mathrel{^{\stsf{mk}\mkern-6mu}\Vdash\mkern-5mu\star}}
+\newcommand{\meeks}{\mathrel{^{\stsf{m}\mkern-6mu}\Vdash_{\stsf{k}}\mkern-5mu\star}}
 \newcommand{\syns}{\operatorname{\tsf{syn}\star}}
 \newcommand{\sems}{\operatorname{\tsf{sem}\star}}
 
 \newcommand{\eeq}{\mathrel{\vDash}}
 
 \newcommand{\rel}{\operatorname{\tsf{rel}}}
-\newcommand{\krel}{\operatorname{^{\stsf{k}\mkern-2mu}\tsf{rel}}}
-\newcommand{\mkrel}{\operatorname{^{\stsf{mk}\mkern-2mu}\tsf{rel}}}
-\newcommand{\krels}{\operatorname{^{\stsf{k}\mkern-2mu}\tsf{rel}\star}}
-\newcommand{\mkrels}{\operatorname{^{\stsf{mk}\mkern-2mu}\tsf{rel}\star}}
+\newcommand{\relk}{\operatorname{\tsf{rel}_{\stsf{k}}}}
+\newcommand{\mrelk}{\operatorname{^{\stsf{m}\mkern-2mu}\tsf{rel}_{\stsf{k}}}}
+\newcommand{\relks}{\operatorname{\tsf{rel}_{\stsf{k}}\star}}
+\newcommand{\mrelks}{\operatorname{^{\stsf{m}\mkern-2mu}\tsf{rel}_{\stsf{k}}\star}}
 
 \newcommand{\unit}{\operatorname{\tsf{unit}}}
 \newcommand{\bind}{\operatorname{\tsf{bind}}}
@@ -316,7 +317,7 @@
 
 
 \begin{abstract}
-  We consider the $\lambdabox$-calculus, an extension of the simply typed $\lambda$-calculus with a \emph{type of quoted programs} that corresponds to the $\sq$ connective of the modal logic S4.  We present a novel class of \emph{introspective Kripke models,} constructed in continuation-passing style, and prove the syntax of the $\lambdabox$-calculus sound and complete with respect to these models.  We fully formalise the arguments in \textsc{Agda}, a dependently typed total functional programming language based on intensional type theory.  The composition of our soundness and completeness proofs is an \textsc{Agda} program that performs normalisation-by-evaluation for the $\lambdabox$-calculus.
+  We consider the $\lambdabox$-calculus, an extension of the simply typed $\lambda$-calculus with a type of quoted programs that corresponds to the $\sq$ connective of the modal logic S4.  We present a novel class of \emph{introspective} Kripke models, constructed in continuation-passing style, and prove the syntax of the $\lambdabox$-calculus sound and complete with respect to these models.  We fully formalise the arguments in \textsc{Agda}, a dependently typed total functional programming language based on intensional type theory.  The composition of our soundness and completeness proofs is an \textsc{Agda} program that performs normalisation-by-evaluation for the $\lambdabox$-calculus.
 \end{abstract}
 
 \begin{keyword}
@@ -340,7 +341,7 @@ I'd like to have a total functional programming language that works like Lisp; t
 \end{gather*}
 It's well-known that if we prove a language sound and complete with respect to some class of models, then an interpreter falls out --- as long as the proofs are constructive.  Unfortunately, all I could find was classical proofs of completeness for S4, and so I decided to do the proofs myself.
 
-It's also well-known how to prove STLC sound and complete with respect to intuitionistic Kripke semantics.  Since the $\lambdabox$-calculus is an extension of STLC, I thought it should be simple to extend intuitionistic Kripke semantics and obtain the desired proofs.  Famous last words!  Eventually, I realised that the interpretation of $\sq A$ should be a syntactically-justified interpretation of $A$; that is, a pair consisting of a derivation of $A$ and an interpretation of $A$.
+It's also well-known how to prove STLC sound and complete with respect to intuitionistic Kripke semantics.  Since the $\lambdabox$-calculus is an extension of STLC, I thought it should be simple to extend intuitionistic Kripke semantics and obtain the desired proofs.  Famous last words!  Eventually, I realised that the interpretation of $\sq A$ should be a syntactically-justified interpretation of $A$; that is, a pair consisting of a term of $A$ and an interpretation of $A$.
 \begin{alignat*}{2}
   & \Delta; \Gamma \ee \sq A \,&&=\, \forall \Delta' \geq \Delta,\,\Gamma' \geq \Gamma.\ \Delta'; \Gamma' \mee A\\[0.5\baselineskip]
   & \Delta; \Gamma \mee A    \,&&=\, \Delta; \0 \e A \times \Delta; \Gamma \ee A
@@ -354,12 +355,12 @@ Now, we can try to write the interpretation of $\sq A$ using the model.
 \end{alignat*}
 However, adding this interpretation to intuitionistic Kripke semantics allows us to prove soundness, but not completeness.  The problem with proving completeness with respect to the modified semantics is similar to the problem with proving completeness of full STLC, with disjunction and the empty type.  Some people have already come up with a solution to that, which is a CPS transformation of the semantics.
 \begin{alignat*}{2}
-  & \M\,|\,w \ee \sq A \,&&=\, \forall w' \ge w.\ \M\,|\,w' \mkee A\\
-  & \M\,|\,w \kee A    \,&&=\, \forall C,\,w' \ge w.\ \raisebox{-8pt}{\prftree{\raisebox{8pt}{$\forall w'' \ge w'\mkern-2mu.\ $}\prftree{\M\,|\,w'' \ee A}{\lfloor w'' \rfloor \enm C}}{\lfloor w' \rfloor \enm C}}\\[0.5\baselineskip]
-  & \M\,|\,w \mkee A \,&&=\, \mpeek{w}; \0 \e A \times \M\,|\,w \kee A
+  & \M\,|\,w \ee \sq A \,&&=\, \forall w' \ge w.\ \M\,|\,w' \meek A\\
+  & \M\,|\,w \eek A    \,&&=\, \forall C,\,w' \ge w.\ \raisebox{-8pt}{\prftree{\raisebox{8pt}{$\forall w'' \ge w'\mkern-2mu.\ $}\prftree{\M\,|\,w'' \ee A}{\lfloor w'' \rfloor \enm C}}{\lfloor w' \rfloor \enm C}}\\[0.5\baselineskip]
+  & \M\,|\,w \meek A \,&&=\, \mpeek{w}; \0 \e A \times \M\,|\,w \eek A
 \end{alignat*}
 It turns out that CPS transforming the modified semantics allows us to prove soundness and completeness, and so, to write an interpreter for the $\lambdabox$-calculus.
-  \[\Delta; \Gamma \eeq A \,=\, \forall \M,\,w.\ \raisebox{-8pt}{$\prftree{\M\,|\,w \mkees \Delta}{\M\,|\,w \kees \Gamma}{\M\,|\,w \kee A}$}\]
+  \[\Delta; \Gamma \eeq A \,=\, \forall \M,\,w.\ \raisebox{-8pt}{$\prftree{\M\,|\,w \meeks \Delta}{\M\,|\,w \eeks \Gamma}{\M\,|\,w \eek A}$}\]
 \begin{theorem}[Soundness]
   \[\tyrule{\reflect}{\Delta; \Gamma \e A}{\Delta; \Gamma \eeq A}\]
 \end{theorem}
@@ -382,14 +383,14 @@ To prove completeness, we need a canonical model.
   \begin{proof}\normalshape % XXX
     \begin{gather*}
       \Mu \,=\, \langle\,\Cx,\,\binop{\Vu},\,\binop{\geqZ},\,\ideZ,\,\binop{\compeZ},\,\rennmZ,\,\id,\,\id\,\rangle\\[0.5\baselineskip]
-      \Delta; \Gamma \Vu x \,=\, \Delta; \Gamma \enm \mkern-4mu \tvar x
+      \Delta; \Gamma \Vu x \,=\, \Delta; \Gamma \enm \mkern-4mu \base
     \end{gather*}
   \end{proof}
 \end{theorem}\noindent % XXX
 We first prove soundness and completeness with respect to this canonical model, and then use that to prove completeness proper.
 \begin{gather*}
-  \tyrule{\reflectu}{\Delta; \Gamma \ent A}{\Mu\,|\,\Delta; \Gamma \kee A}\qquad
-  \tyrule{\reifyu}{\Mu\,|\,\Delta; \Gamma \kee A}{\Delta; \Gamma \enm A}
+  \tyrule{\reflectu}{\Delta; \Gamma \ent A}{\Mu\,|\,\Delta; \Gamma \eek A}\qquad
+  \tyrule{\reifyu}{\Mu\,|\,\Delta; \Gamma \eek A}{\Delta; \Gamma \enm A}
 \end{gather*}
 
 \paragraph{Contributions}
@@ -429,7 +430,7 @@ We first prove soundness and completeness with respect to this canonical model, 
     \tyrule{\lam}{\Delta; \Gamma, A \enm B}{\Delta; \Gamma \enm A \imp B}\\[0.5\baselineskip]
     \tyrule{\quo{-}}{\Delta; \0 \e A}{\Delta; \Gamma \enm \sq A}\qquad
     \tyrule{\unq{-}}{\Delta; \Gamma \ent \sq A}{\Delta, A; \Gamma \enm C}{\Delta; \Gamma \enm C}\\[0.5\baselineskip]
-    \tyrule{\nt}{\Delta; \Gamma \ent \tvar x}{\Delta; \Gamma \enm \tvar x}\\[0.5\baselineskip]
+    \tyrule{\nt}{\Delta; \Gamma \ent \base}{\Delta; \Gamma \enm \base}\\[0.5\baselineskip]
     \tyrule{\mvar}{\Delta \ni A}{\Delta; \Gamma \ent A}\qquad
     \tyrule{\var}{\Gamma \ni A}{\Delta; \Gamma \ent A}\\[0.5\baselineskip]
     \tyrule{\binop{\app}}{\Delta; \Gamma \ent A \imp B}{\Delta; \Gamma \enm A}{\Delta; \Gamma \ent B}
@@ -443,80 +444,79 @@ We first prove soundness and completeness with respect to this canonical model, 
 
 \begin{definition}
   \textbf{(Introspective Kripke models)\ }
-  An \emph{introspective Kripke model} is a tuple that consists of a set of \emph{worlds} $\W$, a \emph{valuation relation} on worlds and type variables $\binop{\V}$, an \emph{accessibility relation} on worlds $\binop{\ge}$, a \emph{world introspection function}, and an \emph{accessibility introspection function}.
+  An \emph{introspective Kripke model} is a tuple that consists of a \emph{set of worlds} $\W$, an unary \emph{valuation relation} on worlds $\V$, a binary \emph{accessibility relation} on worlds $\binop{\ge}$, a \emph{world introspection function} $\peek{-}$, and an \emph{accessibility introspection function} $\peeka{-}$.
   Accessibility is reflexive and transitive, as witnessed by $\ida$ and $\binop{\compa}$, and valuation is monotonic with respect to accessibility, as witnessed by $\relv$.
-  World introspection $\peek{-}$ maps worlds to contexts, and accessibility introspection $\peeka{-}$ maps elements of the accessibility relation to order-preserving embeddings on contexts.
+  World introspection maps worlds to contexts, and accessibility introspection maps elements of the accessibility relation to order-preserving embeddings on contexts.
   \begin{gather*}
-    \M \,=\, \langle\, \W,\, \binop{\V},\, \binop{\ge},\, \ida,\, \binop{\compa},\, \relv,\, \peek{-},\, \peeka{-}\, \rangle
+    \M \,=\, \langle\, \W,\, \V,\, \binop{\ge},\, \ida,\, \binop{\compa},\, \relv,\, \peek{-},\, \peeka{-}\, \rangle
   \end{gather*}
 \end{definition}
 
 \noindent
-We write $w \V x$ to mean the valuation for $x$ at $w$, and $w' \ge w$ to say that $w'$ is accessible from $w$.
-We use the word \emph{relocating} to mean applying the monotonicity property for valuations.
-For example, if $\eta$ witnesses that $w'$ is accessible from $w$, we read $\relv \eta\, v$ as relocating $v$ via $\eta$.
+We write $\V w$ to mean the valuation at $w$, and $w' \ge w$ to say that $w'$ is accessible from $w$.
+We refer to an application of the monotonicity property as a \emph{relocation}; for example, if $\eta$ witnesses that $w'$ is accessible from $w$, we read $\relv \eta\, v$ as a relocation of $v$ via $\eta$.
 
-As shorthand, we use \emph{modal introspection} $\mpeek{-}$ to map directly to the modal projection of a context, and $\mpeeka{-}$ to map directly to the modal projection of an order-preserving embedding on contexts.
+As shorthand, we use \emph{modal world introspection} $\mpeek{-}$ to map a world directly to the modal projection of a context, and \emph{modal accessibility introspection} $\mpeeka{-}$ to map an element of the accessibility relation directly to the modal projection of an order-preserving embedding on contexts.
 
 \begin{definition}
   \textbf{(Values and value continuations)\ }
-  \label{ee/kee/mkee}
-  A \emph{value} for $A$ at $w$ of $\M$, written $\M\,|\,w \ee A$, is defined by induction on the type, mutually with value continuations and justified value continuations.
+  \label{ee/eek/meek}
+  A \emph{value} for type $A$ at world $w$ of introspective Kripke model $\M$, written $\M\,|\,w \ee A$, is defined by induction on the type, mutually with value continuations and modal value continuations.
   
-  For type variables $\tvar x$ \eqref{ee.tvar}, the value at $w$ is given by the valuation for $x$ at $w$.
+  For the base type $\flat$ \eqref{ee.tvar}, the value at $w$ is given by the valuation at $w$.
   For function types $A \imp B$ \eqref{ee.imp}, the value at $w$ is a function that, for every $w'$ accessible from $w$, takes a value continuation for $A$ at $w'$ and returns a value continuation for $B$ at $w'$.
-  For quotation types $\sq A$ \eqref{ee.sq}, the value at $w$ is a justified value continuation for $A$ at $w$.
+  For quotation types $\sq A$ \eqref{ee.sq}, the value at $w$ is a modal value continuation for $A$ at $w$.
   
-  A \emph{value continuation} for $A$ at $w$ of $\M$, written $\M\,|\,w \kee A$ \eqref{kee}, is a function that, for every type $C$ and $w'$ accessible from $w$, takes a continuation that, for every $w''$ accessible from $w'$, consumes a value for $A$ at $w''$ and produces a normal derivation for $C$ under $\peek{w''}$.  The result is a normal derivation for $C$ under $\peek{w'}$.
+  A \emph{value continuation} for $A$ at $w$ of $\M$, written $\M\,|\,w \eek A$ \eqref{eek}, is a function that, for every type $C$ and $w'$ accessible from $w$, takes a continuation that, for every $w''$ accessible from $w'$, consumes a value for $A$ at $w''$ and produces a normal term for $C$ under $\peek{w''}$.  The result is a normal term for $C$ under $\peek{w'}$.
   
-   A \emph{justified value continuation} for $A$ at $w$ of $\M$, written $\M\,|\,w \mkee A$ \eqref{mkee}, is a simple product of a derivation for $A$ under $\mpeek{w}; \0$ and a value continuation for $A$ at $w$.
+   A \emph{modal value continuation} for $A$ at $w$ of $\M$, written $\M\,|\,w \meek A$ \eqref{meek}, is a product of a term for $A$ under $\mpeek{w}; \0$ and a value continuation for $A$ at $w$.
   \begin{alignat}{3}
-    \label{ee.tvar} & \rlap{$\M\,|\,w \ee \tvar x$}  &&\,&&=\, w \V x\\
-    \label{ee.imp}  & \rlap{$\M\,|\,w \ee A \imp B$} &&\,&&=\, \forall w' \ge w.\ \raisebox{-8pt}{\prftree{\M\,|\,w' \kee A} {\M\,|\,w' \kee B}}\\
-    \label{ee.sq}   & \rlap{$\M\,|\,w \ee \sq A$}    &&\,&&=\, \M\,|\,w \mkee A\\[0.5\baselineskip]
-    \label{kee}     && \quad \M\,|\,w \kee A         &\,&&=\, \forall C,\,w' \ge w.\ \raisebox{-8pt}{\prftree{\raisebox{8pt}{$\forall w'' \ge w'\mkern-4mu.\ $} \prftree{\M\,|\,w'' \ee A}{\lfloor w'' \rfloor \enm C}}{\lfloor w' \rfloor \enm C}}\\[\baselineskip]
-    \label{mkee}    && \quad \M\,|\,w \mkee A        &\,&&=\, \mpeek{w}; \0 \e A \times \M\,|\,w \kee A
+    \label{ee.tvar} & \rlap{$\M\,|\,w \ee \base$}    &&\,&&=\, w \V x\\
+    \label{ee.imp}  & \rlap{$\M\,|\,w \ee A \imp B$} &&\,&&=\, \forall w' \ge w.\ \raisebox{-8pt}{\prftree{\M\,|\,w' \eek A} {\M\,|\,w' \eek B}}\\
+    \label{ee.sq}   & \rlap{$\M\,|\,w \ee \sq A$}    &&\,&&=\, \M\,|\,w \meek A\\[0.5\baselineskip]
+    \label{eek}     && \quad \M\,|\,w \eek A         &\,&&=\, \forall C,\,w' \ge w.\ \raisebox{-8pt}{\prftree{\raisebox{8pt}{$\forall w'' \ge w'\mkern-4mu.\ $} \prftree{\M\,|\,w'' \ee A}{\lfloor w'' \rfloor \enm C}}{\lfloor w' \rfloor \enm C}}\\[\baselineskip]
+    \label{meek}    && \quad \M\,|\,w \meek A        &\,&&=\, \mpeek{w}; \0 \e A \times \M\,|\,w \eek A
   \end{alignat}
 \end{definition}
 
 \begin{lemma}
   \normalshape
-  \textbf{(Projections of justified value continuations)\ }
+  \textbf{(Projections of modal value continuations)\ }
   \label{syn/sem}
-  Given a justified value continuation for $A$ at $w$ of $\M$, there exists a derivation for $A$ under $\mpeek{w}; \0$, being the \emph{syntactic projection}, and a value continuation for $A$ at $w$, being the \emph{semantic projection}.
+  Given a modal value continuation for $A$ at $w$ of $\M$, there exists a term for $A$ under $\mpeek{w}; \0$, referred to as the \emph{syntactic projection}, and a value continuation for $A$ at $w$, referred to as the \emph{semantic projection}.
   \begin{gather*}
-    \tyrule{\syn}{\M\,|\, w \mkee A}{\mpeek{w}; \0 \e A}\qquad
-    \tyrule{\sem}{\M\,|\, w \mkee A}{\M\,|\, w \kee A}
+    \tyrule{\syn}{\M\,|\, w \meek A}{\mpeek{w}; \0 \e A}\qquad
+    \tyrule{\sem}{\M\,|\, w \meek A}{\M\,|\, w \eek A}
   \end{gather*}
-  Proved by simple product elimination.
+  Proved by product elimination.
 \end{lemma}
 
 \begin{lemma}
   \normalshape
-  \textbf{(Monotonicity of values and value continuations with respect to accessibility)\ }
-  \label{rel/krel/mkrel}
-  For every $w'$ accessible from $w$ of $\M$, given a value (value continuation; justified value continuation) for $A$ at $w$, there exists a value (value continuation; justified value continuation) for $A$ at $w'$.
+  \textbf{(Monotonicity of values with respect to accessibility)\ }
+  \label{rel/relk/mrelk}
+  For every $w'$ accessible from $w$ of $\M$, given a value for $A$ at $w$, there exists a value for $A$ at $w'$; likewise for value continuations and modal value continuations.
   \begin{gather*}
     \tyrule{\rel}{w' \ge w}{\M\,|\, w \ee A}{w' \ee A}\\[0.5\baselineskip]
-    \tyrule{\krel}{w' \ge w}{\M\,|\, w \kee A}{w' \kee A}\qquad
-    \tyrule{\mkrel}{w' \ge w}{\M\,|\, w \mkee A}{w' \mkee A}
+    \tyrule{\relk}{w' \ge w}{\M\,|\, w \eek A}{w' \eek A}\qquad
+    \tyrule{\mrelk}{w' \ge w}{\M\,|\, w \meek A}{w' \meek A}
   \end{gather*}
   \itshape
   \begin{proof}
     \normalshape
     By mutual induction on the type, and lemmas \ref{mren} and \ref{syn/sem}.
     \begin{alignat*}{3}
-      & \rlap{$\rel\, \{\tvar x\}$}   &\,\eta\, &\,v \,&&=\, \relv \eta\, v\\
+      & \rlap{$\rel\, \{\base\}$}     &\,\eta\, &\,v \,&&=\, \relv \eta\, v\\
       & \rlap{$\rel\, \{A \imp B\}$}  &\,\eta\, &\,f \,&&=\, \eta' \mapsto f\, (\eta \compa \eta')\\
-      & \rlap{$\rel\, \{\sq A\}$}     &\,\eta\, &\,p \,&&=\, \mkrel \eta\, p\\[0.5\baselineskip]
-      && \qquad\quad \krel             \,\eta\, &\,k \,&&=\, \eta'\, f \mapsto k\, (\eta \compa \eta')\, f\\[0.5\baselineskip]
-      && \qquad\quad \mkrel            \,\eta\, &\,p \,&&=\, \mren\, \mpeeka{\eta}\, (\syn p),\, \krel \eta\, (\sem p)
+      & \rlap{$\rel\, \{\sq A\}$}     &\,\eta\, &\,p \,&&=\, \mrelk \eta\, p\\[0.5\baselineskip]
+      && \qquad\quad \relk             \,\eta\, &\,k \,&&=\, \eta'\, f \mapsto k\, (\eta \compa \eta')\, f\\[0.5\baselineskip]
+      && \qquad\quad \mrelk            \,\eta\, &\,p \,&&=\, \mren\, \mpeeka{\eta}\, (\syn p),\, \relk \eta\, (\sem p)
     \end{alignat*}
   \end{proof}
 \end{lemma}
 
 \noindent
-We extend the use of the word \emph{relocating} to mean applying the monotonicity property for values (value continuations; justified value continuations).
+We extend the use of the word \emph{relocating} to mean applying the monotonicity property for values (value continuations; modal value continuations).
 
 \begin{lemma}
   \normalshape
@@ -524,13 +524,13 @@ We extend the use of the word \emph{relocating} to mean applying the monotonicit
   \label{unit/bind}
   Value continuations form a monad.
   \begin{gather*}
-    \tyrule{\unit}{\M\,|\,w \ee A}{\M\,|\,w \kee A}\qquad
-    \tyrule{\bind}{\M\,|\,w \kee A}{\raisebox{8pt}{$\forall w' \ge w.\ $} \prftree{\M\,|\, w' \ee A}{\M\,|\, w' \kee C}}{\M\,|\,w \kee C}
+    \tyrule{\unit}{\M\,|\,w \ee A}{\M\,|\,w \eek A}\qquad
+    \tyrule{\bind}{\M\,|\,w \eek A}{\raisebox{8pt}{$\forall w' \ge w.\ $} \prftree{\M\,|\, w' \ee A}{\M\,|\, w' \eek C}}{\M\,|\,w \eek C}
   \end{gather*}
   \itshape
   \begin{proof}
     \normalshape
-    By lemma \ref{rel/krel/mkrel}.
+    By lemma \ref{rel/relk/mrelk}.
     \begin{alignat*}{3}
       & \unit\,a      \,&&=\, &&\,\eta\, f \mapsto f \ida\, (\rel \eta\, a)\\[0.5\baselineskip]
       & \bind\, k\, f \,&&=\, &&\,\eta\, f' \mapsto k\, \eta\, (\eta'\, a \mapsto\\
@@ -542,40 +542,40 @@ We extend the use of the word \emph{relocating} to mean applying the monotonicit
 
 \begin{definition}
   \textbf{(Environments)\ }
-  \label{kees/mkees}
-  An \emph{(ordinary) environment} for $\Xi$ at $w$ of $\M$, written $\M\,|\,w \kees$, is a mapping that assigns to every type in $\Xi$ a value continuation at $w$ of $\M$.
-  A \emph{justified environment} for $\Xi$ at $w$ of $\M$, written $\M\,|\,w \mkees$, is a mapping that assigns to every type in $\Xi$ a justified value continuation at $w$ of $\M$.
+  \label{eeks/meeks}
+  An \emph{(ordinary) environment} for $\Xi$ at $w$ of $\M$, written $\M\,|\,w \eeks$, is a mapping that assigns to every type in $\Xi$ a value continuation at $w$ of $\M$.
+  A \emph{modal environment} for $\Xi$ at $w$ of $\M$, written $\M\,|\,w \meeks$, is a mapping that assigns to every type in $\Xi$ a modal value continuation at $w$ of $\M$.
   \begin{gather*}
-    \M\,|\,w \kees \Xi  \,=\, \All\, (\M\,|\,w\, \preop{\kee})\, \Xi\\[0.5\baselineskip]
-    \M\,|\,w \mkees \Xi \,=\, \All\, (\M\,|\,w\, \preop{\mkee})\, \Xi
+    \M\,|\,w \eeks \Xi  \,=\, \All\, (\M\,|\,w\, \preop{\eek})\, \Xi\\[0.5\baselineskip]
+    \M\,|\,w \meeks \Xi \,=\, \All\, (\M\,|\,w\, \preop{\meek})\, \Xi
   \end{gather*}
 \end{definition}
 
 \noindent
-We skip the word \emph{ordinary} when possible.  We also abuse the word \emph{environment} to mean a justified environment together with an ordinary environment.  For example, given a context $\Delta; \Gamma$ and a world $w$ of $\M$, the \emph{current environment} refers to a justified environment $\delta$ together with an ordinary environment $\gamma$, where $\delta : \M\,|\,w \mkees \Delta$ and $\gamma : \M\,|\,w \kees \Gamma$.
+We skip the word \emph{ordinary} when possible.  We also abuse the word \emph{environment} to mean a modal environment together with an ordinary environment; for example, given a context $\Delta; \Gamma$ and a world $w$ of $\M$, the \emph{current environment} refers to a modal environment $\delta$ together with an ordinary environment $\gamma$, where $\delta : \M\,|\,w \meeks \Delta$ and $\gamma : \M\,|\,w \eeks \Gamma$.
 
 \begin{lemma}
   \normalshape
-  \textbf{(Projections of justified environments)\ }
+  \textbf{(Projections of modal environments)\ }
   \label{syns/sems}
-  Given a justified environment for $\Xi$ at $w$ of $\M$, there exists a simultaneous substitution for $\Xi$ under $\mpeek{w}; \0$ and an environment for $\Xi$ at $w$ of $\M$.
+  Given a modal environment for $\Xi$ at $w$ of $\M$, there exists a simultaneous substitution for $\Xi$ under $\mpeek{w}; \0$ and an environment for $\Xi$ at $w$ of $\M$.
   \begin{gather*}
-    \tyrule{\syns}{\M\,|\, w \mkees \Xi}{\mpeek{w}; \0 \es \Xi}\qquad
-    \tyrule{\sems}{\M\,|\, w \mkees \Xi}{\M\,|\, w \kees \Xi}
+    \tyrule{\syns}{\M\,|\, w \meeks \Xi}{\mpeek{w}; \0 \es \Xi}\qquad
+    \tyrule{\sems}{\M\,|\, w \meeks \Xi}{\M\,|\, w \eeks \Xi}
   \end{gather*}
-  Proved by induction on the justified environment and lemma \ref{syn/sem}.
+  Proved by induction on the modal environment and lemma \ref{syn/sem}.
 \end{lemma}
 
 \begin{lemma}
   \normalshape
   \textbf{(Monotonicity of environments with respect to accessibility)\ }
-  \label{krels/mkrels}
-  For every $w'$ accessible from $w$, given an environment (justified environment) for $\Xi$ at $w$ of $\M$, there exists an environment (justified environment) for $\Xi$ at $w'$ of $\M$.
+  \label{relks/mrelks}
+  For every $w'$ accessible from $w$, given an environment (modal environment) for $\Xi$ at $w$ of $\M$, there exists an environment (modal environment) for $\Xi$ at $w'$ of $\M$.
   \begin{gather*}
-    \tyrule{\krels}{w' \ge w}{\M\,|\, w \kees \Xi}{w' \kees \Xi}\qquad
-    \tyrule{\mkrels}{w' \ge w}{\M\,|\, w \mkees \Xi}{w' \mkees \Xi}
+    \tyrule{\relks}{w' \ge w}{\M\,|\, w \eeks \Xi}{w' \eeks \Xi}\qquad
+    \tyrule{\mrelks}{w' \ge w}{\M\,|\, w \meeks \Xi}{w' \meeks \Xi}
   \end{gather*}
-  Proved by induction on the environment (justified environment) and lemma \ref{rel/krel/mkrel}.
+  Proved by induction on the environment (modal environment) and lemma \ref{rel/relk/mrelk}.
 \end{lemma}
 
 \begin{lemma}
@@ -584,7 +584,7 @@ We skip the word \emph{ordinary} when possible.  We also abuse the word \emph{en
   \label{lookup}
   Given an environment for $\Xi$ at $w$ of $\M$, for every type $A$ in $\Xi$, there exists a value continuation for $A$ at $w$ of $\M$.
   \begin{gather*}
-    \tyrule{\lookup}{\M\,|\,w \kees \Xi}{\Xi \ni A}{\M\,|\,w \kee A}
+    \tyrule{\lookup}{\M\,|\,w \eeks \Xi}{\Xi \ni A}{\M\,|\,w \eek A}
   \end{gather*}
   Proved by induction on the environment.
 \end{lemma}
@@ -592,9 +592,9 @@ We skip the word \emph{ordinary} when possible.  We also abuse the word \emph{en
 \begin{definition}
   \textbf{(Semantic entailment)\ }
   \label{eeq}
-  We say that $\Delta; \Gamma$ \emph{semantically entails} $A$ when, for every world $w$ of every model $\M$, given a justified environment for $\Delta$ at $w$ of $\M$ and an environment for $\Gamma$ at $w$ of $\M$, there exists a value continuation for $A$ at $w$ of $\M$.
+  We say that $\Delta; \Gamma$ \emph{semantically entails} $A$ when, for every world $w$ of every model $\M$, given a modal environment for $\Delta$ at $w$ of $\M$ and an environment for $\Gamma$ at $w$ of $\M$, there exists a value continuation for $A$ at $w$ of $\M$.
   \begin{gather*}
-    \Delta; \Gamma \eeq A \,=\, \forall \M,\,w.\ \raisebox{-8pt}{$\prftree{\M\,|\,w \mkees \Delta}{\M\,|\,w \kees \Gamma}{\M\,|\,w \kee A}$}
+    \Delta; \Gamma \eeq A \,=\, \forall \M,\,w.\ \raisebox{-8pt}{$\prftree{\M\,|\,w \meeks \Delta}{\M\,|\,w \eeks \Gamma}{\M\,|\,w \eek A}$}
   \end{gather*}
 \end{definition}
 
@@ -609,22 +609,22 @@ We skip the word \emph{ordinary} when possible.  We also abuse the word \emph{en
   \itshape
   \begin{proof}
     \normalshape
-    By induction on the derivation and lemmas \ref{lookup}, \ref{syns/sems}, \ref{unit/bind}, and \ref{krels/mkrels}.
+    By induction on the term and lemmas \ref{lookup}, \ref{syns/sems}, \ref{unit/bind}, and \ref{relks/mrelks}.
     \begin{alignat}{3}
       \label{reflect.mvar} & \reflect\, (\mvar i)    \,&&=\, &&\,\delta\, \gamma \mapsto \lookup\, (\sems \delta)\, i\\
       \label{reflect.var}  & \reflect\, (\var i)     \,&&=\, &&\,\delta\, \gamma \mapsto \lookup \gamma\, i\\
       \label{reflect.lam}  & \reflect\, (\lam \D)    \,&&=\, &&\,\delta\, \gamma \mapsto \unit\, (\eta\,k \mapsto\\
-      \nonumber            & && && \quad \reflect \D\, (\mkrels \eta\, \delta)\, (\krels \eta\, \gamma,\, k))\\
+      \nonumber            & && && \quad \reflect \D\, (\mrelks \eta\, \delta)\, (\relks \eta\, \gamma,\, k))\\
       \label{reflect.app}  & \reflect\, (\D \app \E) \,&&=\, &&\,\delta\, \gamma \mapsto \bind\, (\reflect \D\, \delta\, \gamma)\, (\eta\,f \mapsto\\
-      \nonumber            & && && \quad f \ida\, (\reflect \E\, (\mkrels \eta\, \delta)\, (\krels \eta\, \gamma)))\\
+      \nonumber            & && && \quad f \ida\, (\reflect \E\, (\mrelks \eta\, \delta)\, (\relks \eta\, \gamma)))\\
       \label{reflect.quo}  & \reflect\, (\quo{\D})   \,&&=\, &&\,\delta\, \gamma \mapsto \unit\, (\msub\, (\syns \delta)\, \D,\, \reflect \D\, \delta\, \0)\\
       \label{reflect.unq}  & \reflect\, (\unq{\D}\E) \,&&=\, &&\,\delta\, \gamma \mapsto \bind\, (\reflect \D\, \delta\, \gamma)\, (\eta\,p \mapsto\\
-      \nonumber            & && && \quad \reflect \E\, (\mkrels \eta\, \delta,\, p)\, (\krels \eta\, \gamma))
+      \nonumber            & && && \quad \reflect \E\, (\mrelks \eta\, \delta,\, p)\, (\relks \eta\, \gamma))
     \end{alignat}
   \end{proof}
 \end{theorem}
 \noindent
-$\reflect$, pronounced `reflect', is The proof of soundness is a monadic evaluator for $\lambdabox$-derivations: a function that \emph{reflects} syntactic objects as semantic objects, abstracting over the specifics of any particular model.  Given a justified environment $\delta$ and an environment $\gamma$, both at some world of some model, evaluation consumes a derivation for $A$ under $\Delta; \Gamma$ and produces a value continuation for $A$, still at the same world of the same model.
+$\reflect$, pronounced `reflect', is The proof of soundness is a monadic evaluator for $\lambdabox$-terms: a function that \emph{reflects} syntactic objects as semantic objects, abstracting over the specifics of any particular model.  Given a modal environment $\delta$ and an environment $\gamma$, both at some world of some model, evaluation consumes a term for $A$ under $\Delta; \Gamma$ and produces a value continuation for $A$, still at the same world of the same model.
 
 Modal variables \eqref{reflect.mvar} and variables \eqref{reflect.var} are looked up in the semantic projection of $\delta$ and in $\gamma$, respectively.
 
@@ -646,7 +646,7 @@ XXX
   \emph{A universal model for the $\lambdabox$-calculus.}
   \begin{gather*}
     \Mu \,=\, \langle\,\Cx,\,\binop{\Vu},\,\binop{\geqZ},\,\ideZ,\,\binop{\compeZ},\,\rennmZ,\,\id,\,\id\,\rangle\\[0.5\baselineskip]
-    \Delta; \Gamma \Vu x \,=\, \Delta; \Gamma \enm \mkern-4mu \tvar x
+    \Delta; \Gamma \Vu x \,=\, \Delta; \Gamma \enm \mkern-4mu \base
   \end{gather*}
 \end{definition}
 
@@ -654,17 +654,17 @@ XXX
   \label{reflectu/reifyu}
   Soundness and completeness of the $\lambdabox$-calculus with respect to the universal model $\Mu$.
   \begin{gather*}
-    \tyrule{\reflectu}{\Delta; \Gamma \ent A}{\Mu\,|\,\Delta; \Gamma \kee A}\qquad
-    \tyrule{\reifyu}{\Mu\,|\,\Delta; \Gamma \kee A}{\Delta; \Gamma \enm A}
+    \tyrule{\reflectu}{\Delta; \Gamma \ent A}{\Mu\,|\,\Delta; \Gamma \eek A}\qquad
+    \tyrule{\reifyu}{\Mu\,|\,\Delta; \Gamma \eek A}{\Delta; \Gamma \enm A}
   \end{gather*}
   \begin{proof}
     \normalshape
     By mutual induction on the type.
     \begin{alignat}{2}
-      & \reflectu\, \{\tvar x\}  \,&&\D \,=\, \unit\, (\nt \D)\\
+      & \reflectu\, \{\base\}    \,&&\D \,=\, \unit\, (\nt \D)\\
       & \reflectu\, \{A \imp B\} \,&&\D \,=\, \unit\, (\eta\, k \mapsto \reflectu\, (\renntZ \eta\, \D \app \reifyu k))\\
       & \reflectu\, \{\sq A\}    \,&&\D \,=\, \eta\, f \mapsto \unq{\renntZ \eta\, \D}\, (f\, (\mwkZ \ideZ)\, (\mvO,\, \reflectu \mvO))\\[0.5\baselineskip]
-      & \reifyu\,   \{\tvar x\}  \,&& k \,=\, k \ideZ\, (\eta\ \D \mapsto \D)\\
+      & \reifyu\,   \{\base\}    \,&& k \,=\, k \ideZ\, (\eta\ \D \mapsto \D)\\
       & \reifyu\,   \{A \imp B\} \,&& k \,=\, k \ideZ\, (\eta\, f \mapsto \lam\, (\reifyu\, (f\ (\wkZ \ideZ)\, (\reflectu \vO))))\\
       & \reifyu\,   \{\sq A\}    \,&& k \,=\, k \ideZ\, (\eta\, p \mapsto \quo{\syn p})
     \end{alignat}
@@ -676,8 +676,8 @@ XXX
   \normalshape
   \emph{Identity environments.}
   \begin{gather*}
-    \mide : \Delta; \Gamma \mkees \Delta\qquad
-    \ide : \Delta; \Gamma \kees \Gamma
+    \mide : \Delta; \Gamma \meeks \Delta\qquad
+    \ide : \Delta; \Gamma \eeks \Gamma
   \end{gather*}
   \normalshape
   Each proved by induction on the environment.
