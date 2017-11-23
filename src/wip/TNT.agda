@@ -1,7 +1,7 @@
 module TNT where
 
 open import Prelude public
-  renaming (suc to S ; zero to Z)
+  renaming (suc to S_ ; zero to Z)
 
 
 --------------------------------------------------------------------------------
@@ -32,11 +32,12 @@ instance
 -- Numeric expressions
 infixl 17 _+_
 infixl 18 _*_
+infix  19 S_
 data NExp : Set
   where
     ⁿ   : Nat → NExp
     ⁿᵛ  : NVar → NExp
-    S   : NExp → NExp
+    S_  : NExp → NExp
     _+_ : NExp → NExp → NExp
     _*_ : NExp → NExp → NExp
 
@@ -86,7 +87,7 @@ nsub[ x ≔ s ] ⁿ n     = ⁿ n
 nsub[ x ≔ s ] ⁿᵛ y    with x ≟ₙᵥ y
 ...                   | yes refl = s
 ...                   | no x≢y   = ⁿᵛ y
-nsub[ x ≔ s ] S e     = S (nsub[ x ≔ s ] e)
+nsub[ x ≔ s ] (S e)   = S nsub[ x ≔ s ] e
 nsub[ x ≔ s ] (e + f) = nsub[ x ≔ s ] e + nsub[ x ≔ s ] f
 nsub[ x ≔ s ] (e * f) = nsub[ x ≔ s ] e * nsub[ x ≔ s ] f
 
@@ -173,7 +174,7 @@ data _⊢_ : Context → Type → Set
                    → Γ ⊢ e == f
 
     -- Induction
-    induc : ∀ {x A Γ} → Γ ⊢ sub[ x ≔ 0 ] A → Γ ⊢ ∇ x ∶ A ⊃ sub[ x ≔ S (ⁿᵛ x) ] A
+    induc : ∀ {x A Γ} → Γ ⊢ sub[ x ≔ 0 ] A → Γ ⊢ ∇ x ∶ A ⊃ sub[ x ≔ S ⁿᵛ x ] A
                       → Γ ⊢ ∇ x ∶ A
 
     -- Axiom 1
@@ -270,7 +271,8 @@ lem = ƛ 0
 
 -- Equality is reflexive
 thm₁ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ "a" == "a"
-thm₁ = gen[ "a" ] (trans (sym (spec[ "a" ≔ "a" ] axm₂)) (spec[ "a" ≔ "a" ] axm₂))
+thm₁ = gen[ "a" ] (trans (sym (spec[ "a" ≔ "a" ] axm₂))
+                         (spec[ "a" ≔ "a" ] axm₂))
 
 thm₂ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ~ (S "a" == "a")
 thm₂ = induc (spec[ "a" ≔ 0 ] axm₁)
