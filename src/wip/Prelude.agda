@@ -40,7 +40,8 @@ p ↯ ¬p = elim⊥ (¬p p)
 infixl 6 _,_
 record Σ {ℓ ℓ′} (X : Set ℓ) (P : X → Set ℓ′) : Set (ℓ ⊔ ℓ′)
   where
-    constructor _,_
+    instance
+      constructor _,_
     field
       proj₁ : X
       proj₂ : P proj₁
@@ -305,8 +306,6 @@ data List {ℓ} (X : Set ℓ) : Set ℓ
   where
     ∅   : List X
     _,_ : (Γ : List X) (A : X) → List X
-
-{-# COMPILE GHC List = data List ([] | (:)) #-}
 
 
 len : ∀ {ℓ} → {X : Set ℓ}
