@@ -63,8 +63,8 @@ infix  11 ∃_∶_
 infixr 12 _⊃_
 infixl 13 _∨_
 infixl 14 _∧_
-infix  15 ~_
-infix  16 _==_
+infix  15 _==_
+infix  16 ~_
 data Type : Set
   where
     _==_ : NExp → NExp → Type
@@ -96,11 +96,7 @@ sub[_≔_]_ : NVar → NExp → Type → Type
 sub[ x ≔ s ] (e == f)  = nsub[ x ≔ s ] e == nsub[ x ≔ s ] f
 sub[ x ≔ s ] (~ A)     = ~ sub[ x ≔ s ] A
 sub[ x ≔ s ] (A ∧ B)   = sub[ x ≔ s ] A ∧ sub[ x ≔ s ] B
--- sub[ x ≔ s ] (A ∨ B)   = sub[ x ≔ s ] A ∨ sub[ x ≔ s ] B
 sub[ x ≔ s ] (A ⊃ B)   = sub[ x ≔ s ] A ⊃ sub[ x ≔ s ] B
--- sub[ x ≔ s ] (∃ y ∶ A) with x ≟ₙᵥ y
--- ...                    | yes refl = ∃ y ∶ A
--- ...                    | no x≢y   = ∃ y ∶ sub[ x ≔ s ] A
 sub[ x ≔ s ] (∇ y ∶ A) with x ≟ₙᵥ y
 ...                    | yes refl = ∇ y ∶ A
 ...                    | no x≢y   = ∇ y ∶ sub[ x ≔ s ] A
@@ -118,7 +114,7 @@ data _⊢_ : Context → Type → Set
     ᵛ : ∀ {A Γ} → Γ ∋ A
                 → Γ ⊢ A
 
-    -- Fantasy 
+    -- Fantasy
     ƛ : ∀ {A B Γ} → Γ , A ⊢ B
                   → Γ ⊢ A ⊃ B
 
@@ -126,7 +122,7 @@ data _⊢_ : Context → Type → Set
     _$_ : ∀ {A B Γ} → Γ ⊢ A ⊃ B → Γ ⊢ A
                     → Γ ⊢ B
 
-    -- Joining 
+    -- Joining
     _,_ : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B
                     → Γ ⊢ A ∧ B
 
@@ -157,24 +153,24 @@ data _⊢_ : Context → Type → Set
 
     -- Generalisation
     -- TODO: x must not be free in the premise of any fantasy containing A
-    gen[_] : ∀ {A Γ} → (x : NVar) → Γ ⊢ A 
+    gen[_] : ∀ {A Γ} → (x : NVar) → Γ ⊢ A
                      → Γ ⊢ ∇ x ∶ A
 
     -- Symmetry
-    sym : ∀ {a b Γ} → Γ ⊢ a == b
-                    → Γ ⊢ b == a
+    sym : ∀ {e f Γ} → Γ ⊢ e == f
+                    → Γ ⊢ f == e
 
     -- Transitivity
-    trans : ∀ {a b c Γ} → Γ ⊢ a == b → Γ ⊢ b == c
-                        → Γ ⊢ a == c
+    trans : ∀ {e f g Γ} → Γ ⊢ e == f → Γ ⊢ f == g
+                        → Γ ⊢ e == g
 
     -- Successor introduction
-    S₊ : ∀ {a b Γ} → Γ ⊢ a == b
-                   → Γ ⊢ S a == S b
+    S₊ : ∀ {e f Γ} → Γ ⊢ e == f
+                   → Γ ⊢ S e == S f
 
     -- Successor elimination
-    S₋ : ∀ {a b Γ} → Γ ⊢ S a == S b
-                   → Γ ⊢ a == b
+    S₋ : ∀ {e f Γ} → Γ ⊢ S e == S f
+                   → Γ ⊢ e == f
 
     -- Induction
     induc : ∀ {x A Γ} → Γ ⊢ sub[ x ≔ 0 ] A → Γ ⊢ ∇ x ∶ A ⊃ sub[ x ≔ S (ⁿᵛ x) ] A
@@ -217,12 +213,6 @@ ren η (snd M)           = snd (ren η M)
 ren η (≈₊ M)            = ≈₊ (ren η M)
 ren η (≈₋ M)            = ≈₋ (ren η M)
 ren η (contra M)        = contra (ren η M)
--- ren η (∨→⊃ M)          = ∨→⊃ (ren η M)
--- ren η (⊃→∨ M)          = ⊃→∨ (ren η M)
--- ren η (∧→∨ M)          = ∧→∨ (ren η M)
--- ren η (∨→∧ M)          = ∨→∧ (ren η M)
--- ren η (∇→∃ M)          = ∇→∃ (ren η M)
--- ren η (∃→∇ M)          = ∃→∇ (ren η M)
 ren η (spec[ x ≔ s ] M) = spec[ x ≔ s ] (ren η M)
 ren η (gen[ x ] M)      = gen[ x ] (ren η M)
 ren η (sym M)           = sym (ren η M)
@@ -260,28 +250,43 @@ uncontra M = ƛ (≈₋ (ren (drop idᵣ) (contra M) $ ≈₊ 0))
 -- DeMorgan's minor II
 ∨→∧ : ∀ {A B Γ} → Γ ⊢ ~ (A ∨ B)
                  → Γ ⊢ ~ A ∧ ~ B
-∨→∧ M = {!!} , {!!}
+∨→∧ M = {!!}
 
--- -- DeMorgan's major I
--- ∇→∃ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ ~ A
---                  → Γ ⊢ ~ (∃ x ∶ A)
--- ∇→∃ M = {!!}
+-- DeMorgan's major I
+∇→∃ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ ~ A
+                 → Γ ⊢ ~ (∃ x ∶ A)
+∇→∃ M = ≈₊ M
 
--- -- DeMorgan's major II
--- ∃→∇ : ∀ {x A Γ} → Γ ⊢ ~ (∃ x ∶ A)
---                  → Γ ⊢ ∇ x ∶ ~ A
--- ∃→∇ M = {!!}
+-- DeMorgan's major II
+∃→∇ : ∀ {x A Γ} → Γ ⊢ ~ (∃ x ∶ A)
+                 → Γ ⊢ ∇ x ∶ ~ A
+∃→∇ M = ≈₋ M
 
 
--- -- Equality is reflexive
--- thm₁ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ "a" == "a"
--- thm₁ = gen[ "a" ] (trans (sym (spec[ "a" ≔ "a" ] axm₂)) (spec[ "a" ≔ "a" ] axm₂))
+-- Law of excluded middle
+lem : ∀ {A Γ} → Γ ⊢ A ∨ ~ A
+lem = ƛ 0
 
--- thm₂ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ~ (S "a" == "a")
--- thm₂ = induc (spec[ "a" ≔ 0 ] axm₁)
---              (gen[ "a" ] (contra (ƛ (S₋ 0))))
 
--- -- Only 0 has no predecessor
--- thm₃ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ~ (S "b" == "a" ⊃ "a" == 0)
--- thm₃ = induc {!!}
---              {!!}
+-- Equality is reflexive
+thm₁ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ "a" == "a"
+thm₁ = gen[ "a" ] (trans (sym (spec[ "a" ≔ "a" ] axm₂)) (spec[ "a" ≔ "a" ] axm₂))
+
+thm₂ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ~ (S "a" == "a")
+thm₂ = induc (spec[ "a" ≔ 0 ] axm₁)
+             (gen[ "a" ] (contra (ƛ (S₋ 0))))
+
+-- Only 0 has no predecessor
+thm₃ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ~ (S "b" == "a" ⊃ "a" == 0)
+thm₃ = induc {!!}
+             {!!}
+
+
+-- ~sym : ∀ {e f Γ} → Γ ⊢ ~ (e == f)
+--                  → Γ ⊢ ~ (f == e)
+-- ~sym M = {!!}
+--
+-- -- Proof by contradiction
+-- abort : ∀ {A Γ} → Γ , ~ A ⊢ 0 == S 0
+--                 → Γ ⊢ A
+-- abort M = ≈₋ (contra (ƛ M) $ ~sym (spec[ "a" ≔ 0 ] axm₁))
