@@ -303,6 +303,16 @@ dne∇ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ ~ ~ A
                  → Γ ⊢ ∇ x ∶ A
 dne∇ {x} M = gen[ x ] (dne (spec[ x ≔ nvar x ] M))
 
+dni∃ : ∀ {x A Γ} → Γ ⊢ ∃ x ∶ A
+                 → Γ ⊢ ∃ x ∶ ~ ~ A
+dni∃ {x} M = ne (contradic (dne∇ (var 0))
+                           (ren (drop idᵣ) M))
+
+dne∃ : ∀ {x A Γ} → Γ ⊢ ∃ x ∶ ~ ~ A
+                 → Γ ⊢ ∃ x ∶ A
+dne∃ {x} M = ne (contradic (dni∇ (var 0))
+                           (ren (drop idᵣ) M))
+
 
 -- DeMorgan’s major law I
 ∇→~∃ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ ~ A
