@@ -147,7 +147,7 @@ Context = List Type
 infix  3 _⊢_
 data _⊢_ : Context → Type → Set
   where
-    -- Assumption / Hypothesis / Carry-over
+    -- Assumption / Hypothesis
     var : ∀ {A Γ} → Γ ∋ A
                   → Γ ⊢ A
 
@@ -158,6 +158,10 @@ data _⊢_ : Context → Type → Set
     -- Detachment / Modus ponens
     app : ∀ {A B Γ} → Γ ⊢ A ⊃ B → Γ ⊢ A
                     → Γ ⊢ B
+
+    -- Carry-over
+    define : ∀ {A C Γ} → Γ ⊢ A → Γ , A ⊢ C
+                       → Γ ⊢ C
 
     -- Joining
     pair : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B
@@ -230,13 +234,22 @@ data _⊢_ : Context → Type → Set
 
 
 v0 : ∀ {A Γ} → Γ , A ⊢ A
-v0 = var zero
+v0 = var 0
 
 v1 : ∀ {A B Γ} → Γ , A , B ⊢ A
-v1 = var (suc zero)
+v1 = var 1
 
 v2 : ∀ {A B C Γ} → Γ , A , B , C ⊢ A
-v2 = var (suc (suc zero))
+v2 = var 2
+
+v3 : ∀ {A B C D Γ} → Γ , A , B , C , D ⊢ A
+v3 = var 3
+
+v4 : ∀ {A B C D E Γ} → Γ , A , B , C , D , E ⊢ A
+v4 = var 4
+
+v5 : ∀ {A B C D E F Γ} → Γ , A , B , C , D , E , F ⊢ A
+v5 = var 5
 
 
 ren : ∀ {A Γ Γ′} → Γ′ ⊇ Γ → Γ ⊢ A
@@ -244,6 +257,7 @@ ren : ∀ {A Γ Γ′} → Γ′ ⊇ Γ → Γ ⊢ A
 ren η (var i)           = var (renᵢ η i)
 ren η (lam M)           = lam (ren (keep η) M)
 ren η (app M N)         = app (ren η M) (ren η N)
+ren η (define M N)      = define (ren η M) (ren (keep η) N)
 ren η (pair M N)        = pair (ren η M) (ren η N)
 ren η (fst M)           = fst (ren η M)
 ren η (snd M)           = snd (ren η M)
@@ -334,10 +348,12 @@ boom M = abort (wk M)
 ~∨→⊃ M = lam (app (wk M) (dni v0))
 
 
+-- NOTE: Uses REWRITE idsub
 dni∇ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ A
                  → Γ ⊢ ∇ x ∶ ~ ~ A
 dni∇ {x} M = gen[ x ] (dni (spec[ x ≔ nvar x ] M))
 
+-- NOTE: Uses REWRITE idsub
 dne∇ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ ~ ~ A
                  → Γ ⊢ ∇ x ∶ A
 dne∇ {x} M = gen[ x ] (dne (spec[ x ≔ nvar x ] M))
@@ -429,22 +445,32 @@ left M = swap∨ (right M)
 -- De Morgan’s minor law I
 ~∨→∧ : ∀ {A B Γ} → Γ ⊢ ~ (A ∨ B)
                   → Γ ⊢ ~ A ∧ ~ B
-~∨→∧ M = pair (ne (deny (left v0) (wk M))) (ne (deny (right v0) (wk M)))
+~∨→∧ M = pair
+            (ne (deny (left v0) (wk M)))
+            (ne (deny (right v0) (wk M)))
 
 -- De Morgan’s minor law II
 ∧→~∨ : ∀ {A B Γ} → Γ ⊢ ~ A ∧ ~ B
                   → Γ ⊢ ~ (A ∨ B)
-∧→~∨ M = ne (deny (app v0 (wk (fst M))) (wk (snd M)))
+∧→~∨ M = ne (deny
+            (app v0 (wk (fst M)))
+            (wk (snd M)))
 
 -- De Morgan’s minor law III
 ~∧→∨ : ∀ {A B Γ} → Γ ⊢ ~ (A ∧ B)
                   → Γ ⊢ ~ A ∨ ~ B
-~∧→∨ M = lam (ne (deny (pair (dne v1) v0) (wk (wk M))))
+~∧→∨ M = lam (ne (deny
+            (pair (dne v1) v0)
+            (wk (wk M))))
 
 -- De Morgan’s minor law IV
 ∨→~∧ : ∀ {A B Γ} → Γ ⊢ ~ A ∨ ~ B
                   → Γ ⊢ ~ (A ∧ B)
-∨→~∧ M = ne (deny (snd v0) (app (wk M) (dni (fst v0))))
+∨→~∧ M = ne (deny
+            (snd v0)
+            (app
+              (wk M)
+              (dni (fst v0))))
 
 
 module Kleene where
@@ -787,3 +813,43 @@ module VonEitzen where
           (gen[ "a" ] (lam (trans
             (spec[ "b" ≔ "a" ] (spec[ "a" ≔ 0 ] ax3))
             (suci v0))))
+
+  th6 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ (suc "a" + "b") == suc ("a" + "b")
+  th6 = gen[ "a" ] (induct
+          (trans
+            (spec[ "a" ≔ suc "a" ] ax2)
+            (suci (sym (spec[ "a" ≔ "a" ] ax2))))
+          (gen[ "b" ] (lam (trans
+            (trans
+              (spec[ "b" ≔ "b" ] (spec[ "a" ≔ suc "a" ] ax3))
+              (suci v0))
+            (sym (suci (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] ax3))))))))
+
+  th7 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" + suc "b") == (suc "a" + "b")
+  th7 = gen[ "a" ] (gen[ "b" ] (trans
+          (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] ax3))
+          (sym (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] th6)))))
+
+  -- Addition is commutative
+  th8 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" + "b") == ("b" + "a")
+  th8 = gen[ "a" ] (induct
+          (trans
+            (spec[ "a" ≔ "a" ] ax2)
+            (sym (spec[ "a" ≔ "a" ] th5)))
+          (gen[ "b" ] (lam (trans
+            (trans
+              (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] ax3))
+              (suci v0))
+            (sym (spec[ "c" ≔ "b" ] (gen[ "c" ] (spec[ "b" ≔ "a" ] (spec[ "a" ≔ "c" ] th6)))))))))
+
+  -- Addition is a function in the first addend
+  th9 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ∇ "c" ∶ "a" == "b" ⊃ ("a" + "c") == ("b" + "c")
+  th9 = gen[ "a" ] (gen[ "b" ] (induct
+          (lam (trans
+            (trans (spec[ "a" ≔ "a" ] ax2) v0)
+            (sym (spec[ "a" ≔ "b" ] ax2))))
+          (define
+            (spec[ "b" ≔ "c" ] (spec[ "a" ≔ "a" ] ax3))
+            (gen[ "c" ] (lam (lam (trans
+              (trans v2 (suci (app v1 v0)))
+              (sym (spec[ "a" ≔ "b" ] (gen[ "a" ] v2))))))))))
