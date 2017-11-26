@@ -442,10 +442,13 @@ module Kleene where
     K5b : ∀ {A B Γ} → Γ ⊢ B ⊃ A ∨ B
     K5b = lam (right v₀)
 
-    K6 : ∀ {A B C Γ} → Γ ⊢ (A ⊃ C) ⊃ ((B ⊃ C) ⊃ (A ∨ B ⊃ C))
-    K6 = {!!}
+    woop : ∀ {A C Γ} → Γ ⊢ (A ⊃ C) ⊃ (~ A ⊃ C) ⊃ C
+    woop = lam (lam (swap∨ (snd K*36 $ (swap∨ (dni⊃₁ v₁) , swap∨ (dni⊃₁ v₀))) $ ne (deny (fst v₀) (snd v₀))))
 
-    K7 : ∀ {A B Γ} → Γ ⊢ (A ⊃ B) ⊃ ((A ⊃ ~ B) ⊃ ~ A)
+    K6 : ∀ {A B C Γ} → Γ ⊢ (A ⊃ C) ⊃ (B ⊃ C) ⊃ A ∨ B ⊃ C
+    K6 = lam (lam (lam (woop $ v₂ $ (K*2 $ v₀ $ v₁))))
+
+    K7 : ∀ {A B Γ} → Γ ⊢ (A ⊃ B) ⊃ (A ⊃ ~ B) ⊃ ~ A
     K7 = lam (lam (ne (deny (v₂ $ v₀) (v₁ $ v₀))))
 
     K8 : ∀ {A Γ} → Γ ⊢ ~ ~ A ⊃ A
@@ -469,7 +472,7 @@ module Kleene where
     K*2 = lam (lam (lam (v₁ $ (v₂ $ v₀))))
 
     -- Interchange of premises
-    K*3 : ∀ {A B C Γ} → Γ ⊢ A ⊃ (B ⊃ C) ⫗ B ⊃ (A ⊃ C)
+    K*3 : ∀ {A B C Γ} → Γ ⊢ A ⊃ B ⊃ C ⫗ B ⊃ A ⊃ C
     K*3 = lam (lam (lam (v₂ $ v₀ $ v₁))) ,
           lam (lam (lam (v₂ $ v₀ $ v₁)))
 
@@ -525,8 +528,8 @@ module Kleene where
 
     -- Distributive law of disjunction over conjunction
     K*36 : ∀ {A B C Γ} → Γ ⊢ A ∨ (B ∧ C) ⫗ (A ∨ B) ∧ (A ∨ C)
-    K*36 = {!!} ,
-           {!!}
+    K*36 = lam (lam (fst (v₁ $ v₀)) , lam (snd (v₁ $ v₀))) ,
+           lam (lam (fst v₁ $ v₀ , snd v₁ $ v₀))
 
     -- Idempotent law of conjunction
     K*37 : ∀ {A Γ} → Γ ⊢ A ∧ A ⫗ A
