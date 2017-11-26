@@ -3,6 +3,7 @@
 module TNT where
 
 open import Prelude public
+  renaming (zero to Z ; suc to S)
   hiding (tt)
 
 
@@ -11,24 +12,30 @@ open import Prelude public
 -- Syntax
 
 
--- Numeric variables
-data NVar : Set
-  where
-    mkNV : String → NVar
+-- -- Numeric variables
+-- data NVar : Set
+--   where
+--     mkNV : String → NVar
+--
+-- injmkNV : ∀ {s₁ s₂} → mkNV s₁ ≡ mkNV s₂ → s₁ ≡ s₂
+-- injmkNV refl = refl
+--
+-- _≟ₙᵥ_ : (x₁ x₂ : NVar) → Dec (x₁ ≡ x₂)
+-- mkNV s₁ ≟ₙᵥ mkNV s₂ = mapDec (mkNV &_) injmkNV (s₁ ≟ₛ s₂)
+--
+-- instance
+--   nvarIsString : IsString NVar
+--   nvarIsString =
+--     record
+--       { Constraint = λ s → ⊤
+--       ; fromString = λ s → mkNV s
+--       }
 
-injmkNV : ∀ {s₁ s₂} → mkNV s₁ ≡ mkNV s₂ → s₁ ≡ s₂
-injmkNV refl = refl
+NVar : Set
+NVar = String
 
 _≟ₙᵥ_ : (x₁ x₂ : NVar) → Dec (x₁ ≡ x₂)
-mkNV s₁ ≟ₙᵥ mkNV s₂ = mapDec (mkNV &_) injmkNV (s₁ ≟ₛ s₂)
-
-instance
-  nvarIsString : IsString NVar
-  nvarIsString =
-    record
-      { Constraint = λ s → ⊤
-      ; fromString = λ s → mkNV s
-      }
+_≟ₙᵥ_ = _≟ₛ_
 
 
 -- Numeric expressions
@@ -36,18 +43,18 @@ infixl 18 _+_
 infixl 19 _*_
 data NExp : Set
   where
-    nat  : Nat → NExp
-    nvar : NVar → NExp
-    suc  : NExp → NExp
-    _+_  : NExp → NExp → NExp
-    _*_  : NExp → NExp → NExp
+    ⁿ   : Nat → NExp
+    ⁿᵛ  : NVar → NExp
+    S   : NExp → NExp
+    _+_ : NExp → NExp → NExp
+    _*_ : NExp → NExp → NExp
 
 instance
   nexpIsNumber : Number NExp
   nexpIsNumber =
     record
       { Constraint = λ n → ⊤
-      ; fromNat    = λ n → nat n
+      ; fromNat    = λ n → ⁿ n
       }
 
 instance
@@ -55,7 +62,7 @@ instance
   nexpIsString =
     record
       { Constraint = λ s → ⊤
-      ; fromString = λ s → nvar (mkNV s)
+      ; fromString = λ s → ⁿᵛ s -- (mkNV s)
       }
 
 
@@ -89,22 +96,22 @@ A ⫗ B = (A ⊃ B) ∧ (B ⊃ A)
 -- Substitution of numeric variables in numeric expressions
 -- TODO: capture avoidance?
 nsub[_≔_]_ : NVar → NExp → NExp → NExp
-nsub[ x ≔ s ] nat n   = nat n
-nsub[ x ≔ s ] nvar y  with x ≟ₙᵥ y
+nsub[ x ≔ s ] ⁿ n     = ⁿ n
+nsub[ x ≔ s ] ⁿᵛ y    with x ≟ₙᵥ y
 ...                   | yes refl = s
-...                   | no x≢y   = nvar y
-nsub[ x ≔ s ] (suc e) = suc (nsub[ x ≔ s ] e)
+...                   | no x≢y   = ⁿᵛ y
+nsub[ x ≔ s ] (S e)   = S (nsub[ x ≔ s ] e)
 nsub[ x ≔ s ] (e + f) = nsub[ x ≔ s ] e + nsub[ x ≔ s ] f
 nsub[ x ≔ s ] (e * f) = nsub[ x ≔ s ] e * nsub[ x ≔ s ] f
 
-idnsub : ∀ x e → nsub[ x ≔ nvar x ] e ≡ e
-idnsub x (nat n)  = refl
-idnsub x (nvar y) with x ≟ₙᵥ y
-...               | yes refl = refl
-...               | no x≢y   = refl
-idnsub x (suc e)  = suc & idnsub x e
-idnsub x (e + f)  = _+_ & idnsub x e ⊗ idnsub x f
-idnsub x (e * f)  = _*_ & idnsub x e ⊗ idnsub x f
+idnsub : ∀ x e → nsub[ x ≔ ⁿᵛ x ] e ≡ e
+idnsub x (ⁿ n)   = refl
+idnsub x (ⁿᵛ y)  with x ≟ₙᵥ y
+...                | yes refl = refl
+...                | no x≢y   = refl
+idnsub x (S e)   = S & idnsub x e
+idnsub x (e + f) = _+_ & idnsub x e ⊗ idnsub x f
+idnsub x (e * f) = _*_ & idnsub x e ⊗ idnsub x f
 
 
 -- Substitution of numeric variables in types
@@ -118,8 +125,7 @@ sub[ x ≔ s ] (∇ y ∶ A) with x ≟ₙᵥ y
 ...                    | yes refl = ∇ y ∶ A
 ...                    | no x≢y   = ∇ y ∶ sub[ x ≔ s ] A
 
--- TODO: substitution of variable by itself must be identity
-idsub : ∀ x A → sub[ x ≔ nvar x ] A ≡ A
+idsub : ∀ x A → sub[ x ≔ ⁿᵛ x ] A ≡ A
 idsub x (e == f)  = _==_ & idnsub x e ⊗ idnsub x f
 idsub x (~ A)     = ~_ & idsub x A
 idsub x (A ∧ B)   = _∧_ & idsub x A ⊗ idsub x B
@@ -141,8 +147,8 @@ infixl 9 _$_
 data _⊢_ : Context → Type → Set
   where
     -- Assumption / Hypothesis / Carry-over
-    var : ∀ {A Γ} → Γ ∋ A
-                  → Γ ⊢ A
+    ᵛ : ∀ {A Γ} → Γ ∋ A
+                → Γ ⊢ A
 
     -- Fantasy
     lam : ∀ {A B Γ} → Γ , A ⊢ B
@@ -173,8 +179,8 @@ data _⊢_ : Context → Type → Set
                   → Γ ⊢ A
 
     -- Contraposition I
-    contrapos : ∀ {A B Γ} → Γ ⊢ A ⊃ B
-                          → Γ ⊢ ~ B ⊃ ~ A
+    contra : ∀ {A B Γ} → Γ ⊢ A ⊃ B
+                       → Γ ⊢ ~ B ⊃ ~ A
 
     -- Specialisation
     -- TODO: s must not contain any variables bound in A
@@ -195,46 +201,46 @@ data _⊢_ : Context → Type → Set
                         → Γ ⊢ e == g
 
     -- Successor introduction
-    suci : ∀ {e f Γ} → Γ ⊢ e == f
-                     → Γ ⊢ suc e == suc f
+    Si : ∀ {e f Γ} → Γ ⊢ e == f
+                   → Γ ⊢ S e == S f
 
     -- Successor elimination
-    suce : ∀ {e f Γ} → Γ ⊢ suc e == suc f
-                     → Γ ⊢ e == f
+    Se : ∀ {e f Γ} → Γ ⊢ S e == S f
+                   → Γ ⊢ e == f
 
     -- Induction
-    induc : ∀ {x A Γ} → Γ ⊢ sub[ x ≔ 0 ] A → Γ ⊢ ∇ x ∶ A ⊃ sub[ x ≔ suc (nvar x) ] A
+    induc : ∀ {x A Γ} → Γ ⊢ sub[ x ≔ 0 ] A → Γ ⊢ ∇ x ∶ A ⊃ sub[ x ≔ S (ⁿᵛ x) ] A
                       → Γ ⊢ ∇ x ∶ A
 
     -- Axiom 1
-    axm₁ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ~ (suc "a" == 0)
+    axm₁ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ~ (S "a" == 0)
 
     -- Axiom 2
     axm₂ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ("a" + 0) == "a"
 
     -- Axiom 3
-    axm₃ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" + suc "b") == suc ("a" + "b")
+    axm₃ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" + S "b") == S ("a" + "b")
 
     -- Axiom 4
     axm₄ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ("a" * 0) == 0
 
     -- Axiom 5
-    axm₅ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" * suc "b") == ("a" * "b") + "a"
+    axm₅ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" * S "b") == ("a" * "b") + "a"
 
 
-v₀ : ∀ {A Γ} → Γ , A ⊢ A
-v₀ = var zero
+ᵛ0 : ∀ {A Γ} → Γ , A ⊢ A
+ᵛ0 = ᵛ Z
 
-v₁ : ∀ {A B Γ} → Γ , A , B ⊢ A
-v₁ = var (suc zero)
+ᵛ1 : ∀ {A B Γ} → Γ , A , B ⊢ A
+ᵛ1 = ᵛ (S Z)
 
-v₂ : ∀ {A B C Γ} → Γ , A , B , C ⊢ A
-v₂ = var (suc (suc zero))
+ᵛ2 : ∀ {A B C Γ} → Γ , A , B , C ⊢ A
+ᵛ2 = ᵛ (S (S Z))
 
 
 ren : ∀ {A Γ Γ′} → Γ′ ⊇ Γ → Γ ⊢ A
                  → Γ′ ⊢ A
-ren η (var i)           = var (renᵢ η i)
+ren η (ᵛ i)             = ᵛ (renᵢ η i)
 ren η (lam M)           = lam (ren (keep η) M)
 ren η (M $ N)           = ren η M $ ren η N
 ren η (M , N)           = ren η M , ren η N
@@ -242,13 +248,13 @@ ren η (fst M)           = fst (ren η M)
 ren η (snd M)           = snd (ren η M)
 ren η (dni M)           = dni (ren η M)
 ren η (dne M)           = dne (ren η M)
-ren η (contrapos M)     = contrapos (ren η M)
+ren η (contra M)        = contra (ren η M)
 ren η (spec[ x ≔ s ] M) = spec[ x ≔ s ] (ren η M)
 ren η (gen[ x ] M)      = gen[ x ] (ren η M)
 ren η (sym M)           = sym (ren η M)
 ren η (trans M N)       = trans (ren η M) (ren η N)
-ren η (suci M)          = suci (ren η M)
-ren η (suce M)          = suce (ren η M)
+ren η (Si M)            = Si (ren η M)
+ren η (Se M)            = Se (ren η M)
 ren η (induc M N)       = induc (ren η M) (ren η N)
 ren η axm₁              = axm₁
 ren η axm₂              = axm₂
@@ -262,26 +268,24 @@ wk M = ren (drop idᵣ) M
 
 
 -- Contraposition II
-uncontrapos : ∀ {A B Γ} → Γ ⊢ ~ B ⊃ ~ A
-                        → Γ ⊢ A ⊃ B
-uncontrapos M = lam (dne (wk (contrapos M) $ dni v₀))
+ntra : ∀ {A B Γ} → Γ ⊢ ~ B ⊃ ~ A
+                 → Γ ⊢ A ⊃ B
+ntra M = lam (dne (wk (contra M) $ dni ᵛ0))
 
-predeny : ∀ {A C Γ} → Γ ⊢ A ⊃ ~ A ⊃ C
-predeny = lam (uncontrapos (lam (dni v₁)))
-
+-- Denial of antecendent
 deny : ∀ {A C Γ} → Γ ⊢ A → Γ ⊢ ~ A
                  → Γ ⊢ C
-deny M N = predeny $ M $ N
+deny M N = ntra (lam (wk N)) $ M
 
 
 -- Law of excluded middle
 lem : ∀ {A Γ} → Γ ⊢ A ∨ ~ A
-lem = lam v₀
+lem = lam ᵛ0
 
 
 -- Truth
 TT : Type
-TT = ∇ "a" ∶ ~ (suc "a" == 0)
+TT = ∇ "a" ∶ ~ (S "a" == 0)
 
 -- Triviality
 tt : ∀ {Γ} → Γ ⊢ TT
@@ -295,17 +299,17 @@ FF = ~ TT
 -- Proof of negation
 ne : ∀ {A Γ} → Γ , A ⊢ FF
              → Γ ⊢ ~ A
-ne M = contrapos (lam M) $ dni tt
+ne M = contra (lam M) $ dni tt
 
 -- Proof by contradiction
 abort : ∀ {A Γ} → Γ , ~ A ⊢ FF
                 → Γ ⊢ A
 abort M = dne (ne M)
 
--- Ex falso quodlibet
-efq : ∀ {C Γ} → Γ ⊢ FF
-              → Γ ⊢ C
-efq M = abort (wk M)
+-- Principle of explosion
+boom : ∀ {C Γ} → Γ ⊢ FF
+               → Γ ⊢ C
+boom M = abort (wk M)
 
 
 -- Switcheroo I
@@ -321,31 +325,29 @@ efq M = abort (wk M)
 -- Switcheroo III
 ⊃→~∨ : ∀ {A B Γ} → Γ ⊢ A ⊃ B
                   → Γ ⊢ ~ A ∨ B
-⊃→~∨ M = lam (wk M $ dne v₀)
+⊃→~∨ M = lam (wk M $ dne ᵛ0)
 
 -- Switcheroo IV
 ~∨→⊃ : ∀ {A B Γ} → Γ ⊢ ~ A ∨ B
                   → Γ ⊢ A ⊃ B
-~∨→⊃ M = lam (wk M $ dni v₀)
+~∨→⊃ M = lam (wk M $ dni ᵛ0)
 
 
 dni∇ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ A
                  → Γ ⊢ ∇ x ∶ ~ ~ A
-dni∇ {x} M = gen[ x ] (dni (spec[ x ≔ nvar x ] M))
+dni∇ {x} M = gen[ x ] (dni (spec[ x ≔ ⁿᵛ x ] M))
 
 dne∇ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ ~ ~ A
                  → Γ ⊢ ∇ x ∶ A
-dne∇ {x} M = gen[ x ] (dne (spec[ x ≔ nvar x ] M))
+dne∇ {x} M = gen[ x ] (dne (spec[ x ≔ ⁿᵛ x ] M))
 
--- DeMorgan’s major law I
-∇→~∃ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ ~ A
-                  → Γ ⊢ ~ (∃ x ∶ A)
-∇→~∃ M = dni M
+dni∃ : ∀ {x A Γ} → Γ ⊢ ∃ x ∶ A
+                 → Γ ⊢ ∃ x ∶ ~ ~ A
+dni∃ {x} M = ne (deny (dne∇ ᵛ0) (wk M))
 
--- DeMorgan’s major law II
-~∃→∇ : ∀ {x A Γ} → Γ ⊢ ~ (∃ x ∶ A)
-                  → Γ ⊢ ∇ x ∶ ~ A
-~∃→∇ M = dne M
+dne∃ : ∀ {x A Γ} → Γ ⊢ ∃ x ∶ ~ ~ A
+                 → Γ ⊢ ∃ x ∶ A
+dne∃ {x} M = ne (deny (dni∇ ᵛ0) (wk M))
 
 
 dni∧₁ : ∀ {A B Γ} → Γ ⊢ A ∧ B
@@ -367,36 +369,19 @@ dne∧₂ M = fst M , dne (snd M)
 
 dni⊃₁ : ∀ {A B Γ} → Γ ⊢ A ⊃ B
                   → Γ ⊢ ~ ~ A ⊃ B
-dni⊃₁ M = lam (wk M $ dne v₀)
+dni⊃₁ M = lam (wk M $ dne ᵛ0)
 
 dne⊃₁ : ∀ {A B Γ} → Γ ⊢ ~ ~ A ⊃ B
                   → Γ ⊢ A ⊃ B
-dne⊃₁ M = lam (wk M $ dni v₀)
+dne⊃₁ M = lam (wk M $ dni ᵛ0)
 
 dni⊃₂ : ∀ {A B Γ} → Γ ⊢ A ⊃ B
                   → Γ ⊢ A ⊃ ~ ~ B
-dni⊃₂ M = lam (dni (wk M $ v₀))
+dni⊃₂ M = lam (dni (wk M $ ᵛ0))
 
 dne⊃₂ : ∀ {A B Γ} → Γ ⊢ A ⊃ ~ ~ B
                   → Γ ⊢ A ⊃ B
-dne⊃₂ M = lam (dne (wk M $ v₀))
-
-
-dni∨₁ : ∀ {A B Γ} → Γ ⊢ A ∨ B
-                  → Γ ⊢ ~ ~ A ∨ B
-dni∨₁ M = dni⊃₁ M
-
-dne∨₁ : ∀ {A B Γ} → Γ ⊢ ~ ~ A ∨ B
-                  → Γ ⊢ A ∨ B
-dne∨₁ M = dne⊃₁ M
-
-dni∨₂ : ∀ {A B Γ} → Γ ⊢ A ∨ B
-                  → Γ ⊢ A ∨ ~ ~ B
-dni∨₂ M = dni⊃₂ M
-
-dne∨₂ : ∀ {A B Γ} → Γ ⊢ A ∨ ~ ~ B
-                  → Γ ⊢ A ∨ B
-dne∨₂ M = dne⊃₂ M
+dne⊃₂ M = lam (dne (wk M $ ᵛ0))
 
 
 swap∧ : ∀ {A B Γ} → Γ ⊢ A ∧ B
@@ -405,7 +390,7 @@ swap∧ M = snd M , fst M
 
 swap∨ : ∀ {A B Γ} → Γ ⊢ A ∨ B
                   → Γ ⊢ B ∨ A
-swap∨ M = dne∨₂ (contrapos M)
+swap∨ M = dne⊃₂ (contra M)
 
 
 -- Disjunction introduction II
@@ -419,75 +404,121 @@ left : ∀ {A B Γ} → Γ ⊢ A
 left M = swap∨ (right M)
 
 
+-- De Morgan’s major law I
+∇→~∃ : ∀ {x A Γ} → Γ ⊢ ∇ x ∶ ~ A
+                  → Γ ⊢ ~ (∃ x ∶ A)
+∇→~∃ M = dni M
+
+-- De Morgan’s major law II
+~∃→∇ : ∀ {x A Γ} → Γ ⊢ ~ (∃ x ∶ A)
+                  → Γ ⊢ ∇ x ∶ ~ A
+~∃→∇ M = dne M
+
+-- De Morgan’s major law III
+~∇→∃ : ∀ {x A Γ} → Γ ⊢ ~ (∇ x ∶ A)
+                  → Γ ⊢ ∃ x ∶ ~ A
+~∇→∃ M = ne (deny (dne∇ ᵛ0) (wk M))
+
+-- De Morgan’s major law IV
+∃→~∇ : ∀ {x A Γ} → Γ ⊢ ∃ x ∶ ~ A
+                  → Γ ⊢ ~ (∇ x ∶ A)
+∃→~∇ M = ne (deny (dni∇ ᵛ0) (wk M))
+
+
+-- De Morgan’s minor law I
+~∨→∧ : ∀ {A B Γ} → Γ ⊢ ~ (A ∨ B)
+                  → Γ ⊢ ~ A ∧ ~ B
+~∨→∧ M = ne (deny (left ᵛ0) (wk M)) , ne (deny (right ᵛ0) (wk M))
+
+-- De Morgan’s minor law II
+∧→~∨ : ∀ {A B Γ} → Γ ⊢ ~ A ∧ ~ B
+                  → Γ ⊢ ~ (A ∨ B)
+∧→~∨ M = ne (deny (ᵛ0 $ wk (fst M)) (wk (snd M)))
+
+-- De Morgan’s minor law III
+~∧→∨ : ∀ {A B Γ} → Γ ⊢ ~ (A ∧ B)
+                  → Γ ⊢ ~ A ∨ ~ B
+~∧→∨ M = lam (ne (deny (dne ᵛ1 , ᵛ0) (wk (wk M))))
+
+-- De Morgan’s minor law IV
+∨→~∧ : ∀ {A B Γ} → Γ ⊢ ~ A ∨ ~ B
+                  → Γ ⊢ ~ (A ∧ B)
+∨→~∧ M = ne (deny (snd ᵛ0) (wk M $ dni (fst ᵛ0)))
+
+
 module Kleene where
   mutual
     K1a : ∀ {A B Γ} → Γ ⊢ A ⊃ B ⊃ A
-    K1a = lam (lam v₁)
+    K1a = lam (lam ᵛ1)
 
     K1b : ∀ {A B C Γ} → Γ ⊢ (A ⊃ B) ⊃ (A ⊃ B ⊃ C) ⊃ A ⊃ C
-    K1b = lam (lam (lam (v₁ $ v₀ $ (v₂ $ v₀))))
+    K1b = lam (lam (lam (ᵛ1 $ ᵛ0 $ (ᵛ2 $ ᵛ0))))
 
     K3 : ∀ {A B Γ} → Γ ⊢ A ⊃ B ⊃ A ∧ B
-    K3 = lam (lam (v₁ , v₀))
+    K3 = lam (lam (ᵛ1 , ᵛ0))
 
     K4a : ∀ {A B Γ} → Γ ⊢ A ∧ B ⊃ A
-    K4a = lam (fst v₀)
+    K4a = lam (fst ᵛ0)
 
     K4b : ∀ {A B Γ} → Γ ⊢ A ∧ B ⊃ B
-    K4b = lam (snd v₀)
+    K4b = lam (snd ᵛ0)
 
     K5a : ∀ {A B Γ} → Γ ⊢ A ⊃ A ∨ B
-    K5a = lam (left v₀)
+    K5a = lam (left ᵛ0)
 
     K5b : ∀ {A B Γ} → Γ ⊢ B ⊃ A ∨ B
-    K5b = lam (right v₀)
+    K5b = lam (right ᵛ0)
 
     woop : ∀ {A C Γ} → Γ ⊢ (A ⊃ C) ⊃ (~ A ⊃ C) ⊃ C
-    woop = lam (lam (swap∨ (snd K*36 $ (swap∨ (dni⊃₁ v₁) , swap∨ (dni⊃₁ v₀))) $ ne (deny (fst v₀) (snd v₀))))
+    woop = lam (lam (swap∨ (snd K*36 $ (swap∨ (dni⊃₁ ᵛ1) , swap∨ (dni⊃₁ ᵛ0))) $ ne (deny (fst ᵛ0) (snd ᵛ0))))
 
     K6 : ∀ {A B C Γ} → Γ ⊢ (A ⊃ C) ⊃ (B ⊃ C) ⊃ A ∨ B ⊃ C
-    K6 = lam (lam (lam (woop $ v₂ $ (K*2 $ v₀ $ v₁))))
+    K6 = lam (lam (lam (woop $ ᵛ2 $ (K*2 $ ᵛ0 $ ᵛ1))))
+
+    case : ∀ {A B C Γ} → Γ ⊢ A ∨ B → Γ , A ⊢ C → Γ , B ⊢ C
+                       → Γ ⊢ C
+    case M N O = K6 $ lam N $ lam O $ M
 
     K7 : ∀ {A B Γ} → Γ ⊢ (A ⊃ B) ⊃ (A ⊃ ~ B) ⊃ ~ A
-    K7 = lam (lam (ne (deny (v₂ $ v₀) (v₁ $ v₀))))
+    K7 = lam (lam (ne (deny (ᵛ2 $ ᵛ0) (ᵛ1 $ ᵛ0))))
 
     K8 : ∀ {A Γ} → Γ ⊢ ~ ~ A ⊃ A
-    K8 = lam (dne v₀)
+    K8 = lam (dne ᵛ0)
 
     K9a : ∀ {A B Γ} → Γ ⊢ (A ⊃ B) ⊃ (B ⊃ A) ⊃ (A ⫗ B)
-    K9a = lam (lam (v₁ , v₀))
+    K9a = lam (lam (ᵛ1 , ᵛ0))
 
     K10a : ∀ {A B Γ} → Γ ⊢ (A ⫗ B) ⊃ A ⊃ B
-    K10a = lam (fst v₀)
+    K10a = lam (fst ᵛ0)
 
     K10b : ∀ {A B Γ} → Γ ⊢ (A ⫗ B) ⊃ B ⊃ A
-    K10b = lam (snd v₀)
+    K10b = lam (snd ᵛ0)
 
     -- Principle of identity
     K*1 : ∀ {A Γ} → Γ ⊢ A ⊃ A
-    K*1 = lam v₀
+    K*1 = lam ᵛ0
 
     -- Chain inference
     K*2 : ∀ {A B C Γ} → Γ ⊢ (A ⊃ B) ⊃ (B ⊃ C) ⊃ A ⊃ C
-    K*2 = lam (lam (lam (v₁ $ (v₂ $ v₀))))
+    K*2 = lam (lam (lam (ᵛ1 $ (ᵛ2 $ ᵛ0))))
 
     -- Interchange of premises
     K*3 : ∀ {A B C Γ} → Γ ⊢ A ⊃ B ⊃ C ⫗ B ⊃ A ⊃ C
-    K*3 = lam (lam (lam (v₂ $ v₀ $ v₁))) ,
-          lam (lam (lam (v₂ $ v₀ $ v₁)))
+    K*3 = lam (lam (lam (ᵛ2 $ ᵛ0 $ ᵛ1))) ,
+          lam (lam (lam (ᵛ2 $ ᵛ0 $ ᵛ1)))
 
     -- Importation and exportation
     K*4a : ∀ {A B C Γ} → Γ ⊢ A ⊃ B ⊃ C ⫗ A ∧ B ⊃ C
-    K*4a = lam (lam (v₁ $ fst v₀ $ snd v₀)) ,
-           lam (lam (lam (v₂ $ (v₁ , v₀))))
+    K*4a = lam (lam (ᵛ1 $ fst ᵛ0 $ snd ᵛ0)) ,
+           lam (lam (lam (ᵛ2 $ (ᵛ1 , ᵛ0))))
 
     -- Denial of the antecedent
     K*10a : ∀ {A B Γ} → Γ ⊢ ~ A ⊃ A ⊃ B
-    K*10a = lam (lam (deny v₀ v₁))
+    K*10a = lam (lam (deny ᵛ0 ᵛ1))
 
     -- Contraposition
     K*12a° : ∀ {A B Γ} → Γ ⊢ A ⊃ B ⫗ ~ B ⊃ ~ A
-    K*12a° = lam (contrapos v₀) , lam (uncontrapos v₀)
+    K*12a° = lam (contra ᵛ0) , lam (ntra ᵛ0)
 
     -- Reflexive property of equivalence
     K*19 : ∀ {A Γ} → Γ ⊢ A ⫗ A
@@ -495,67 +526,69 @@ module Kleene where
 
     -- Symmetric property of equivalence
     K*20 : ∀ {A B Γ} → Γ ⊢ (A ⫗ B) ⫗ (B ⫗ A)
-    K*20 = lam (snd v₀ , fst v₀) ,
-           lam (snd v₀ , fst v₀)
+    K*20 = lam (snd ᵛ0 , fst ᵛ0) ,
+           lam (snd ᵛ0 , fst ᵛ0)
 
     -- Transitive property of equivalence
     K*21 : ∀ {A B C Γ} → Γ ⊢ (A ⫗ B) ∧ (B ⫗ C) ⊃ (A ⫗ C)
-    K*21 = lam (lam (fst (snd v₁) $ (fst (fst v₁) $ v₀)) ,
-                lam (snd (fst v₁) $ (snd (snd v₁) $ v₀)))
+    K*21 = lam (lam (fst (snd ᵛ1) $ (fst (fst ᵛ1) $ ᵛ0)) ,
+                lam (snd (fst ᵛ1) $ (snd (snd ᵛ1) $ ᵛ0)))
 
     -- Associative law of conjunction
     K*31 : ∀ {A B C Γ} → Γ ⊢ (A ∧ B) ∧ C ⫗ A ∧ (B ∧ C)
-    K*31 = lam (fst (fst v₀) , (snd (fst v₀) , snd v₀)) ,
-           lam ((fst v₀ , fst (snd v₀)) , snd (snd v₀))
+    K*31 = lam (fst (fst ᵛ0) , (snd (fst ᵛ0) , snd ᵛ0)) ,
+           lam ((fst ᵛ0 , fst (snd ᵛ0)) , snd (snd ᵛ0))
 
     -- Associative law of disjunction
     K*32 : ∀ {A B C Γ} → Γ ⊢ (A ∨ B) ∨ C ⫗ A ∨ (B ∨ C)
-    K*32 = {!!} ,
-           {!!}
+    K*32 = lam (lam (lam (ᵛ2 $ (snd K*55a $ (ᵛ1 , ᵛ0))))) ,
+           lam (lam (ᵛ1 $ fst (fst K*55a $ ᵛ0) $ snd (fst K*55a $ ᵛ0)))
 
     -- Commutative law of conjunction
     K*33 : ∀ {A B Γ} → Γ ⊢ A ∧ B ⫗ B ∧ A
-    K*33 = lam (swap∧ v₀) , lam (swap∧ v₀)
+    K*33 = lam (swap∧ ᵛ0) , lam (swap∧ ᵛ0)
 
     -- Commutative law of disjunction
     K*34 : ∀ {A B Γ} → Γ ⊢ A ∨ B ⫗ B ∨ A
-    K*34 = lam (swap∨ v₀) , lam (swap∨ v₀)
+    K*34 = lam (swap∨ ᵛ0) , lam (swap∨ ᵛ0)
 
     -- Distributive law of conjunction over disjunction
     K*35 : ∀ {A B C Γ} → Γ ⊢ A ∧ (B ∨ C) ⫗ (A ∧ B) ∨ (A ∧ C)
-    K*35 = {!!} ,
-           {!!}
+    K*35 = lam (case (snd ᵛ0) (left (fst ᵛ1 , ᵛ0))
+                              (right (fst ᵛ1 , ᵛ0))) ,
+           lam (case ᵛ0 (fst ᵛ0 , left (snd ᵛ0))
+                        (fst ᵛ0 , right (snd ᵛ0)))
 
     -- Distributive law of disjunction over conjunction
     K*36 : ∀ {A B C Γ} → Γ ⊢ A ∨ (B ∧ C) ⫗ (A ∨ B) ∧ (A ∨ C)
-    K*36 = lam (lam (fst (v₁ $ v₀)) , lam (snd (v₁ $ v₀))) ,
-           lam (lam (fst v₁ $ v₀ , snd v₁ $ v₀))
+    K*36 = lam (lam (fst (ᵛ1 $ ᵛ0)) , lam (snd (ᵛ1 $ ᵛ0))) ,
+           lam (lam (fst ᵛ1 $ ᵛ0 , snd ᵛ1 $ ᵛ0))
 
     -- Idempotent law of conjunction
     K*37 : ∀ {A Γ} → Γ ⊢ A ∧ A ⫗ A
-    K*37 = lam (fst v₀) , lam (v₀ , v₀)
+    K*37 = lam (fst ᵛ0) , lam (ᵛ0 , ᵛ0)
 
     -- Idempotent law of disjunction
     K*38 : ∀ {A Γ} → Γ ⊢ A ∨ A ⫗ A
-    K*38 = uncontrapos (lam (ne (deny (v₀ $ v₁) v₁))) ,
-           lam (left v₀)
+    K*38 = ntra (lam (ne (deny (ᵛ0 $ ᵛ1) ᵛ1))) ,
+           lam (left ᵛ0)
 
     -- Elimination law of conjunction over disjunction
     K*39 : ∀ {A B Γ} → Γ ⊢ A ∧ (A ∨ B) ⫗ A
-    K*39 = lam (fst v₀) , lam (v₀ , left v₀)
+    K*39 = lam (fst ᵛ0) , lam (ᵛ0 , left ᵛ0)
 
     -- Elimination law of disjunction over conjunction
     K*40 : ∀ {A B Γ} → Γ ⊢ A ∨ (A ∧ B) ⫗ A
-    K*40 = uncontrapos (lam (ne (deny (fst (v₀ $ v₁)) v₁))) ,
-           lam (lam (deny v₁ v₀))
+    K*40 = ntra (lam (ne (deny (fst (ᵛ0 $ ᵛ1)) ᵛ1))) ,
+           lam (lam (deny ᵛ1 ᵛ0))
 
     -- Law of double negation
     K*49° : ∀ {A Γ} → Γ ⊢ ~ ~ A ⫗ A
-    K*49° = lam (dne v₀) , lam (dni v₀)
+    K*49° = lam (dne ᵛ0) , lam (dni ᵛ0)
 
     -- Denial of contradiction
     K*50 : ∀ {A Γ} → Γ ⊢ ~ (A ∧ ~ A)
-    K*50 = ne (deny (fst v₀) (snd v₀))
+    K*50 = ne (deny (fst ᵛ0) (snd ᵛ0))
 
     -- Law of the excluded middle
     K*51° : ∀ {A Γ} → Γ ⊢ A ∨ ~ A
@@ -563,154 +596,67 @@ module Kleene where
 
     -- De Morgan’s law I
     K*55a : ∀ {A B Γ} → Γ ⊢ ~ (A ∨ B) ⫗ ~ A ∧ ~ B
-    K*55a = lam (ne (deny (left v₀) v₁) , ne (deny (right v₀) v₁)) ,
-            lam (ne (deny (v₀ $ fst v₁) (snd v₁)))
+    K*55a = lam (ne (deny (left ᵛ0) ᵛ1) , ne (deny (right ᵛ0) ᵛ1)) ,
+            lam (ne (deny (ᵛ0 $ fst ᵛ1) (snd ᵛ1)))
 
     -- De Morgan’s law II
     K*55b° : ∀ {A B Γ} → Γ ⊢ ~ (A ∧ B) ⫗ ~ A ∨ ~ B
-    K*55b° = lam (lam (ne (deny (dne v₁ , v₀) v₂))) ,
-             lam (ne (deny (snd v₀) (v₁ $ dni (fst v₀))))
+    K*55b° = lam (lam (ne (deny (dne ᵛ1 , ᵛ0) ᵛ2))) ,
+             lam (ne (deny (snd ᵛ0) (ᵛ1 $ dni (fst ᵛ0))))
 
     -- Negation of an implication
     K*55c° : ∀ {A B Γ} → Γ ⊢ ~ (A ⊃ B) ⫗ A ∧ ~ B
-    K*55c° = uncontrapos (lam (dni (lam (dne (fst K*55b° $ v₁ $ dni v₀))))) ,
-             lam (ne (deny (v₀ $ fst v₁) (snd v₁)))
+    K*55c° = ntra (lam (dni (lam (dne (fst K*55b° $ ᵛ1 $ dni ᵛ0))))) ,
+             lam (ne (deny (ᵛ0 $ fst ᵛ1) (snd ᵛ1)))
 
     -- Expression for disjunction in terms of conjunction
     K*56° : ∀ {A B Γ} → Γ ⊢ A ∨ B ⫗ ~ (~ A ∧ ~ B)
-    K*56° = lam (ne (deny v₁ (snd K*55a $ v₀))) ,
-            uncontrapos (lam (dni (fst K*55a $ v₀)))
+    K*56° = lam (ne (deny ᵛ1 (snd K*55a $ ᵛ0))) ,
+            ntra (lam (dni (fst K*55a $ ᵛ0)))
 
     -- Expression for conjunction in terms of disjunction
     K*57° : ∀ {A B Γ} → Γ ⊢ A ∧ B ⫗ ~ (~ A ∨ ~ B)
-    K*57° = lam (snd K*55a $ (dni (fst v₀) , dni (snd v₀))) ,
-            lam (dne (fst (fst K*55a $ v₀)) , dne (snd (fst K*55a $ v₀)))
+    K*57° = lam (snd K*55a $ (dni (fst ᵛ0) , dni (snd ᵛ0))) ,
+            lam (dne (fst (fst K*55a $ ᵛ0)) , dne (snd (fst K*55a $ ᵛ0)))
 
     -- Expression for implication in terms of conjunction
     K*58° : ∀ {A B Γ} → Γ ⊢ A ⊃ B ⫗ ~ (A ∧ ~ B)
-    K*58° = lam (snd K*55b° $ lam (dni (v₁ $ dne v₀))) ,
-            lam (lam (dne (fst K*55b° $ v₁ $ dni v₀)))
+    K*58° = lam (snd K*55b° $ lam (dni (ᵛ1 $ dne ᵛ0))) ,
+            lam (lam (dne (fst K*55b° $ ᵛ1 $ dni ᵛ0)))
 
     -- Expression for implication in terms of disjunction
     K*59° : ∀ {A B Γ} → Γ ⊢ A ⊃ B ⫗ ~ A ∨ B
-    K*59° = lam (lam (v₁ $ dne v₀)) ,
-            lam (lam (v₁ $ dni v₀))
+    K*59° = lam (lam (ᵛ1 $ dne ᵛ0)) ,
+            lam (lam (ᵛ1 $ dni ᵛ0))
 
     -- Expression for conjunction in terms of implication
     K*60° : ∀ {A B Γ} → Γ ⊢ A ∧ B ⫗ ~ (A ⊃ ~ B)
-    K*60° = lam (snd K*55c° $ (fst v₀ , dni (snd v₀))) ,
-            lam (fst (fst K*55c° $ v₀) , dne (snd (fst K*55c° $ v₀)))
+    K*60° = lam (snd K*55c° $ (fst ᵛ0 , dni (snd ᵛ0))) ,
+            lam (fst (fst K*55c° $ ᵛ0) , dne (snd (fst K*55c° $ ᵛ0)))
 
     -- Expression for disjunction in terms of implication
     K*61° : ∀ {A B Γ} → Γ ⊢ A ∨ B ⫗ ~ A ⊃ B
-    K*61° = lam (lam (v₁ $ v₀)) ,
-            lam (lam (v₁ $ v₀))
+    K*61° = lam (lam (ᵛ1 $ ᵛ0)) ,
+            lam (lam (ᵛ1 $ ᵛ0))
 
     -- Expression for equivalence in terms of conjunction of implications
     K*62° : ∀ {A B Γ} → Γ ⊢ (A ⫗ B) ⫗ (A ⊃ B) ∧ (B ⊃ A)
     K*62° = K*1 , K*1
 
 
--- -- TODO: what the fork?
--- contradic : ∀ {A Γ} → Γ ⊢ A → Γ ⊢ ~ A
---                     → Γ ⊢ FF
--- contradic M N = dne⊃₁ (contrapos (lam (wk lem″))) $ (M , N)
+module VonEitzen where
+  -- Equality is reflexive
+  thm₁ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ "a" == "a"
+  thm₁ = gen[ "a" ] (trans (sym (spec[ "a" ≔ "a" ] axm₂))
+                           (spec[ "a" ≔ "a" ] axm₂))
 
+  thm₂ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ~ (S "a" == "a")
+  thm₂ = induc (spec[ "a" ≔ 0 ] axm₁)
+               (gen[ "a" ] (contra (lam (Se ᵛ0))))
 
--- dni∃ : ∀ {x A Γ} → Γ ⊢ ∃ x ∶ A
---                  → Γ ⊢ ∃ x ∶ ~ ~ A
--- dni∃ {x} M = ne (contradic (dne∇ v₀)
---                            (wk M))
-
--- dne∃ : ∀ {x A Γ} → Γ ⊢ ∃ x ∶ ~ ~ A
---                  → Γ ⊢ ∃ x ∶ A
--- dne∃ {x} M = ne (contradic (dni∇ v₀)
---                            (wk M))
-
-
--- -- DeMorgan’s major law III
--- ~∇→∃ : ∀ {x A Γ} → Γ ⊢ ~ (∇ x ∶ A)
---                   → Γ ⊢ ∃ x ∶ ~ A
--- ~∇→∃ M = ne (contradic (dne∇ v₀)
---                         (wk M))
-
--- -- DeMorgan’s major law IV
--- ∃→~∇ : ∀ {x A Γ} → Γ ⊢ ∃ x ∶ ~ A
---                   → Γ ⊢ ~ (∇ x ∶ A)
--- ∃→~∇ M = ne (contradic (dni∇ v₀)
---                         (wk M))
-
-
--- -- -- Disjunction introduction I
--- -- left : ∀ {A B Γ} → Γ ⊢ A
--- --                  → Γ ⊢ A ∨ B
--- -- left M = lam (efq (contradic (wk M)
--- --                              v₀))
-
-
--- DeMorgan’s minor law I
-∧→~∨ : ∀ {A B Γ} → Γ ⊢ ~ A ∧ ~ B
-                  → Γ ⊢ ~ (A ∨ B)
-∧→~∨ M = ne (deny (v₀ $ wk (fst M)) (wk (snd M)))
-
--- -- DeMorgan’s minor law II
--- ~∨→∧ : ∀ {A B Γ} → Γ ⊢ ~ (A ∨ B)
---                   → Γ ⊢ ~ A ∧ ~ B
--- ~∨→∧ M = ne (contradic (left v₀)
---                         (wk M)) ,
---           ne (contradic (right v₀)
---                         (wk M))
-
--- -- DeMorgan’s minor law III
--- ~∧→∨ : ∀ {A B Γ} → Γ ⊢ ~ (A ∧ B)
---                   → Γ ⊢ ~ A ∨ ~ B
--- ~∧→∨ M = contrapos {!!}
--- -- ~∧→∨ M = lam (ne (contradic (dne v₁ , v₀)
--- --                              (wk (wk M))))
-
--- -- DeMorgan’s minor law IV
--- ∨→~∧ : ∀ {A B Γ} → Γ ⊢ ~ A ∨ ~ B
---                   → Γ ⊢ ~ (A ∧ B)
--- ∨→~∧ M = {!!}
--- -- ∨→~∧ M = ne (contradic (snd v₀)
--- --                         (wk M $ dni (fst v₀))
-
-
--- lem‴ : ∀ {A Γ} → Γ ⊢ ~ (A ∧ ~ A)
--- lem‴ = ∨→~∧ lem
-
-
--- -- Disjunction elimination
--- case : ∀ {A B C Γ} → Γ ⊢ A ∨ B → Γ , A ⊢ C → Γ , B ⊢ C
---                    → Γ ⊢ C
--- case M N O = {!⊃→~∨ (lam O)!}
-
--- -- ∨→~∧ (dni∨₁ (dni∨₂ M))
--- -- A ∨ B
--- -- ~ ~ A ∨ ~ ~ B
--- -- ~ (~ A ∧ ~ B)
-
--- -- ⊃→~∨ (lam N)
--- -- ~ A ∨ C
--- -- ~ A ∨ ~ ~ C
--- -- ~ (A ∧ ~ C)
-
--- -- ⊃→~∨ (lam O)
--- -- ~ B ∨ C
--- -- ~ B ∨ ~ ~ C
--- -- ~ (B ∧ ~ C)
-
-
--- -- Equality is reflexive
--- thm₁ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ "a" == "a"
--- thm₁ = gen[ "a" ] (trans (sym (spec[ "a" ≔ "a" ] axm₂))
---                          (spec[ "a" ≔ "a" ] axm₂))
-
--- thm₂ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ~ (suc "a" == "a")
--- thm₂ = induc (spec[ "a" ≔ 0 ] axm₁)
---              (gen[ "a" ] (contrapos (lam (suce v₀))))
-
--- -- Only 0 has no predecessor
--- thm₃ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ~ (suc "b" == "a" ⊃ "a" == 0)
--- thm₃ = induc {!!}
---              {!!}
+  -- Only 0 has no predecessor
+  thm₃ : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ~ (S "b" == "a") ⊃ "a" == 0
+  thm₃ = induc (gen[ "b" ] (lam (spec[ "a" ≔ 0 ] thm₁)))
+               (gen[ "a" ] (lam (gen[ "b" ] (lam
+                 (dne (contra (lam (spec[ "a" ≔ S "a" ] thm₁)) $
+                   spec[ "b" ≔ "a" ] (gen[ "b" ] ᵛ0)))))))
