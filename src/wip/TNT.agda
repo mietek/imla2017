@@ -792,7 +792,7 @@ module VonEitzen where
             (contra (lam (spec[ "a" ≔ suc "a" ] th1)))
             (spec[ "b" ≔ "a" ] (gen[ "b" ] v0))))))))
 
-  -- A sum is 0 only if both summands are 0
+  -- The result of addition is 0 only if both arguments are 0
   th4 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" + "b") == 0 ⊃ ("a" == 0 ∧ "b" == 0)
   th4 = gen[ "a" ] (induct
           (lam (pair
@@ -806,7 +806,7 @@ module VonEitzen where
               (spec[ "a" ≔ "a" + "b" ] ax1))))
             (dni v0)))))))
 
-  -- 0 is also left-neutral in the addition
+  -- 0 is left-neutral in addition
   th5 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ (0 + "a") == "a"
   th5 = induct
           (spec[ "a" ≔ 0 ] ax2)
@@ -842,14 +842,60 @@ module VonEitzen where
               (suci v0))
             (sym (spec[ "c" ≔ "b" ] (gen[ "c" ] (spec[ "b" ≔ "a" ] (spec[ "a" ≔ "c" ] th6)))))))))
 
-  -- Addition is a function in the first addend
+  -- Addition is a function in the first argument
   th9 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ∇ "c" ∶ "a" == "b" ⊃ ("a" + "c") == ("b" + "c")
-  th9 = gen[ "a" ] (gen[ "b" ] (induct
-          (lam (trans
-            (trans (spec[ "a" ≔ "a" ] ax2) v0)
-            (sym (spec[ "a" ≔ "b" ] ax2))))
-          (define
-            (spec[ "b" ≔ "c" ] (spec[ "a" ≔ "a" ] ax3))
+  th9 = define
+          (spec[ "b" ≔ "c" ] (spec[ "a" ≔ "a" ] ax3))
+          (gen[ "a" ] (gen[ "b" ] (induct
+            (lam (trans
+              (trans (spec[ "a" ≔ "a" ] ax2) v0)
+              (sym (spec[ "a" ≔ "b" ] ax2))))
             (gen[ "c" ] (lam (lam (trans
               (trans v2 (suci (app v1 v0)))
               (sym (spec[ "a" ≔ "b" ] (gen[ "a" ] v2))))))))))
+
+  -- Addition is a function in both arguments
+  th10 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ∇ "c" ∶ ∇ "d" ∶ "a" == "c" ∧ "b" == "d" ⊃ ("a" + "b") == ("c" + "d")
+  th10 = define
+           (spec[ "b" ≔ "d" ] (spec[ "a" ≔ "a" ] th9))
+           (define
+             (spec[ "a" ≔ "c" ] th8)
+             (gen[ "a" ] (gen[ "b" ] (gen[ "c" ] (gen[ "d" ] (lam (trans
+               (trans
+                 (trans
+                   (app
+                     (spec[ "d" ≔ "c" ] (gen[ "d" ] (spec[ "c" ≔ "b" ] v2)))
+                     (fst v0))
+                   (spec[ "b" ≔ "b" ] v1))
+                 (app
+                   (spec[ "a" ≔ "b" ] (gen[ "a" ] (spec[ "c" ≔ "c" ] v2)))
+                   (snd v0)))
+               (sym (spec[ "b" ≔ "d" ] v1)))))))))
+
+  -- Axiom 2 in functional interpretation
+  th11 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ "b" == 0 ⊃ ("a" + "b") == "a"
+  th11 = gen[ "a" ] (gen[ "b" ] (lam (trans
+           (app
+             (spec[ "d" ≔ 0 ] (spec[ "c" ≔ "a" ] (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "c" ] th10))))
+             (pair (spec[ "a" ≔ "a" ] th1) v0))
+           (spec[ "a" ≔ "a" ] ax2))))
+
+  -- Addition is associative
+  th12 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ∇ "c" ∶ ("a" + ("b" + "c")) == (("a" + "b") + "c")
+  th12 = define
+           (spec[ "a" ≔ "a" ] th6)
+           (gen[ "a" ] (gen[ "b" ] (gen[ "c" ] (spec[ "a" ≔ "a" ] (induct
+             (trans
+               (spec[ "a" ≔ "b" + "c" ] th5)
+               (app
+                 (spec[ "c" ≔ "c" ] (spec[ "a" ≔ "b" ] (gen[ "a" ] (spec[ "b" ≔ 0 + "a" ] (spec[ "a" ≔ "a" ] th9)))))
+                 (sym (spec[ "a" ≔ "b" ] th5))))
+             (gen[ "a" ] (lam (trans
+               (trans
+                 (spec[ "b" ≔ "b" + "c" ] v1)
+                 (suci v0))
+               (sym (trans
+                 (app
+                   (spec[ "d" ≔ "b" ] (gen[ "d" ] (spec[ "c" ≔ "c" ] (spec[ "b" ≔ suc ("a" + "d") ] (spec[ "a" ≔ suc "a" + "d" ] th9)))))
+                   (spec[ "b" ≔ "b" ] v1))
+                 (spec[ "a" ≔ "a" + "b" ] (gen[ "a" ] (spec[ "b" ≔ "c" ] v1)))))))))))))
