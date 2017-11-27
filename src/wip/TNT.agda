@@ -159,10 +159,6 @@ data _⊢_ : Context → Type → Set
     app : ∀ {A B Γ} → Γ ⊢ A ⊃ B → Γ ⊢ A
                     → Γ ⊢ B
 
-    -- Carry-over
-    define : ∀ {A C Γ} → Γ ⊢ A → Γ , A ⊢ C
-                       → Γ ⊢ C
-
     -- Joining
     pair : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B
                      → Γ ⊢ A ∧ B
@@ -257,7 +253,6 @@ ren : ∀ {A Γ Γ′} → Γ′ ⊇ Γ → Γ ⊢ A
 ren η (var i)           = var (renᵢ η i)
 ren η (lam M)           = lam (ren (keep η) M)
 ren η (app M N)         = app (ren η M) (ren η N)
-ren η (define M N)      = define (ren η M) (ren (keep η) N)
 ren η (pair M N)        = pair (ren η M) (ren η N)
 ren η (fst M)           = fst (ren η M)
 ren η (snd M)           = snd (ren η M)
@@ -280,6 +275,12 @@ ren η ax5               = ax5
 wk : ∀ {A B Γ} → Γ ⊢ A
                → Γ , B ⊢ A
 wk M = ren (drop idᵣ) M
+
+
+-- Carry-over / Let
+define : ∀ {A C Γ} → Γ ⊢ A → Γ , A ⊢ C
+                   → Γ ⊢ C
+define M N = app (lam N) M
 
 
 -- Contraposition II
@@ -806,7 +807,7 @@ module VonEitzen where
               (spec[ "a" ≔ "a" + "b" ] ax1))))
             (dni v0)))))))
 
-  -- 0 is left-neutral in addition
+  -- 0 is also left-neutral in addition
   th5 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ (0 + "a") == "a"
   th5 = induct
           (spec[ "a" ≔ 0 ] ax2)
@@ -840,7 +841,8 @@ module VonEitzen where
             (trans
               (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] ax3))
               (suci v0))
-            (sym (spec[ "c" ≔ "b" ] (gen[ "c" ] (spec[ "b" ≔ "a" ] (spec[ "a" ≔ "c" ] th6)))))))))
+            (sym (spec[ "c" ≔ "b" ] (gen[ "c" ]
+              (spec[ "b" ≔ "a" ] (spec[ "a" ≔ "c" ] th6)))))))))
 
   -- Addition is a function in the first argument
   th9 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ∇ "c" ∶ "a" == "b" ⊃ ("a" + "c") == ("b" + "c")
@@ -876,7 +878,8 @@ module VonEitzen where
   th11 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ "b" == 0 ⊃ ("a" + "b") == "a"
   th11 = gen[ "a" ] (gen[ "b" ] (lam (trans
            (app
-             (spec[ "d" ≔ 0 ] (spec[ "c" ≔ "a" ] (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "c" ] th10))))
+             (spec[ "d" ≔ 0 ] (spec[ "c" ≔ "a" ]
+               (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "c" ] th10))))
              (pair (spec[ "a" ≔ "a" ] th1) v0))
            (spec[ "a" ≔ "a" ] ax2))))
 
@@ -888,7 +891,8 @@ module VonEitzen where
              (trans
                (spec[ "a" ≔ "b" + "c" ] th5)
                (app
-                 (spec[ "c" ≔ "c" ] (spec[ "a" ≔ "b" ] (gen[ "a" ] (spec[ "b" ≔ 0 + "a" ] (spec[ "a" ≔ "a" ] th9)))))
+                 (spec[ "c" ≔ "c" ] (spec[ "a" ≔ "b" ] (gen[ "a" ]
+                   (spec[ "b" ≔ 0 + "a" ] (spec[ "a" ≔ "a" ] th9)))))
                  (sym (spec[ "a" ≔ "b" ] th5))))
              (gen[ "a" ] (lam (trans
                (trans
@@ -896,6 +900,17 @@ module VonEitzen where
                  (suci v0))
                (sym (trans
                  (app
-                   (spec[ "d" ≔ "b" ] (gen[ "d" ] (spec[ "c" ≔ "c" ] (spec[ "b" ≔ suc ("a" + "d") ] (spec[ "a" ≔ suc "a" + "d" ] th9)))))
+                   (spec[ "d" ≔ "b" ] (gen[ "d" ] (spec[ "c" ≔ "c" ]
+                     (spec[ "b" ≔ suc ("a" + "d") ] (spec[ "a" ≔ suc "a" + "d" ] th9)))))
                    (spec[ "b" ≔ "b" ] v1))
                  (spec[ "a" ≔ "a" + "b" ] (gen[ "a" ] (spec[ "b" ≔ "c" ] v1)))))))))))))
+
+  -- 0 is also left-zero in multiplication
+  th13 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ (0 * "a") == 0
+  th13 = induct
+           (spec[ "a" ≔ 0 ] ax4)
+           (gen[ "a" ] (lam (trans
+             (trans
+               (spec[ "b" ≔ "a" ] (spec[ "a" ≔ 0 ] ax5))
+               (spec[ "a" ≔ 0 * "a" ] ax2))
+             v0)))
