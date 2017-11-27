@@ -914,3 +914,18 @@ module VonEitzen where
                (spec[ "b" ≔ "a" ] (spec[ "a" ≔ 0 ] ax5))
                (spec[ "a" ≔ 0 * "a" ] ax2))
              v0)))
+
+  -- The result of multiplication is 0 only if an argument is 0
+  th14 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" * "b") == 0 ⊃ ~ (~ ("a" == 0) ∧ ~ ("b" == 0))
+  th14 = gen[ "a" ] (induct
+           (lam (app
+             (contra (lam (snd v0)))
+             (dni (spec[ "a" ≔ 0 ] th1))))
+           (gen[ "b" ] (lam (lam (app
+             (contra (lam (fst v0)))
+             (dni (snd (app
+               (spec[ "c" ≔ "b" ] (gen[ "c" ]
+                 (spec[ "b" ≔ "a" ] (spec[ "a" ≔ "b" * "c" ] th4))))
+               (trans
+                 (sym (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] ax5)))
+                 v0)))))))))
