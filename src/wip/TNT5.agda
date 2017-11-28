@@ -536,13 +536,13 @@ module Expressions where
       contra : ∀ {ξ A B Γ} → Exp ξ Γ (A ⊃ B)
                            → Exp ξ Γ (~ B ⊃ ~ A)
    
-      spec[_≔_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}} {A : Type (ξ , x)}
-                            → (M : NExp ξ) → Exp ξ Γ (∇ x ∶ A)
-                            → Exp ξ Γ (nsubT (reflNS , M / x) A)
+      spec[_/_] : ∀ {ξ Γ} → (M : NExp ξ) (x : NVar) {{f : Fresh x ξ}} {A : Type (ξ , x)}
+                          → Exp ξ Γ (∇ x ∶ A)
+                          → Exp ξ Γ (nsubT (reflNS , M / x) A)
 
-      gen[_] : ∀ x {ξ A Γ} → {{f : Fresh x ξ}}
-                           → Exp ξ Γ A
-                           → Exp (ξ , x) (nrenC N.wk⊇ Γ) (nrenT N.wk⊇ A)
+      gen[_] : ∀ {ξ A Γ} → (x : NVar) {{f : Fresh x ξ}}
+                         → Exp ξ Γ A
+                         → Exp (ξ , x) (nrenC N.wk⊇ Γ) (nrenT N.wk⊇ A)
    
       sym : ∀ {ξ M N Γ} → Exp ξ Γ (M == N)
                         → Exp ξ Γ (N == M)
@@ -556,10 +556,10 @@ module Expressions where
       nsuce : ∀ {ξ M N Γ} → Exp ξ Γ (nsuc M == nsuc N)
                           → Exp ξ Γ (M == N)
    
-      induct[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}} {A : Type (ξ , x)}
-                            → Exp ξ Γ (nsubT (reflNS , nlit 0 / x) A)
-                            → Exp ξ Γ (∇ x ∶ (A ⊃ nsubT (wkNS , nsuc (nvar x) / x) A))
-                            → Exp ξ Γ (∇ x ∶ A)
+      induct[_] : ∀ {ξ Γ} → (x : NVar) {{f : Fresh x ξ}} {A : Type (ξ , x)}
+                          → Exp ξ Γ (nsubT (reflNS , nlit 0 / x) A)
+                          → Exp ξ Γ (∇ x ∶ (A ⊃ nsubT (wkNS , nsuc (nvar x) / x) A))
+                          → Exp ξ Γ (∇ x ∶ A)
       
       ax1 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ ~ (nsuc (nvar 𝑎) == nlit 0))
    
