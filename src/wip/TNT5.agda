@@ -453,20 +453,17 @@ module Expressions where
       suce : ∀ {ξ M N Γ} → Exp ξ Γ (nsuc M == nsuc N)
                          → Exp ξ Γ (M == N)
    
-      -- induct[_] : ∀ x {ξ A Γ} → Γ ⊢ sub[ x ≔ 0 ] A → Γ ⊢ ∇ x ∶ A ⊃ sub[ x ≔ suc (nvar x) ] A
-      --                         → Γ ⊢ ∇ x ∶ A
-
-      -- induct[_] : ∀ x {ξ Γ} → {{f : fresh x ξ}} {A : Type (ξ , x)}
-      --                       → Exp ξ Γ (nsubT (reflNS , nlit 0 / x) A)
-      --                       → Exp ξ Γ (∇ x ∶ A ⊃ nsubT (reflNS , {!nsuc (nvar x)!} / x) A)
-      --                       → Exp ξ Γ (∇ x ∶ A)
+      induct[_] : ∀ x {ξ Γ} → {{f : fresh x ξ}} {A : Type (ξ , x)}
+                            → Exp ξ Γ (nsubT (reflNS , nlit 0 / x) A)
+                            → Exp ξ Γ (∇ x ∶ (A ⊃ nsubT (wkNS , nsuc (nvar x) / x) A))
+                            → Exp ξ Γ (∇ x ∶ A)
       
       ax1 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ ~ (nsuc (nvar 𝑎) == nlit 0))
    
       ax2 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ ((nvar 𝑎 + nlit 0) == nvar 𝑎))
    
-      -- ax3 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ (∇ 𝑏 ∶ ((nvar 𝑎 + nvar 𝑏) == nsuc (nvar 𝑎 + nvar 𝑏))))
+      -- ax3 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ ∇ 𝑏 ∶ ((nvar 𝑎 + nvar 𝑏) == nsuc (nvar 𝑎 + nvar 𝑏)))
    
-      -- -- ax4 : ∀ {Γ} → Γ ⊢ ∇ a ∶ ((nvar a * 0) == 0)
+      ax4 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ ((nvar 𝑎 * nlit 0) == nlit 0))
    
-      -- -- ax5 : ∀ {Γ} → Γ ⊢ ∇ a ∶ ∇ b ∶ ((nvar a * suc (nvar b)) == ((nvar a * nvar b) + nvar a))
+      -- ax5 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ ∇ 𝑏 ∶ ((nvar 𝑎 * nsuc (nvar 𝑏)) == ((nvar 𝑎 * nvar 𝑏) + nvar 𝑎)))
