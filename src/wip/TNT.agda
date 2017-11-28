@@ -229,6 +229,21 @@ data _⊢_ : Context → Type → Set
     ax5 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" * suc "b") == ("a" * "b") + "a"
 
 
+infix 10 ∇s_∶_
+∇s_∶_ : List NVar → Type → Type
+∇s ∅     ∶ A = A
+∇s ξ , x ∶ A = ∇s ξ ∶ ∇ x ∶ A
+
+gens[_] : ∀ {A Γ} → (ξ : List NVar) → Γ ⊢ A
+                  → Γ ⊢ ∇s ξ ∶ A
+gens[ ∅ ]     M = M
+gens[ ξ , x ] M = gens[ ξ ] (gen[ x ] M)
+
+specs[_] : ∀ {A Γ} → (σ : List (NVar × NExp)) → Γ ⊢ ∇s (map proj₁ σ) ∶ A
+                   → Γ ⊢ {!!}
+specs[_] = {!!}
+
+
 v0 : ∀ {A Γ} → Γ , A ⊢ A
 v0 = var 0
 
@@ -929,3 +944,67 @@ module VonEitzen where
                (trans
                  (sym (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] ax5)))
                  v0)))))))))
+
+  th15 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ (suc "a" * "b") == (("a" * "b") + "b")
+  th15 = gen[ "a" ] (induct
+           (trans
+             (spec[ "a" ≔ suc "a" ] ax4)
+             (sym (trans
+               (app
+                 (spec[ "c" ≔ 0 ] (spec[ "b" ≔ 0 ] (spec[ "a" ≔ "a" * 0 ] th9)))
+                 (spec[ "a" ≔ "a" ] ax4))
+               (spec[ "a" ≔ 0 ] ax2))))
+           (gen[ "b" ] (lam (trans
+             (trans
+               (spec[ "b" ≔ "b" ] (spec[ "a" ≔ suc "a" ] ax5))
+               (app
+                 (spec[ "d" ≔ suc "a" * "b" ] (gen[ "d" ] (spec[ "c" ≔ suc "a" ]
+                   (spec[ "b" ≔ ("a" * "b") + "b" ] (spec[ "a" ≔ "d" ] th9)))))
+                 v0))
+             (trans
+               (trans
+                 (trans
+                   (sym (spec[ "c" ≔ suc "a" ] (spec[ "b" ≔ "b" ]
+                     (spec[ "a" ≔ "a" * "b" ] th12))))
+                   (app
+                     (spec[ "d" ≔ "a" + suc "b" ] (spec[ "c" ≔ "a" * "b" ]
+                       (spec[ "b" ≔ "b" + suc "a" ] (spec[ "a" ≔ "c" ] th10))))
+                     (pair
+                       (spec[ "a" ≔ "a" * "b" ] th1)
+                       (sym (trans
+                         (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] th7))
+                         (spec[ "b" ≔ "b" ] (spec[ "a" ≔ suc "a" ] th8)))))))
+                 (spec[ "d" ≔ "b" ] (gen[ "d" ] (spec[ "c" ≔ suc "b" ]
+                   (spec[ "b" ≔ "a" ] (spec[ "a" ≔ "a" * "d" ] th12))))))
+               (app
+                 (spec[ "d" ≔ "b" ] (gen[ "d" ] (spec[ "c" ≔ suc "b" ]
+                   (spec[ "b" ≔ "a" * suc "b" ] (spec[ "a" ≔ ("a" * "d") + "a" ] th9)))))
+                 (sym (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] ax5)))))))))
+
+  -- Multiplication is commutative
+  th16 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ("a" * "b") == ("b" * "a")
+  th16 = gens[ ∅ , "a" , "b" ] (spec[ "a" ≔ "a" ] (induct
+           (trans
+             (spec[ "a" ≔ "b" ] th13)
+             (sym (spec[ "a" ≔ "b" ] ax4)))
+           (gen[ "a" ] (lam (trans
+             (trans
+               (spec[ "b" ≔ "b" ] (spec[ "a" ≔ "a" ] th15))
+               (app
+                 (spec[ "c" ≔ "b" ] (spec[ "b" ≔ "c" * "a" ] (spec[ "a" ≔ "a" * "c" ] th9)))
+                 v0))
+             (sym (spec[ "c" ≔ "b" ] (gen[ "c" ] (spec[ "b" ≔ "a" ] (spec[ "a" ≔ "c" ] ax5))))))))))
+
+  -- -- Multiplication is a function in the first argument
+  -- th17 : ∀ {Γ} → Γ ⊢ ∇ "a" ∶ ∇ "b" ∶ ∇ "c" ∶ "a" == "b" ⊃ ("a" * "c") == ("b" * "c")
+  -- th17 = gens[ ∅ , "a" , "b" ] (induct
+  --          (lam (trans
+  --            (spec[ "a" ≔ "a" ] ax4)
+  --            (sym (spec[ "a" ≔ "b" ] ax4))))
+  --          (gen[ "c" ] (lam (lam (trans
+  --            (trans
+  --              (spec[ "b" ≔ "c" ] (spec[ "a" ≔ "a" ] ax5))
+  --              (app
+  --                (spec[ "e" ≔ "a" * "c" ] (gen[ "e" ] (spec[ "d" ≔ "b" ] (spec[ "c" ≔ "b" * "c" ] (spec[ "b" ≔ "a" ] (spec[ "a" ≔ "e" ] {!!}))))))
+  --                {!!})) -- 27
+  --            {!!}))))) -- 31

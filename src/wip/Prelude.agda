@@ -385,10 +385,11 @@ lem₄ (Γ , AB) = (_, AB) & lem₄ Γ
 infix 4 _∋_
 data _∋_ {ℓ} {X : Set ℓ} : List X → X → Set ℓ
   where
-    zero : ∀ {Γ A} → Γ , A ∋ A
+    instance
+      zero : ∀ {Γ A} → Γ , A ∋ A
 
-    suc  : ∀ {Γ A B} → (i : Γ ∋ A)
-                     → Γ , B ∋ A
+      suc  : ∀ {Γ A B} → (i : Γ ∋ A)
+                       → Γ , B ∋ A
 
 
 Nat→∋ : ∀ {ℓ} → {X : Set ℓ} {Γ : List X}
