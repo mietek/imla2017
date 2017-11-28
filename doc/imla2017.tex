@@ -627,22 +627,28 @@ As shorthand, we use \emph{modal world introspection} $\mpeek{-}$ to map a world
 \end{theorem}
 \noindent
 The proof of soundness $\reflect$ is an \emph{evaluation function} for $\lambdabox$-terms, written in a monadic style.
-We also describe $\reflect M$ as a \emph{reflection} of the term $M$ into an introspective Kripke model.
+$\reflect M$ can also be described as the \emph{reflection} of the term $M$ into an arbitrary introspective Kripke model.
 
 Let $w$ be a world of $\M$.  
 Then, given a modal environment $\delta$ of types $\Delta$ at $w$ and an environment $\gamma$ of types $\Gamma$ at $w$, evaluation consumes a term of type $A$ under the context $\Delta; \Gamma$ and produces a value continuation of type $A$ at $w$.
 
+As shorthand, we say that the modal environment $\delta$ and the environment $\gamma$ together form the \emph{current environment}.
+
 For modal variables \eqref{reflect.mvar} and variables \eqref{reflect.var}, we look up the index $i$ in the semantic projection of $\delta$ and in $\gamma$, respectively.
 
-For function abstraction \eqref{reflect.lam}, we first suppose that we can access via $\xi$ some world at which the value continuation $k$ represents the function argument.
-Then, we evaluate the function body $M$ in an environment obtained by relocating the current environment via $\xi$ and extending it with $k$.
+For function abstractions \eqref{reflect.lam}, we start by supposing that we have a semantic representation of the function argument: a value continuation $k$ at a world accessible via $\xi$.
+Then, we can evaluate the function body $M$ in the current environment relocated via $\xi$ and extended with $k$.
 
-For function application \eqref{reflect.app}, we start by evaluating the function $\D$ in the current environment, obtaining a value $f$ at some world accessible via $\xi$.
-By definition, the value of a function of type $A \imp B$ is a meta-level function that, given a value continuation of $A$ at some accessible world, returns a value continuation of $B$ at the same world.
-Evaluating the function argument $\E$ in the current environment relocated via $\xi$ gives us a value continuation, which we use to call $f$.
+For function applications \eqref{reflect.app}, we first evaluate the function $M$ in the current environment and obtain a value $f$ of type $A \imp B$ at a world $w$ accessible via $\xi$.
+This value is a function that, given a value continuation of type $A$ at a arbitrary world $w'$ accessible from $w$, returns a value continuation of $B$ at $w'$.
+Since $w$ is accessible from $w$, we put $w$ as $w'$.
+Then, we obtain a value continuation of type $A$ at $w$ by evaluating the function argument $N$ in the current environment relocated via $\xi$, and use it to call $f$.
 
-Normalisation-by-evaluation is also known as \emph{reduction-free normalisation} \cite{AltenkirchHS1995,Danvy2005}, because performing substitution at the meta level frees us from having to implement it at the object level.
-However, in the case of quotation \eqref{reflect.quo}, object-level modal substitution \eqref{msub} is required.
+For quotations \eqref{reflect.quo}, XXX
+
+For unquotations \eqref{reflect.unq}, XXX
+
+% Normalisation-by-evaluation is also known as \emph{reduction-free normalisation} \cite{AltenkirchHS1995,Danvy2005}, because performing substitution at the meta level frees us from having to implement it at the object level.
 
 XXX
 
