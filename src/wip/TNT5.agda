@@ -570,3 +570,22 @@ module Expressions where
       ax4 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ ((nvar 𝑎 * nlit 0) == nlit 0))
    
       ax5 : ∀ {Γ} → Exp ∅ Γ (∇ 𝑎 ∶ ∇ 𝑏 ∶ ((nvar 𝑎 * nsuc (nvar 𝑏)) == ((nvar 𝑎 * nvar 𝑏) + nvar 𝑎)))
+
+
+  v0 : ∀ {ξ A Γ} → Exp ξ (Γ , A) A
+  v0 = var 0
+   
+  v1 : ∀ {ξ A B Γ} → Exp ξ (Γ , A , B) A
+  v1 = var 1
+   
+  v2 : ∀ {ξ A B C Γ} → Exp ξ (Γ , A , B , C) A
+  v2 = var 2
+   
+  v3 : ∀ {ξ A B C D Γ} → Exp ξ (Γ , A , B , C , D) A
+  v3 = var 3
+   
+  v4 : ∀ {ξ A B C D E Γ} → Exp ξ (Γ , A , B , C , D , E) A
+  v4 = var 4
+   
+  v5 : ∀ {ξ A B C D E F Γ} → Exp ξ (Γ , A , B , C , D , E , F) A
+  v5 = var 5
