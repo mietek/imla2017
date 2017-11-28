@@ -33,6 +33,10 @@ data _N≥_ : NVar → NVar → Set
     step : ∀ {x y} → x N≥ y
                    → suc x N≥ suc y
 
+sxN≥x : ∀ {x} → suc x N≥ x
+sxN≥x {zero}  = done
+sxN≥x {suc x} = step sxN≥x
+
 predN≥ : ∀ {x y} → suc x N≥ suc y
                  → x N≥ y
 predN≥ (step p) = p
@@ -51,6 +55,11 @@ x N> y = x N≥ suc y
 _N>?_ : (x y : NVar) → Dec (x N> y)
 x N>? y = x N≥? suc y
 
+stepN≥ : ∀ {x y} → x N≥ y
+                 → suc x N≥ y
+stepN≥ done     = done
+stepN≥ (step p) = step (stepN≥ p)
+
 reflN≥ : ∀ {x} → x N≥ x
 reflN≥ {zero}  = done
 reflN≥ {suc x} = step reflN≥
@@ -60,10 +69,9 @@ transN≥ : ∀ {x y z} → x N≥ y → y N≥ z
 transN≥ p        done     = done
 transN≥ (step p) (step q) = step (transN≥ p q)
 
-stepN≥ : ∀ {x y} → x N≥ y
-                 → suc x N≥ y
-stepN≥ done     = done
-stepN≥ (step p) = step (stepN≥ p)
+transN> : ∀ {x y z} → x N> y → y N> z
+                    → x N> z
+transN> p q = transN≥ p (stepN≥ q)
 
 N>→N≥ : ∀ {x y} → x N> y
                  → x N≥ y
@@ -71,6 +79,9 @@ N>→N≥ (step p) = transN≥ (stepN≥ reflN≥) p
 
 _N≱_ : NVar → NVar → Set
 x N≱ y = ¬ (x N≥ y)
+
+xN≱sx : ∀ {x} → x N≱ suc x
+xN≱sx (step p) = xN≱sx p
 
 _N≯_ : NVar → NVar → Set
 x N≯ y = ¬ (x N> y)
@@ -96,13 +107,6 @@ N≥+≢→N> : ∀ {x y} → x N≥ y → x ≢ y
 N≥+≢→N> {zero}  {y}     done     q = refl ↯ q
 N≥+≢→N> {suc x} {zero}  done     q = step done
 N≥+≢→N> {suc x} {suc y} (step p) q = step (N≥+≢→N> p (q ∘ (suc &_)))
-
-sxN≥x : ∀ {x} → suc x N≥ x
-sxN≥x {zero}  = done
-sxN≥x {suc x} = step sxN≥x
-
-xN≱sx : ∀ {x} → x N≱ suc x
-xN≱sx (step p) = xN≱sx p
 
 N>→≢ : ∀ {x y} → x N> y
                 → x ≢ y
@@ -270,39 +274,43 @@ data Type : NCtx → Set
     ∇_∶_ : ∀ {ξ} → (x : NVar) {{φ : fresh x ξ}} → Type (ξ , x)
                  → Type ξ
 
-biglem₁ : ∀ {ξ x y} → y N> x → {{β : big x ξ}}
-                    → big y ξ
-biglem₁ = {!!}
-
-biglem₂ : ∀ {ξ x y} → y N> x → {{β : big y ξ}} {{φ : fresh x ξ}}
-                    → big y (ξ , x)
-biglem₂ = {!!}
+transbig : ∀ {ξ x y} → y N> x → {{β : big x ξ}}
+                     → big y ξ
+transbig {∅}     y>x {{tt}}      = tt
+transbig {ξ , z} y>x {{x>z , β}} = transN> y>x x>z , transbig y>x {{β}}
 
 genbig : (ξ : NCtx) → Σ NVar (λ y → big y ξ)
 genbig ∅       = zero , tt
 genbig (ξ , x) with genbig ξ
 genbig (ξ , x) | y  , β with y N>? x
-genbig (ξ , x) | y  , β | yes y>x = y , biglem₂ y>x {{β}}
-genbig (ξ , x) | y  , β | no y≯x  = suc x , (reflN≥ , biglem₁ (N≱→N< y≯x) {{β}})
+genbig (ξ , x) | y  , β | yes y>x = y , (y>x , β)
+genbig (ξ , x) | y  , β | no y≯x  = suc x , (reflN≥ , transbig (N≱→N< y≯x) {{β}})
 
 genfresh : (ξ : NCtx) → Σ NVar (λ y → fresh y ξ)
 genfresh ξ with genbig ξ
 genfresh ξ | y , β = y , big→fresh {{β}}
 
--- -- -- renT : ∀ {ξ ξ′} → ξ′ N⊇ ξ → Type ξ
--- -- --                 → Type ξ′
--- -- -- renT η (M == N)  = renNE η M == renNE η N
--- -- -- renT η (~ A)     = ~ (renT η A)
--- -- -- renT η (A ∧ B)   = renT η A ∧ renT η B
--- -- -- renT η (A ⊃ B)   = renT η A ⊃ renT η B
--- -- -- renT η (∇_∶_ x {{φ}} A) = let x′ , φ′ = refreshN⊇ x η in
--- -- --                           ∇_∶_ x′ {{φ′}} (renT {!keepN⊇ η {{φ′}} !} A)
+backfresh : ∀ {x ξ ξ′} → ξ′ N⊇ ξ → {{φ : fresh x ξ′}}
+                       → fresh x ξ
+backfresh      done               = tt
+backfresh {x} (step {x = y}  η i) with x N≟ y
+backfresh {x} (step {x = .x} η i) | yes refl = i ↯ fresh→N∌
+backfresh {x} (step {x = y}  η i) | no x≢y   = x≢y , backfresh η 
 
--- -- -- subT : ∀ {ξ ζ} → NSub ξ ζ → Type ζ
--- -- --                → Type ξ
--- -- -- subT σ (M == N)  = subNE σ M == subNE σ N
--- -- -- subT σ (~ A)     = ~ (subT σ A)
--- -- -- subT σ (A ∧ B)   = subT σ A ∧ subT σ B
--- -- -- subT σ (A ⊃ B)   = subT σ A ⊃ subT σ B
--- -- -- subT σ (∇ x ∶ A) = let y = {!!} in
--- -- --                    ∇_∶_ y {{{!!}}} (subT (keepNS σ {{{!!}}}) A)
+subT : ∀ {ξ ζ} → NSub ξ ζ → Type ζ
+               → Type ξ
+subT     σ (M == N)  = subNE σ M == subNE σ N
+subT     σ (~ A)     = ~ (subT σ A)
+subT     σ (A ∧ B)   = subT σ A ∧ subT σ B
+subT     σ (A ⊃ B)   = subT σ A ⊃ subT σ B
+subT {ξ} σ (∇ x ∶ A) with genfresh ξ
+subT {ξ} σ (∇ x ∶ A) | x′ , φ′ = ∇ x′ ∶ subT (keepNS σ {{φ′}}) A
+
+N⊇→NSub : ∀ {ξ ξ′} → ξ′ N⊇ ξ
+                    → NSub ξ′ ξ
+N⊇→NSub done               = ∅
+N⊇→NSub (step {x = x} η i) = N⊇→NSub η , nvar x {{i}}
+
+renT : ∀ {ξ ξ′} → ξ′ N⊇ ξ → Type ξ
+                → Type ξ′
+renT η A = subT (N⊇→NSub η) A
