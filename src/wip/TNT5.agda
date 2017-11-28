@@ -3,114 +3,105 @@ module TNT5 where
 open import Prelude public
 
 
-not : Bool → Bool
-not true  = false
-not false = true
+--------------------------------------------------------------------------------
+--
+-- Naturals
 
-_and_ : Bool → Bool → Bool
-true  and x = x
-false and x = false
 
-⌊_⌋ : ∀ {ℓ} {X : Set ℓ} → Dec X → Bool
-⌊ yes _ ⌋ = true
-⌊ no  _ ⌋ = false
+_≟_ : (n m : Nat) → Dec (n ≡ m)
+zero  ≟ zero  = yes refl
+zero  ≟ suc m = no (λ ())
+suc n ≟ zero  = no (λ ())
+suc n ≟ suc m with n ≟ m
+...           | yes refl = yes refl
+...           | no n≢m   = no (n≢m ∘ injsuc)
+
+
+data _≥_ : Nat → Nat → Set
+  where
+    done : ∀ {n} → n ≥ zero
+
+    keep : ∀ {n m} → n ≥ m
+                   → suc n ≥ suc m
+
+drop≥ : ∀ {n m} → n ≥ m
+                → suc n ≥ m
+drop≥ done       = done
+drop≥ (keep n≥m) = keep (drop≥ n≥m)
+
+pred≥ : ∀ {n m} → suc n ≥ suc m
+                → n ≥ m
+pred≥ (keep n≥m) = n≥m
+
+refl≥ : ∀ {n} → n ≥ n
+refl≥ {zero}  = done
+refl≥ {suc n} = keep refl≥
+
+trans≥ : ∀ {n m k} → n ≥ m → m ≥ k
+                   → n ≥ k
+trans≥ n≥m        done       = done
+trans≥ (keep n≥m) (keep m≥k) = keep (trans≥ n≥m m≥k)
+
+_≥?_ : ∀ n m  → Dec (n ≥ m)
+zero  ≥? zero  = yes done
+zero  ≥? suc m = no (λ ())
+suc n ≥? zero  = yes done
+suc n ≥? suc m with n ≥? m
+...            | yes n≥m = yes (keep n≥m)
+...            | no n≱m  = no (n≱m ∘ pred≥)
+
+
+_≱_ : Nat → Nat → Set
+n ≱ m = ¬ (n ≥ m)
+
+n≱sn : ∀ {n} → n ≱ suc n
+n≱sn (keep n≥sn) = n≥sn ↯ n≱sn
+
+
+_>_ : Nat → Nat → Set
+n > m = n ≥ suc m
+
+trans> : ∀ {n m k} → n > m → m > k
+                   → n > k
+trans> n>m m>k = trans≥ n>m (drop≥ m>k)
+
+>→≥ : ∀ {n m} → n > m
+               → n ≥ m
+>→≥ (keep n≥m) = trans≥ (drop≥ refl≥) n≥m
+
+>→≢ : ∀ {n m} → n > m
+               → n ≢ m
+>→≢ n>m refl = n≱sn n>m
+
+_>?_ : ∀ n m  → Dec (n > m)
+n >? m = n ≥? suc m
+
+
+_<_ : Nat → Nat → Set
+n < m = m > n
+
+≱→< : ∀ {n m} → n ≱ m
+               → n < m
+≱→< {n}     {zero}  n≱z   = done ↯ n≱z
+≱→< {zero}  {suc m} z≱sm  = keep done
+≱→< {suc n} {suc m} sn≱sm = keep (≱→< (sn≱sm ∘ keep))
+
+
+_≤_ : Nat → Nat → Set
+n ≤ m = m ≥ n
+
+≱→≤ : ∀ {n m} → n ≱ m
+               → n ≤ m
+≱→≤ = >→≥ ∘ ≱→<
+
+
+--------------------------------------------------------------------------------
+--
+-- Syntax
+
 
 NVar : Set
 NVar = Nat
-
-_N≟_ : (x₁ x₂ : NVar) → Dec (x₁ ≡ x₂)
-zero   N≟ zero   = yes refl
-zero   N≟ suc x₂ = no (λ ())
-suc x₁ N≟ zero   = no (λ ())
-suc x₁ N≟ suc x₂ with x₁ N≟ x₂
-...              | yes refl = yes refl
-...              | no x₁≢x₂ = no (x₁≢x₂ ∘ injsuc)
-
-data _N≥_ : NVar → NVar → Set
-  where
-    done : ∀ {x} → x N≥ zero
-
-    step : ∀ {x y} → x N≥ y
-                   → suc x N≥ suc y
-
-sxN≥x : ∀ {x} → suc x N≥ x
-sxN≥x {zero}  = done
-sxN≥x {suc x} = step sxN≥x
-
-predN≥ : ∀ {x y} → suc x N≥ suc y
-                 → x N≥ y
-predN≥ (step p) = p
-
-_N≥?_ : (x y : NVar) → Dec (x N≥ y)
-zero  N≥? zero  = yes done
-zero  N≥? suc y = no (λ ())
-suc x N≥? zero  = yes done
-suc x N≥? suc y with x N≥? y
-...             | yes x≥y = yes (step x≥y)
-...             | no x≱y  = no (x≱y ∘ predN≥)
-
-_N>_ : NVar → NVar → Set
-x N> y = x N≥ suc y
-
-_N>?_ : (x y : NVar) → Dec (x N> y)
-x N>? y = x N≥? suc y
-
-stepN≥ : ∀ {x y} → x N≥ y
-                 → suc x N≥ y
-stepN≥ done     = done
-stepN≥ (step p) = step (stepN≥ p)
-
-reflN≥ : ∀ {x} → x N≥ x
-reflN≥ {zero}  = done
-reflN≥ {suc x} = step reflN≥
-
-transN≥ : ∀ {x y z} → x N≥ y → y N≥ z
-                    → x N≥ z
-transN≥ p        done     = done
-transN≥ (step p) (step q) = step (transN≥ p q)
-
-transN> : ∀ {x y z} → x N> y → y N> z
-                    → x N> z
-transN> p q = transN≥ p (stepN≥ q)
-
-N>→N≥ : ∀ {x y} → x N> y
-                 → x N≥ y
-N>→N≥ (step p) = transN≥ (stepN≥ reflN≥) p
-
-_N≱_ : NVar → NVar → Set
-x N≱ y = ¬ (x N≥ y)
-
-xN≱sx : ∀ {x} → x N≱ suc x
-xN≱sx (step p) = xN≱sx p
-
-_N≯_ : NVar → NVar → Set
-x N≯ y = ¬ (x N> y)
-
-_N≤_ : NVar → NVar → Set
-x N≤ y = y N≥ x
-
-_N<_ : NVar → NVar → Set
-x N< y = y N> x
-
-N≱→N< : ∀ {x y} → x N≱ y
-                 → x N< y
-N≱→N< {x}     {zero}  p = done ↯ p
-N≱→N< {zero}  {suc y} p = step done
-N≱→N< {suc x} {suc y} p = step (N≱→N< (p ∘ step))
-
-N≱→N≤ : ∀ {x y} → x N≱ y
-                 → x N≤ y
-N≱→N≤ = N>→N≥ ∘ N≱→N<
-
-N≥+≢→N> : ∀ {x y} → x N≥ y → x ≢ y
-                   → x N> y
-N≥+≢→N> {zero}  {y}     done     q = refl ↯ q
-N≥+≢→N> {suc x} {zero}  done     q = step done
-N≥+≢→N> {suc x} {suc y} (step p) q = step (N≥+≢→N> p (q ∘ (suc &_)))
-
-N>→≢ : ∀ {x y} → x N> y
-                → x ≢ y
-N>→≢ x>y refl = xN≱sx x>y
 
 mutual
   data NCtx : Set
@@ -126,12 +117,12 @@ mutual
 
 big : NVar → NCtx → Set
 big x ∅       = ⊤
-big x (ξ , y) = x N> y × big x ξ
+big x (ξ , y) = x > y × big x ξ
 
 big→fresh : ∀ {x ξ} → {{β : big x ξ}}
                      → fresh x ξ
 big→fresh {x} {∅}     {{tt}}      = tt
-big→fresh {x} {ξ , y} {{x>y , β}} = N>→≢ x>y , big→fresh {{β}}
+big→fresh {x} {ξ , y} {{x>y , β}} = >→≢ x>y , big→fresh {{β}}
 
 infix 4 _N∋_
 data _N∋_ : NCtx → NVar → Set
@@ -278,17 +269,27 @@ data Type : NCtx → Set
     ∇_∶_ : ∀ {ξ} → (x : NVar) {{φ : fresh x ξ}} → Type (ξ , x)
                  → Type ξ
 
-transbig : ∀ {ξ x y} → y N> x → {{β : big x ξ}}
+_∨_ : ∀ {ξ} → Type ξ → Type ξ → Type ξ
+A ∨ B = (~ A) ⊃ B
+
+∃_∶_ : ∀ {ξ} → (x : NVar) {{φ : fresh x ξ}} → Type (ξ , x)
+             → Type ξ
+∃ x ∶ A = ~ (∇ x ∶ ~ A)
+
+_⫗_ : ∀ {ξ} → Type ξ → Type ξ → Type ξ
+A ⫗ B = (A ⊃ B) ∧ (B ⊃ A)
+
+transbig : ∀ {ξ x y} → y > x → {{β : big x ξ}}
                      → big y ξ
 transbig {∅}     y>x {{tt}}      = tt
-transbig {ξ , z} y>x {{x>z , β}} = transN> y>x x>z , transbig y>x {{β}}
+transbig {ξ , z} y>x {{x>z , β}} = trans> y>x x>z , transbig y>x {{β}}
 
 genbig : (ξ : NCtx) → Σ NVar (λ y → big y ξ)
 genbig ∅       = zero , tt
 genbig (ξ , x) with genbig ξ
-genbig (ξ , x) | y  , β with y N>? x
+genbig (ξ , x) | y  , β with y >? x
 genbig (ξ , x) | y  , β | yes y>x = y , (y>x , β)
-genbig (ξ , x) | y  , β | no y≯x  = suc x , (reflN≥ , transbig (N≱→N< y≯x) {{β}})
+genbig (ξ , x) | y  , β | no y≯x  = suc x , (refl≥ , transbig (≱→< y≯x) {{β}})
 
 genfresh : (ξ : NCtx) → Σ NVar (λ y → fresh y ξ)
 genfresh ξ with genbig ξ
@@ -297,7 +298,7 @@ genfresh ξ | y , β = y , big→fresh {{β}}
 backfresh : ∀ {x ξ ξ′} → ξ′ N⊇ ξ → {{φ : fresh x ξ′}}
                        → fresh x ξ
 backfresh      done               = tt
-backfresh {x} (step {x = y}  η i) with x N≟ y
+backfresh {x} (step {x = y}  η i) with x ≟ y
 backfresh {x} (step {x = .x} η i) | yes refl = i ↯ fresh→N∌
 backfresh {x} (step {x = y}  η i) | no x≢y   = x≢y , backfresh η 
 
