@@ -235,9 +235,13 @@ dropNS : ∀ {x ξ ζ} → NSub ξ ζ → {{φ : fresh x ξ}}
                    → NSub (ξ , x) ζ
 dropNS σ = renNS (dropN⊇ reflN⊇) σ
 
-keepNS : ∀ {x y ξ ζ} → NSub ξ ζ → {{φ₁ : fresh x ξ}} {{φ₂ : fresh y ζ}}
+forkNS : ∀ {x y ξ ζ} → NSub ξ ζ → {{φ₁ : fresh x ξ}} {{φ₂ : fresh y ζ}}
                      → NSub (ξ , x) (ζ , y)
-keepNS {x} σ = dropNS σ , nvar x
+forkNS {x} σ = dropNS σ , nvar x
+
+keepNS : ∀ {x ξ ζ} → NSub ξ ζ → {{φ₁ : fresh x ξ}} {{φ₂ : fresh x ζ}}
+                   → NSub (ξ , x) (ζ , x)
+keepNS σ = forkNS σ
 
 reflNS : ∀ {ξ} → NSub ξ ξ
 reflNS {∅}     = ∅
@@ -304,7 +308,7 @@ subT     σ (~ A)     = ~ (subT σ A)
 subT     σ (A ∧ B)   = subT σ A ∧ subT σ B
 subT     σ (A ⊃ B)   = subT σ A ⊃ subT σ B
 subT {ξ} σ (∇ x ∶ A) with genfresh ξ
-subT {ξ} σ (∇ x ∶ A) | x′ , φ′ = ∇ x′ ∶ subT (keepNS σ {{φ′}}) A
+subT {ξ} σ (∇ x ∶ A) | x′ , φ′ = ∇ x′ ∶ subT (forkNS σ {{φ′}}) A
 
 N⊇→NSub : ∀ {ξ ξ′} → ξ′ N⊇ ξ
                     → NSub ξ′ ξ
