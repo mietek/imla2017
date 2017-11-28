@@ -447,11 +447,11 @@ module Expressions where
       trans : ∀ {ξ M N O Γ} → Exp ξ Γ (M == N) → Exp ξ Γ (N == O)
                             → Exp ξ Γ (M == O)
    
-      suci : ∀ {ξ M N Γ} → Exp ξ Γ (M == N)
-                         → Exp ξ Γ (nsuc M == nsuc N)
+      nsuci : ∀ {ξ M N Γ} → Exp ξ Γ (M == N)
+                          → Exp ξ Γ (nsuc M == nsuc N)
    
-      suce : ∀ {ξ M N Γ} → Exp ξ Γ (nsuc M == nsuc N)
-                         → Exp ξ Γ (M == N)
+      nsuce : ∀ {ξ M N Γ} → Exp ξ Γ (nsuc M == nsuc N)
+                          → Exp ξ Γ (M == N)
    
       induct[_] : ∀ x {ξ Γ} → {{f : fresh x ξ}} {A : Type (ξ , x)}
                             → Exp ξ Γ (nsubT (reflNS , nlit 0 / x) A)
