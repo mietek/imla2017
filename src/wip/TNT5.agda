@@ -93,6 +93,13 @@ module Naturals where
                  → n ≢ m
   >→≢ n>m refl = n≱sn n>m
 
+  ≥+≢→> : ∀ {n m} → n ≥ m → n ≢ m
+                   → n > m
+  ≥+≢→> {zero}  {zero}  done       z≢z   = refl ↯ z≢z
+  ≥+≢→> {zero}  {suc m} ()         z≢sm
+  ≥+≢→> {suc n} {zero}  done       sn≢z  = keep done
+  ≥+≢→> {suc n} {suc m} (keep n≥m) sn≢sm = keep (≥+≢→> n≥m (sn≢sm ∘ (suc &_)))
+
   _>?_ : ∀ n m  → Dec (n > m)
   n >? m = n ≥? suc m
 
@@ -216,20 +223,30 @@ module NumericExpressions where
   NVar : Set
   NVar = Nat
 
-  𝑎 : NVar
-  𝑎 = 0
+  -- TODO: Improve this
+  String→NVar : String → NVar
+  String→NVar "a" = 0
+  String→NVar "b" = 1
+  String→NVar "c" = 2
+  String→NVar "d" = 3
+  String→NVar "e" = 4
+  String→NVar _   = 5
 
-  𝑏 : NVar
-  𝑏 = 1
-
-  𝑐 : NVar
-  𝑐 = 2
-
-  𝑑 : NVar
-  𝑑 = 3
-
-  𝑒 : NVar
-  𝑒 = 4
+  NVar→String : NVar → String
+  NVar→String 0 = "a"
+  NVar→String 1 = "b"
+  NVar→String 2 = "c"
+  NVar→String 3 = "d"
+  NVar→String 4 = "e"
+  NVar→String _ = "f"
+  
+  instance
+    nvarIsString : IsString NVar
+    nvarIsString =
+      record
+        { Constraint = λ s → ⊤
+        ; fromString = λ s → String→NVar s
+        }
 
 
   -- Numeric contexts, freshness, and greatness
@@ -264,6 +281,27 @@ module NumericExpressions where
                                                             (transGreat {ξ} x>y {{g}})
   transGreat {ξ , z} {x} {y} x>y {{()}}  | no y≯z
 
+--  transFreshGreat : ∀ {ξ x y} → x ≢ y → x > y → {{f : Fresh y ξ}} {{g : Great y ξ}}
+--                              → Fresh x ξ × Great x ξ
+--  transFreshGreat {∅}     {x} {y} x≢y x>y {{yes}} {{yes}} = yes , yes
+--  transFreshGreat {ξ , z} {x} {y} x≢y x>y {{f}}   {{g}}   with y ≢? x | y >? x
+--  ...                                                     | yes y≢x | yes y>x = {!⌈pair⌉ (trans≢ wrap≢ y≢x)!}
+--  ...                                                     | yes y≢x | no y≯y  = {!!}
+--  ...                                                     | no ¬y≢x | yes y>y = {!!}
+--  ...                                                     | no ¬y≢x | no y≯y  = {!!}
+--                              
+-- 
+--  genFreshGreat : (ξ : NCtx) → Σ NVar (λ y → Fresh y ξ × Great y ξ)
+--  genFreshGreat ∅       = zero , (yes , yes)
+--  genFreshGreat (ξ , x) with genFreshGreat ξ
+--  ...                   | y  , (f , g) with y ≢? x | y ≥? x
+--  ...                                  | yes y≢x | yes y≥x = y , ( ⌈pair⌉ (wrap≢ y≢x) f
+--                                                                 , ⌈pair⌉ (wrap> (≥+≢→> y≥x y≢x)) g
+--                                                                 )
+--  ...                                  | yes y≢x | no y≱x  = {!!}
+--  ...                                  | no ¬y≢x | yes y≥x = {!!}
+--  ...                                  | no ¬y≢x | no y≱x  = {!!}
+
   genGreat : (ξ : NCtx) → Σ NVar (λ y → Great y ξ)
   genGreat ∅       = zero , yes
   genGreat (ξ , x) with genGreat ξ
@@ -271,16 +309,27 @@ module NumericExpressions where
   ...                       | yes y>x = y , ⌈pair⌉ (wrap> y>x) g
   ...                       | no y≯x  = suc x , ⌈pair⌉ (wrap> (refl≥ {suc x}))
                                                        (transGreat {ξ} (≱→< y≯x) {{g}})
-
+  
   Great→Fresh : ∀ {ξ x} → {{g : Great x ξ}}
                          → Fresh x ξ
   Great→Fresh {∅}     {x} {{yes}} = yes
   Great→Fresh {ξ , y} {x} {{g}}   = ⌈pair⌉ (wrap≢ (>→≢ (unwrap> {x} (⌈fst⌉ g))))
                                             (Great→Fresh {ξ} {{⌈snd⌉ {x ⌊>?⌋ y} g}})
+  
+--  genFresh : (ξ : NCtx) → Σ NVar (λ y → Fresh y ξ)
+--  genFresh ξ with genGreat ξ
+--  ...        | y , g = y , Great→Fresh {ξ} {{g}}
 
-  genFresh : (ξ : NCtx) → Σ NVar (λ y → Fresh y ξ)
-  genFresh ξ with genGreat ξ
-  ...        | y , g = y , Great→Fresh {ξ} {{g}}
+--  genGreatFresh : (ξ : NCtx) → Σ NVar (λ y → Σ (Great y ξ) (λ g → Fresh y ξ × genGreat ξ ≡ (y , g)))
+--  genGreatFresh ξ with genGreat ξ
+--  ...             | y , g = y , (g , (Great→Fresh {ξ} {{g}} , refl))
+
+  genGreatFresh : (ξ : NCtx) → Σ NVar (λ y →
+                                Σ (Great y ξ) (λ g →
+                                Σ (Fresh y ξ) (λ f →
+                                genGreat ξ ≡ (y , g) × Great→Fresh {ξ} {{g}} ≡ f)))
+  genGreatFresh ξ with genGreat ξ
+  ...                  | y , g = y , (g , (Great→Fresh {ξ} {{g}} , (refl , refl)))
 
 
   -- _∋_
@@ -379,7 +428,7 @@ module NumericExpressions where
                   → NExp ξ
 
   {-# DISPLAY nlit n = n #-}
-  {-# DISPLAY nvar x = x #-}
+  {-# DISPLAY nvar x = NVar→String x #-}
 
   instance
     nexpIsNumber : ∀ {ξ} → Number (NExp ξ)
@@ -387,6 +436,27 @@ module NumericExpressions where
       record
         { Constraint = λ n → ⊤
         ; fromNat    = λ n → nlit n
+        }
+
+  pred∋ : ∀ {ξ x y} → x ≢ y → {{f : Fresh y ξ}}
+                    → ξ , y ∋ x
+                    → ξ ∋ x
+  pred∋ x≢x zero    = refl ↯ x≢x
+  pred∋ x≢y (suc i) = i
+
+  _∋?_ : ∀ ξ x → Dec (ξ ∋ x)
+  ∅       ∋? x = no (λ ())
+  (ξ , y) ∋? x with x ≡? y
+  ...          | yes refl = yes zero
+  ...          | no x≢y   = mapDec suc (pred∋ x≢y) (ξ ∋? x)
+
+  instance
+    nexpIsString : ∀ {ξ} → IsString (NExp ξ)
+    nexpIsString {ξ} =
+      record
+        { Constraint = λ s → Σ ⌈ ⌊ ξ ∋? String→NVar s ⌋ ⌉
+                                (λ e → ξ ∋ String→NVar s) 
+        ; fromString = λ { s {{e , i}} → nvar (String→NVar s) {{i}} }
         }
 
 
@@ -461,10 +531,10 @@ module NumericExpressions where
 module Expressions where
   open import Prelude
     hiding (tt)
-    renaming (renᵢ to ren∋)
+    renaming (renᵢ to ren∋ ; idᵣ to refl⊇)
   open Booleans
   open NumericExpressions
-    hiding (_∋_ ; ren∋ ; _⊇_)
+    hiding (_∋_ ; ren∋ ; _⊇_ ; refl⊇)
   module N = NumericExpressions
 
 
@@ -509,8 +579,8 @@ module Expressions where
   nsubT {ξ} σ (~ A)     = ~ (nsubT σ A)
   nsubT {ξ} σ (A ∧ B)   = nsubT σ A ∧ nsubT σ B
   nsubT {ξ} σ (A ⊃ B)   = nsubT σ A ⊃ nsubT σ B
-  nsubT {ξ} σ (∇ x ∶ A) with genFresh ξ
-  ...                   | y , f = ∇ y ∶ nsubT (forkNS σ {{f}}) A
+  nsubT {ξ} σ (∇ x ∶ A) with genGreatFresh ξ
+  ...                   | y , (g , (f , (refl , refl))) = ∇ y ∶ nsubT (forkNS σ {{f}}) A
 
   nrenT : ∀ {ξ ξ′} → ξ′ N.⊇ ξ → Type ξ
                    → Type ξ′
@@ -522,9 +592,86 @@ module Expressions where
   Ctx : NCtx → Set
   Ctx ξ = List (Type ξ)
 
+  nsubC : ∀ {ξ ζ} → NSub ξ ζ → Ctx ζ
+                  → Ctx ξ
+  nsubC σ Γ = map (nsubT σ) Γ
+
   nrenC : ∀ {ξ ξ′} → ξ′ N.⊇ ξ → Ctx ξ
                    → Ctx ξ′
-  nrenC η Γ = map (nrenT η) Γ
+  nrenC `η Γ = nsubC (⊇→NSub `η) Γ
+
+  nsub∋ : ∀ {ξ ζ Γ A} → (`σ : NSub ξ ζ) → Γ ∋ A
+                      → nsubC `σ Γ ∋ nsubT `σ A
+  nsub∋ `σ zero    = zero
+  nsub∋ `σ (suc i) = suc (nsub∋ `σ i)
+
+  nren∋ : ∀ {ξ ξ′ Γ A} → (`η : ξ′ N.⊇ ξ) → Γ ∋ A
+                       → nrenC `η Γ ∋ nrenT `η A
+  nren∋ `η i = nsub∋ (⊇→NSub `η) i
+
+  nsub⊇ : ∀ {ξ ζ Γ Γ′} → (σ : NSub ξ ζ) → Γ′ ⊇ Γ
+                       → nsubC σ Γ′ ⊇ nsubC σ Γ
+  nsub⊇ σ done     = done
+  nsub⊇ σ (drop η) = drop (nsub⊇ σ η)
+  nsub⊇ σ (keep η) = keep (nsub⊇ σ η) 
+
+  nren⊇ : ∀ {ξ ξ′ Γ Γ′} → (`η : ξ′ N.⊇ ξ) → Γ′ ⊇ Γ
+                        → nrenC `η Γ′ ⊇ nrenC `η Γ
+  nren⊇ `η η = nsub⊇ (⊇→NSub `η) η
+ 
+
+{-
+  -- TODO: n-ary spec/gen
+
+  fresh⋆ : NCtx → NCtx → Bool
+  fresh⋆ ∅       ξ = true
+  fresh⋆ (ζ , x) ξ = fresh x ξ and fresh⋆ ζ ξ
+
+  Fresh⋆ : NCtx → NCtx → Set
+  Fresh⋆ ζ ξ = ⌈ fresh⋆ ζ ξ ⌉
+
+  mutual
+    _++_ : ∀ ξ ζ → {{f⋆ : Fresh⋆ ζ ξ}}
+                 → NCtx
+    (ξ ++ ∅)             {{f⋆}} = ξ
+    (ξ ++ (ζ , x) {{f}}) {{f⋆}}
+      = ((ξ ++ ζ) {{⌈snd⌉ {fresh x ξ} {fresh⋆ ζ ξ} f⋆}} , x)
+          {{Fresh++Fresh {ξ} {ζ} {{⌈fst⌉ f⋆}} {{f}} {{⌈snd⌉ {fresh x ξ} f⋆}}}}
+
+    Fresh++Fresh : ∀ {ξ ζ x} → {{f₁ : Fresh x ξ}} {{f₂ : Fresh x ζ}} {{f⋆ : Fresh⋆ ζ ξ}}
+                             → Fresh x (ξ ++ ζ)
+    Fresh++Fresh {ξ} {∅}              {x} {{f₁}} {{f₂}} {{f⋆}} = f₁
+    Fresh++Fresh {ξ} {(ζ , y) {{f₀}}} {x} {{f₁}} {{f₂}} {{f⋆}}
+      = ⌈pair⌉ (⌈fst⌉ {x ⌊≢?⌋ y} f₂)
+               (Fresh++Fresh {ξ} {ζ} {{f₁}} {{⌈snd⌉ {x ⌊≢?⌋ y} f₂}} {{⌈snd⌉ {fresh y ξ} f⋆}})
+
+
+  wk⋆⊇ : ∀ ζ {ξ} → {{f⋆ : Fresh⋆ ζ ξ}}
+                 → (ξ ++ ζ) N.⊇ ξ
+  wk⋆⊇ ∅       = refl⊇
+  wk⋆⊇ (ζ , x) = drop⊇ (wk⋆⊇ ζ)
+
+
+  ∇⋆_∶_ : ∀ ζ {ξ} → {{f⋆ : Fresh⋆ ζ ξ}} → Type (ξ ++ ζ)
+                  → Type ξ
+  ∇⋆ ∅     ∶ A = A
+  ∇⋆ ζ , x ∶ A = ∇⋆ ζ ∶ ∇ x ∶ A
+
+  -- TODO: Figure this out
+  -- spec⋆[_] : ∀ {ζ ξ Γ} → {{f⋆ : Fresh⋆ ζ ξ}} (σ : NSub ξ (ξ ++ ζ)) {A : Type (ξ ++ ζ)}
+  --                      → Exp ξ Γ (∇⋆ ζ ∶ A)
+  --                      → Exp ξ Γ (nsubT σ A)
+  -- spec⋆[_] {∅}     ∅            N = {!!}
+  -- spec⋆[_] {∅}     (σ , M / x)  N = {!!}
+  -- spec⋆[_] {ζ , x} (σ , M / .x) N = {!!}
+
+  -- TODO: Figure this out
+  -- gen⋆[_] : ∀ ζ {ξ A Γ} → {{f⋆ : Fresh⋆ ζ ξ}}
+  --                       → Exp ξ Γ A
+  --                       → Exp ξ Γ (∇⋆ ζ ∶ nrenT (wk⋆⊇ ζ) A)
+  -- gen⋆[ ∅ ]     M = {!M!}
+  -- gen⋆[ ζ , x ] M = {!gen⋆[ ζ ] {{?}} (gen[ x ] {{?}} M)!}
+-}
 
 
   -- Expressions
@@ -558,13 +705,17 @@ module Expressions where
       contra : ∀ {ξ A B Γ} → Exp ξ Γ (A ⊃ B)
                            → Exp ξ Γ (~ B ⊃ ~ A)
 
-      spec[_/_] : ∀ {ξ Γ} → (M : NExp ξ) (x : NVar) {{f : Fresh x ξ}} {A : Type (ξ , x)}
-                          → Exp ξ Γ (∇ x ∶ A)
-                          → Exp ξ Γ (nsubT (reflNS , M / x) A)
+      spec[_⁏_/_] : ∀ {ξ ζ} → (`σ : NSub ξ ζ) (S : NExp ξ) (x : NVar)
+                            → {{f : Fresh x ζ}} {A : Type (ζ , x)} {Γ : Ctx ζ} {A′ : Type ξ} {Γ′ : Ctx ξ}
+                            → {{_ : A′ ≡ nsubT (`σ , S / x) A}}
+                            → {{_ : Γ′ ≡ nsubC `σ Γ}}
+                            → Exp ζ Γ (∇ x ∶ A)
+                            → Exp ξ Γ′ A′
 
-      gen[_] : ∀ x {ξ A Γ} → {{f : Fresh x ξ}}
-                           → Exp ξ Γ A
-                           → Exp ξ Γ (∇ x ∶ nrenT N.wk⊇ A)
+      gen[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}} {A : Type (ξ , x)} {Γ′ : Ctx (ξ , x)}
+                         → {{_ : Γ′ ≡ nrenC wk⊇ Γ}}
+                         → Exp (ξ , x) Γ′ A
+                         → Exp ξ Γ (∇ x ∶ A)
 
       sym : ∀ {ξ M N Γ} → Exp ξ Γ (M == N)
                         → Exp ξ Γ (N == M)
@@ -578,74 +729,40 @@ module Expressions where
       nsuce : ∀ {ξ M N Γ} → Exp ξ Γ (nsuc M == nsuc N)
                           → Exp ξ Γ (M == N)
 
-      induct[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}} {A : Type (ξ , x)}
-                            → Exp ξ Γ (nsubT (reflNS , 0 / x) A)
-                            → Exp ξ Γ (∇ x ∶ (A ⊃ nsubT (wkNS , nsuc (nvar x) / x) A))
+      induct[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}} {A : Type (ξ , x)} {A₀ : Type ξ} {Aₙ : Type (ξ , x)}
+                            → {{_ : A₀ ≡ nsubT (reflNS , 0 / x) A}}
+                            → {{_ : Aₙ ≡ nsubT (wkNS , nsuc (nvar x) / x) A}}
+                            → Exp ξ Γ A₀ → Exp ξ Γ (∇ x ∶ (A ⊃ Aₙ))
                             → Exp ξ Γ (∇ x ∶ A)
 
-      ax1[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}}
-                         → Exp ξ Γ (∇ x ∶ ~ (nsuc (nvar x) == 0))
 
-      ax2[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}}
-                         → Exp ξ Γ (∇ x ∶ nvar x + 0 == nvar x)
+      -- ax1[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}}
+      --                    → Exp ξ Γ (∇ x ∶ ~ (nsuc (nvar x) == 0))
+      --  
+      -- ax2[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}}
+      --                    → Exp ξ Γ (∇ x ∶ nvar x + 0 == nvar x)
+      --  
+      -- ax3[_,_] : ∀ x y {ξ Γ} → {{f₁ : Fresh x ξ}} {{f₂ : Fresh y (ξ , x)}}
+      --                        → Exp ξ Γ (∇ x ∶ ∇ y ∶ nvar x + nvar y == nsuc (nvar x + nvar y))
+      --  
+      -- ax4[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}}
+      --                    → Exp ξ Γ (∇ x ∶ nvar x * 0 == 0)
+      --  
+      -- ax5[_,_] : ∀ x y {ξ Γ} → {{f₁ : Fresh x ξ}} {{f₂ : Fresh y (ξ , x)}}
+      --                        → Exp ξ Γ (∇ x ∶ ∇ y ∶ nvar x * nsuc (nvar y) == nvar x * nvar y + nvar x)
 
-      ax3[_,_] : ∀ x y {ξ Γ} → {{f₁ : Fresh x ξ}} {{f₂ : Fresh y (ξ , x)}}
-                             → Exp ξ Γ (∇ x ∶ ∇ y ∶ nvar x + nvar y == nsuc (nvar x + nvar y))
-
-      ax4[_] : ∀ x {ξ Γ} → {{f : Fresh x ξ}}
-                         → Exp ξ Γ (∇ x ∶ nvar x * 0 == 0)
-
-      ax5[_,_] : ∀ x y {ξ Γ} → {{f₁ : Fresh x ξ}} {{f₂ : Fresh y (ξ , x)}}
-                             → Exp ξ Γ (∇ x ∶ ∇ y ∶ nvar x * nsuc (nvar y) == nvar x * nvar y + nvar x)
-
-
-  fresh⋆ : NCtx → NCtx → Bool
-  fresh⋆ ∅       ξ = true
-  fresh⋆ (ζ , x) ξ = fresh x ξ and fresh⋆ ζ ξ
-
-  Fresh⋆ : NCtx → NCtx → Set
-  Fresh⋆ ζ ξ = ⌈ fresh⋆ ζ ξ ⌉
-
-  mutual
-    _++_ : ∀ ξ ζ → {{f⋆ : Fresh⋆ ζ ξ}}
-                 → NCtx
-    (ξ ++ ∅)             {{f⋆}} = ξ
-    (ξ ++ (ζ , x) {{f}}) {{f⋆}}
-      = ((ξ ++ ζ) {{⌈snd⌉ {fresh x ξ} {fresh⋆ ζ ξ} f⋆}} , x)
-          {{Fresh++Fresh {ξ} {ζ} {{⌈fst⌉ f⋆}} {{f}} {{⌈snd⌉ {fresh x ξ} f⋆}}}}
-
-    Fresh++Fresh : ∀ {ξ ζ x} → {{f₁ : Fresh x ξ}} {{f₂ : Fresh x ζ}} {{f⋆ : Fresh⋆ ζ ξ}}
-                             → Fresh x (ξ ++ ζ)
-    Fresh++Fresh {ξ} {∅}              {x} {{f₁}} {{f₂}} {{f⋆}} = f₁
-    Fresh++Fresh {ξ} {(ζ , y) {{f₀}}} {x} {{f₁}} {{f₂}} {{f⋆}}
-      = ⌈pair⌉ (⌈fst⌉ {x ⌊≢?⌋ y} f₂)
-               (Fresh++Fresh {ξ} {ζ} {{f₁}} {{⌈snd⌉ {x ⌊≢?⌋ y} f₂}} {{⌈snd⌉ {fresh y ξ} f⋆}})
+--      ax1 : ∀ {Γ} → Exp ∅ Γ (∇ "a" ∶ ~ (nsuc "a" == 0))
+-- 
+--      ax2 : ∀ {Γ} → Exp ∅ Γ (∇ "a" ∶ "a" + 0 == "a")
+-- 
+--      ax3 : ∀ {Γ} → Exp ∅ Γ (∇ "a" ∶ ∇ "b" ∶ "a" + "b" == nsuc ("a" + "b"))
+-- 
+--      ax4 : ∀ {Γ} → Exp ∅ Γ (∇ "a" ∶ "a" * 0 == 0)
+-- 
+--      ax5 : ∀ {Γ} → Exp ∅ Γ (∇ "a" ∶ ∇ "b" ∶ "a" * nsuc "b" == "a" * "b" + "a")
 
 
-  wk⋆⊇ : ∀ ζ {ξ} → {{f⋆ : Fresh⋆ ζ ξ}}
-                 → (ξ ++ ζ) N.⊇ ξ
-  wk⋆⊇ ∅       = refl⊇
-  wk⋆⊇ (ζ , x) = N.drop⊇ (wk⋆⊇ ζ)
-
-
-  ∇⋆_∶_ : ∀ ζ {ξ} → {{f⋆ : Fresh⋆ ζ ξ}} → Type (ξ ++ ζ)
-                  → Type ξ
-  ∇⋆ ∅     ∶ A = A
-  ∇⋆ ζ , x ∶ A = ∇⋆ ζ ∶ ∇ x ∶ A
-
-  -- spec⋆[_] : ∀ {ζ ξ Γ} → {{f⋆ : Fresh⋆ ζ ξ}} (σ : NSub ξ (ξ ++ ζ)) {A : Type (ξ ++ ζ)}
-  --                      → Exp ξ Γ (∇⋆ ζ ∶ A)
-  --                      → Exp ξ Γ (nsubT σ A)
-  -- spec⋆[_] {∅}     ∅            N = {!!}
-  -- spec⋆[_] {∅}     (σ , M / x)  N = {!!}
-  -- spec⋆[_] {ζ , x} (σ , M / .x) N = {!!}
-
-  -- gen⋆[_] : ∀ ζ {ξ A Γ} → {{f⋆ : Fresh⋆ ζ ξ}}
-  --                       → Exp ξ Γ A
-  --                       → Exp ξ Γ (∇⋆ ζ ∶ nrenT (wk⋆⊇ ζ) A)
-  -- gen⋆[ ∅ ]     M = {!M!}
-  -- gen⋆[ ζ , x ] M = {!gen⋆[ ζ ] {{?}} (gen[ x ] {{?}} M)!}
-
+  -- TODO: Names in Exp too!
 
   v0 : ∀ {ξ A Γ} → Exp ξ (Γ , A) A
   v0 = var 0
@@ -666,117 +783,210 @@ module Expressions where
   v5 = var 5
 
 
+  postulate
+    lemgen : ∀ {x y ξ ζ} Γ → (`σ : NSub ξ ζ)
+                           → {{_ : Fresh y ξ}} {{_ : Fresh x ζ}} {A : Type (ξ , y)}
+                           → Exp (ξ , y) (nsubC (dropNS `σ , nvar y / x)
+                                            (nrenC (wk⊇ {x}) Γ)) A
+                           → Exp (ξ , y) (nrenC (wk⊇ {y})
+                                            (nsubC `σ Γ)) A
+
+  postulate
+    leminduct₀ : ∀ {x y ξ ζ Γ} → {{_ : Fresh y ξ}} {{_ : Fresh x ζ}} {A : Type (ζ , x)} {`σ : NSub ξ ζ}
+                               → Exp ξ Γ (nsubT `σ
+                                            (nsubT (reflNS , 0 / x) A))
+                               → Exp ξ Γ (nsubT (reflNS , 0 / y)
+                                            (nsubT (dropNS `σ , nvar y / x) A))
+
+  postulate
+    leminductₙ : ∀ {x y ξ ζ Γ} → {{_ : Fresh y ξ}} {{_ : Fresh x ζ}} {A : Type (ζ , x)} {`σ : NSub ξ ζ}
+                               → Exp ξ Γ (∇ y ∶ nsubT (forkNS `σ) A ⊃
+                                                   nsubT (forkNS {y} {x} `σ)
+                                                     (nsubT (wkNS , nsuc (nvar x) / x) A))
+                               → Exp ξ Γ (∇ y ∶ nsubT (dropNS `σ , nvar y / x) A ⊃
+                                                   nsubT (wkNS , nsuc (nvar y) / y)
+                                                     (nsubT (dropNS `σ , nvar y / x) A))
+
+  postulate
+    lemspec : ∀ {ξ θ ζ} Γ → (`σ : NSub ξ θ) (‶σ : NSub θ ζ) (S : NExp θ) (x : NVar)
+                          → {{_ : Fresh x ζ}} {A : Type (ζ , x)}
+                          → Exp ξ (nsubC (transNS `σ ‶σ) Γ)
+                                   (nsubT (transNS `σ ‶σ , subNE `σ S / x) A)
+                          → Exp ξ (nsubC `σ (nsubC ‶σ Γ))
+                                   (nsubT `σ (nsubT (‶σ , S / x) A))
+
+  nsub : ∀ {ξ ζ Γ A} → (`σ : NSub ξ ζ) → Exp ζ Γ A
+                     → Exp ξ (nsubC `σ Γ) (nsubT `σ A)
+  nsub `σ (var i)     = var (nsub∋ `σ i)
+  nsub `σ (lam M)     = lam (nsub `σ M)
+  nsub `σ (app M N)   = app (nsub `σ M) (nsub `σ N)
+  nsub `σ (pair M N)  = pair (nsub `σ M) (nsub `σ N)
+  nsub `σ (fst M)     = fst (nsub `σ M)
+  nsub `σ (snd M)     = snd (nsub `σ M)
+  nsub `σ (dni M)     = dni (nsub `σ M)
+  nsub `σ (dne M)     = dne (nsub `σ M)
+  nsub `σ (contra M)  = contra (nsub `σ M)
+  nsub `σ (spec[ ‶σ ⁏ S / x ] {Γ = Γ} {{refl}} {{refl}} M)
+                      = lemspec Γ `σ ‶σ S x
+                          (spec[ transNS `σ ‶σ ⁏ subNE `σ S / x ] {{_}} {{refl}} {{refl}} M)
+  nsub {ξ} {ζ} {Γ} `σ (gen[ x ] {A = A} {{refl}} M)
+                      with genGreatFresh ξ
+  ...                 | y , (g , (f , (refl , refl)))
+                      = gen[ y ] {ξ} {{f}} {nsubT (dropNS `σ , nvar y / x) A}
+                          (lemgen Γ `σ {{f}}
+                            (nsub (dropNS `σ , nvar y / x) M))
+  nsub `σ (sym M)     = sym (nsub `σ M)
+  nsub `σ (trans M N) = trans (nsub `σ M) (nsub `σ N)
+  nsub `σ (nsuci M)   = nsuci (nsub `σ M)
+  nsub `σ (nsuce M)   = nsuce (nsub `σ M)
+  nsub {ξ} {ζ} {Γ} `σ (induct[ x ] {A = A} {A₀} {Aₙ} {{refl}} {{refl}} M N)
+                      with genGreatFresh ξ
+  ...                 | y , (g , (f , (refl , refl)))
+                      = induct[ y ] {ξ} {{f}} {nsubT (dropNS `σ , nvar y / x) A} {{refl}} {{refl}}
+                          (leminduct₀ (nsub `σ M))
+                          (leminductₙ (nsub `σ N))
+
+  nren : ∀ {ξ′ ξ A Γ} → (`η : ξ′ N.⊇ ξ) → Exp ξ Γ A
+                      → Exp ξ′ (nrenC `η Γ) (nrenT `η A)
+  nren `η M = nsub (⊇→NSub `η) M
+
+
   ren : ∀ {ξ A Γ Γ′} → Γ′ ⊇ Γ → Exp ξ Γ A
                      → Exp ξ Γ′ A
-  ren η (var i)           = var (ren∋ η i)
-  ren η (lam M)           = lam (ren (keep η) M)
-  ren η (app M N)         = app (ren η M) (ren η N)
-  ren η (pair M N)        = pair (ren η M) (ren η N)
-  ren η (fst M)           = fst (ren η M)
-  ren η (snd M)           = snd (ren η M)
-  ren η (dni M)           = dni (ren η M)
-  ren η (dne M)           = dne (ren η M)
-  ren η (contra M)        = contra (ren η M)
-  ren η (spec[ M / x ] N) = spec[ M / x ] (ren η N)
-  ren η (gen[ x ] M)      = gen[ x ] (ren η M)
-  ren η (sym M)           = sym (ren η M)
-  ren η (trans M N)       = trans (ren η M) (ren η N)
-  ren η (nsuci M)         = nsuci (ren η M)
-  ren η (nsuce M)         = nsuce (ren η M)
-  ren η (induct[ x ] M N) = induct[ x ] (ren η M) (ren η N )
-  ren η ax1[ x ]          = ax1[ x ]
-  ren η ax2[ x ]          = ax2[ x ]
-  ren η ax3[ x , y ]      = ax3[ x , y ]
-  ren η ax4[ x ]          = ax4[ x ]
-  ren η ax5[ x , y ]      = ax5[ x , y ]
+  ren η (var i)                     = var (ren∋ η i)
+  ren η (lam M)                     = lam (ren (keep η) M)
+  ren η (app M N)                   = app (ren η M) (ren η N)
+  ren η (pair M N)                  = pair (ren η M) (ren η N)
+  ren η (fst M)                     = fst (ren η M)
+  ren η (snd M)                     = snd (ren η M)
+  ren η (dni M)                     = dni (ren η M)
+  ren η (dne M)                     = dne (ren η M)
+  ren η (contra M)                  = contra (ren η M)
+  ren {ξ} {A₀} {Γ₀} {Γ′₀} η (spec[ `σ ⁏ S / x ] {{_}} {A} {Γ} {A′} {Γ′} {{p}} {{q}} M)
+                                    = {!spec[ `σ ⁏ S / x ] {{_}} {A} {Γ}
+                                        {A′} {Γ′₀} {{?}} {{?}}
+                                          (ren {!!} M)!}
+  ren η (gen[ x ] {{_}} {{refl}} M) = gen[ x ] (ren (nren⊇ wk⊇ η) M)
+  ren η (sym M)                     = sym (ren η M)
+  ren η (trans M N)                 = trans (ren η M) (ren η N)
+  ren η (nsuci M)                   = nsuci (ren η M)
+  ren η (nsuce M)                   = nsuce (ren η M)
+  ren η (induct[ x ] M N)           = induct[ x ] (ren η M) (ren η N)
 
   wk : ∀ {ξ A B Γ} → Exp ξ Γ A
                    → Exp ξ (Γ , B) A
-  wk M = ren (drop idᵣ) M
+  wk M = ren (drop refl⊇) M
 
 
-  lem : ∀ {ξ A Γ} → Exp ξ Γ (A ∨ ~ A)
-  lem = lam v0
+  -- Substitutions
 
-  define : ∀ {ξ A C Γ} → Exp ξ Γ A → Exp ξ (Γ , A) C
-                       → Exp ξ Γ C
-  define M N = app (lam N) M
+  Sub : ∀ ξ → Ctx ξ → Ctx ξ → Set
+  Sub ξ Γ Ξ = All (Exp ξ Γ) Ξ
 
-  ntra : ∀ {ξ A B Γ} → Exp ξ Γ (~ B ⊃ ~ A)
-                     → Exp ξ Γ (A ⊃ B)
-  ntra M = lam (dne (app (wk (contra M)) (dni v0)))
-
-  deny : ∀ {ξ A C Γ} → Exp ξ Γ A → Exp ξ Γ (~ A)
-                     → Exp ξ Γ C
-  deny M N = app (ntra (lam (wk N))) M
+  ⊇→Sub : ∀ {ξ Γ Γ′} → Γ′ ⊇ Γ
+                      → Sub ξ Γ′ Γ
+  ⊇→Sub done     = ∅
+  ⊇→Sub (drop η) = mapAll wk (⊇→Sub η)
+  ⊇→Sub (keep η) = mapAll wk (⊇→Sub η) , var zero
 
 
-  TT : ∀ {ξ} → Type ξ
-  TT {ξ} with genFresh ξ
-  ...    | x , f = let instance _ = f in
-                     ∇ x ∶ ~ (nsuc (nvar x) == 0)
 
-  tt : ∀ {ξ Γ} → Exp ξ Γ TT
-  tt {ξ} {Γ} with genGreat ξ | genFresh ξ
-  ...        | x , g | _ , f = let instance _ = f in
-                                  ax1[ x ] {ξ} {Γ}
+  -- -- lem : ∀ {ξ A Γ} → Exp ξ Γ (A ∨ ~ A)
+  -- -- lem = lam v0
 
-  FF : ∀ {ξ} → Type ξ
-  FF = ~ TT
+  -- -- define : ∀ {ξ A C Γ} → Exp ξ Γ A → Exp ξ (Γ , A) C
+  -- --                      → Exp ξ Γ C
+  -- -- define M N = app (lam N) M
 
-  fen : ∀ {ξ A Γ} → Exp ξ (Γ , A) FF
-                  → Exp ξ Γ (~ A)
-  fen M = app (contra (lam M)) (dni tt)
+  -- -- ntra : ∀ {ξ A B Γ} → Exp ξ Γ (~ B ⊃ ~ A)
+  -- --                    → Exp ξ Γ (A ⊃ B)
+  -- -- ntra M = lam (dne (app (wk (contra M)) (dni v0)))
 
-  fe : ∀ {ξ A Γ} → Exp ξ (Γ , ~ A) FF
-                 → Exp ξ Γ A
-  fe M = dne (fen M)
-
-  efq : ∀ {ξ C Γ} → Exp ξ Γ FF
-                  → Exp ξ Γ C
-  efq M = fe (wk M)
+  -- -- deny : ∀ {ξ A C Γ} → Exp ξ Γ A → Exp ξ Γ (~ A)
+  -- --                    → Exp ξ Γ C
+  -- -- deny M N = app (ntra (lam (wk N))) M
 
 
-  dni⊃₁ : ∀ {ξ A B Γ} → Exp ξ Γ (A ⊃ B)
-                      → Exp ξ Γ (~ ~ A ⊃ B)
-  dni⊃₁ M = lam (app (wk M) (dne v0))
+  -- -- -- TT : ∀ {ξ} → Type ξ
+  -- -- -- TT {ξ} with genFresh ξ
+  -- -- -- ...    | x , f = let instance _ = f in
+  -- -- --                    ∇ x ∶ ~ (nsuc (nvar x) == 0)
+  -- -- --  
+  -- -- -- tt : ∀ {ξ Γ} → Exp ξ Γ TT
+  -- -- -- tt {ξ} {Γ} with genGreat ξ | genFresh ξ
+  -- -- -- ...        | x , g | _ , f = let instance _ = f in
+  -- -- --                                 ax1[ x ] {ξ} {Γ}
+  -- -- --  
+  -- -- -- FF : ∀ {ξ} → Type ξ
+  -- -- -- FF = ~ TT
+  -- -- --  
+  -- -- -- fen : ∀ {ξ A Γ} → Exp ξ (Γ , A) FF
+  -- -- --                 → Exp ξ Γ (~ A)
+  -- -- -- fen M = app (contra (lam M)) (dni tt)
+  -- -- --  
+  -- -- -- fe : ∀ {ξ A Γ} → Exp ξ (Γ , ~ A) FF
+  -- -- --                → Exp ξ Γ A
+  -- -- -- fe M = dne (fen M)
+  -- -- --  
+  -- -- -- efq : ∀ {ξ C Γ} → Exp ξ Γ FF
+  -- -- --                 → Exp ξ Γ C
+  -- -- -- efq M = fe (wk M)
 
-  dne⊃₂ : ∀ {ξ A B Γ} → Exp ξ Γ (A ⊃ ~ ~ B)
-                      → Exp ξ Γ (A ⊃ B)
-  dne⊃₂ M = lam (dne (app (wk M) v0))
 
-  swap∨ : ∀ {ξ A B Γ} → Exp ξ Γ (A ∨ B)
-                      → Exp ξ Γ (B ∨ A)
-  swap∨ M = dne⊃₂ (contra M)
+  -- -- TT : ∀ {ξ} → Type ξ
+  -- -- TT = 0 == 0
 
-  right : ∀ {ξ A B Γ} → Exp ξ Γ B
-                      → Exp ξ Γ (A ∨ B)
-  right M = lam (wk M)
+  -- -- refl== : ∀ {Γ} → Exp ∅ Γ (∇ "a" ∶ "a" == "a")
+  -- -- refl== = gen[ "a" ] (trans
+  -- --            (sym {!!}) -- (sym (spec[_] {∅ , "a"} {∅} {{yes}} (∅ , "a" / "a") {!ax2!}))
+  -- --            {!ax2!})
+  -- -- -- refl== = gen[ "a" ] (trans
+  -- -- --            (sym (spec[ {!nvar 0!} / "a" ] ax2))
+  -- -- --            (spec[ {!!} / "a" ] ax2))
 
-  left : ∀ {ξ A B Γ} → Exp ξ Γ A
-                     → Exp ξ Γ (A ∨ B)
-  left M = swap∨ (right M)
+  
 
-  sndK*36 : ∀ {ξ A B C Γ} → Exp ξ Γ ((A ∨ B) ∧ (A ∨ C))
-                          → Exp ξ Γ (A ∨ (B ∧ C))
-  sndK*36 M = lam (pair
-                (app (fst (wk M)) v0)
-                (app (snd (wk M)) v0))
 
-  ∨→~∧ : ∀ {ξ A B Γ} → Exp ξ Γ (~ A ∨ ~ B)
-                      → Exp ξ Γ (~ (A ∧ B))
-  ∨→~∧ M = fen (deny
-              (snd v0)
-              (app
-                (wk M)
-                (dni (fst v0))))
+  -- -- -- dni⊃₁ : ∀ {ξ A B Γ} → Exp ξ Γ (A ⊃ B)
+  -- -- --                     → Exp ξ Γ (~ ~ A ⊃ B)
+  -- -- -- dni⊃₁ M = lam (app (wk M) (dne v0))
 
-  woop : ∀ {ξ A C Γ} → Exp ξ (Γ , A) C → Exp ξ (Γ , ~ A) C
-                     → Exp ξ Γ C
-  woop M N = app
-               (swap∨ (sndK*36 (pair
-                 (swap∨ (dni⊃₁ (lam M)))
-                 (swap∨ (dni⊃₁ (lam N))))))
-               (fen (deny
-                 (fst v0)
-                 (snd v0)))
+  -- -- -- dne⊃₂ : ∀ {ξ A B Γ} → Exp ξ Γ (A ⊃ ~ ~ B)
+  -- -- --                     → Exp ξ Γ (A ⊃ B)
+  -- -- -- dne⊃₂ M = lam (dne (app (wk M) v0))
+
+  -- -- -- swap∨ : ∀ {ξ A B Γ} → Exp ξ Γ (A ∨ B)
+  -- -- --                     → Exp ξ Γ (B ∨ A)
+  -- -- -- swap∨ M = dne⊃₂ (contra M)
+
+  -- -- -- right : ∀ {ξ A B Γ} → Exp ξ Γ B
+  -- -- --                     → Exp ξ Γ (A ∨ B)
+  -- -- -- right M = lam (wk M)
+
+  -- -- -- left : ∀ {ξ A B Γ} → Exp ξ Γ A
+  -- -- --                    → Exp ξ Γ (A ∨ B)
+  -- -- -- left M = swap∨ (right M)
+
+  -- -- -- sndK*36 : ∀ {ξ A B C Γ} → Exp ξ Γ ((A ∨ B) ∧ (A ∨ C))
+  -- -- --                         → Exp ξ Γ (A ∨ (B ∧ C))
+  -- -- -- sndK*36 M = lam (pair
+  -- -- --               (app (fst (wk M)) v0)
+  -- -- --               (app (snd (wk M)) v0))
+
+  -- -- -- -- ∨→~∧ : ∀ {ξ A B Γ} → Exp ξ Γ (~ A ∨ ~ B)
+  -- -- -- --                     → Exp ξ Γ (~ (A ∧ B))
+  -- -- -- -- ∨→~∧ M = fen (deny
+  -- -- -- --             (snd v0)
+  -- -- -- --             (app
+  -- -- -- --               (wk M)
+  -- -- -- --               (dni (fst v0))))
+  -- -- -- --  
+  -- -- -- -- woop : ∀ {ξ A C Γ} → Exp ξ (Γ , A) C → Exp ξ (Γ , ~ A) C
+  -- -- -- --                    → Exp ξ Γ C
+  -- -- -- -- woop M N = app
+  -- -- -- --              (swap∨ (sndK*36 (pair
+  -- -- -- --                (swap∨ (dni⊃₁ (lam M)))
+  -- -- -- --                (swap∨ (dni⊃₁ (lam N))))))
+  -- -- -- --              (fen (deny
+  -- -- -- --                (fst v0)
+  -- -- -- --                (snd v0)))
